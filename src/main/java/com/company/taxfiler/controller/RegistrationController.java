@@ -28,11 +28,12 @@ public class RegistrationController {
 		/**
 		 * 1. do validations 2. insert into database
 		 */
-		if (!taxfilerUtil.checkStringNullEmptyWhiteSpace(registraionModel.getName())) {
-			LOGGER.error("name parameter not passed validation");
-			return taxfilerUtil.getErrorResponse(MessageCode.NAME_NULL_OR_EMPTY);
+		Object validationResult = taxfilerUtil.validateRegistrationEndpointRequestParameters(registraionModel);
+		if (validationResult == null) {
+			//validation success, insert into database
 		} else {
-			LOGGER.info("name parameter passed validation");
+			//validation failed, return error response
+			return validationResult;
 		}
 		return null;
 	}
