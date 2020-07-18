@@ -5,7 +5,7 @@ import java.util.Date;
 public class BasicInformation {
 
 	private boolean martialStatus;
-	private String nameAsPerSSN;
+	private Name name;
 	private Long ssn;
 	private Date dateOfBirth;
 	private String Occupation;
@@ -21,13 +21,6 @@ public class BasicInformation {
 		this.martialStatus = martialStatus;
 	}
 
-	public String getNameAsPerSSN() {
-		return nameAsPerSSN;
-	}
-
-	public void setNameAsPerSSN(String nameAsPerSSN) {
-		this.nameAsPerSSN = nameAsPerSSN;
-	}
 
 	public Long getSsn() {
 		return ssn;
@@ -76,5 +69,15 @@ public class BasicInformation {
 	public void setTypeOfVisa(String typeOfVisa) {
 		this.typeOfVisa = typeOfVisa;
 	}
+
+	public Name getName() {
+		return name;
+	}
+
+	public void setName(Name name) {
+		this.name = name;
+	}
+
+
 
 }

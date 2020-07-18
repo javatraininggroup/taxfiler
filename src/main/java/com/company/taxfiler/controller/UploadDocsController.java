@@ -5,12 +5,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.model.RegistraionModel;
+import com.company.model.UploadDocs;
 
 @RestController("/api")
 public class UploadDocsController {
 
-	@PostMapping("/register")
-	public Object registerUser(@RequestBody RegistraionModel registraionModel) {
+	@PostMapping("/uploaddocs")
+	public Object uploadDocs(@RequestBody UploadDocs uploadDocs) {
 		/**
 		 * 1. do validations
 		 * 2. insert into database
