@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 import com.company.taxfiler.model.RegistraionModel;
 import com.company.taxfiler.model.ResponseModel;
 
-import ch.qos.logback.core.status.Status;
-
 @Component
 public class TaxfilerUtil {
 
