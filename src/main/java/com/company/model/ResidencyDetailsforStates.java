@@ -1,44 +1,26 @@
 package com.company.model;
 
-import java.util.Date;
+import java.util.List;
 
 public class ResidencyDetailsforStates {
 
-	private int TaxYear;
-	private String stateResided;
-	private Date startDate;
-	private Date endDate;
+	private int taxYear;
+	private List<TaxYearInfo> taxYearInfoList;
 
 	public int getTaxYear() {
-		return TaxYear;
+		return taxYear;
 	}
 
 	public void setTaxYear(int taxYear) {
-		TaxYear = taxYear;
+		this.taxYear = taxYear;
 	}
 
-	public String getStateResided() {
-		return stateResided;
+	public List<TaxYearInfo> getTaxYearInfoList() {
+		return taxYearInfoList;
 	}
 
-	public void setStateResided(String stateResided) {
-		this.stateResided = stateResided;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public void setTaxYearInfoList(List<TaxYearInfo> taxYearInfoList) {
+		this.taxYearInfoList = taxYearInfoList;
 	}
 
 }

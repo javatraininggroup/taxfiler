@@ -1,61 +1,26 @@
 package com.company.model;
 
-import java.util.Date;
+import java.util.List;
 
 public class SpouseDetails {
 
-	private String name;
+	private Name name;
 	private String DateOfBirth;
-	private String ssn_itin;
-	private String checkIfITINToBeApplied;
-	private String checkIfITINToBeRenewed;
-	private String ITIN_Renewed;
-	private String entryDateInto_US;
+	private String ssnOrItin;
+	private boolean checkIfITINToBeApplied;
+	private boolean checkIfITINToBeRenewed;
+	private boolean ITIN_Renewed;
+	private String entryDateIntoUS;
 	private String occupation;
+	private List<ResidencyDetailsforStates> residencyDetailsforStatesList;
+	private boolean didYourSpouseisWorkedinXX;
+	private boolean isLivingMoreThan6Months;
 
-	private int TaxYear;
-	private String stateResided;
-	private Date startDate;
-	private Date endDate;
-	private boolean didYourSpouseisWorkedin2019;
-
-	public int getTaxYear() {
-		return TaxYear;
-	}
-
-	public void setTaxYear(int taxYear) {
-		TaxYear = taxYear;
-	}
-
-	public String getStateResided() {
-		return stateResided;
-	}
-
-	public void setStateResided(String stateResided) {
-		this.stateResided = stateResided;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public String getName() {
+	public Name getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(Name name) {
 		this.name = name;
 	}
 
@@ -67,44 +32,12 @@ public class SpouseDetails {
 		DateOfBirth = dateOfBirth;
 	}
 
-	public String getSsn_itin() {
-		return ssn_itin;
+	public String getSsnOrItin() {
+		return ssnOrItin;
 	}
 
-	public void setSsn_itin(String ssn_itin) {
-		this.ssn_itin = ssn_itin;
-	}
-
-	public String getCheckIfITINToBeApplied() {
-		return checkIfITINToBeApplied;
-	}
-
-	public void setCheckIfITINToBeApplied(String checkIfITINToBeApplied) {
-		this.checkIfITINToBeApplied = checkIfITINToBeApplied;
-	}
-
-	public String getCheckIfITINToBeRenewed() {
-		return checkIfITINToBeRenewed;
-	}
-
-	public void setCheckIfITINToBeRenewed(String checkIfITINToBeRenewed) {
-		this.checkIfITINToBeRenewed = checkIfITINToBeRenewed;
-	}
-
-	public String getITIN_Renewed() {
-		return ITIN_Renewed;
-	}
-
-	public void setITIN_Renewed(String iTIN_Renewed) {
-		ITIN_Renewed = iTIN_Renewed;
-	}
-
-	public String getEntryDateInto_US() {
-		return entryDateInto_US;
-	}
-
-	public void setEntryDateInto_US(String entryDateInto_US) {
-		this.entryDateInto_US = entryDateInto_US;
+	public void setSsnOrItin(String ssnOrItin) {
+		this.ssnOrItin = ssnOrItin;
 	}
 
 	public String getOccupation() {
@@ -115,12 +48,60 @@ public class SpouseDetails {
 		this.occupation = occupation;
 	}
 
-	public boolean isDidYourSpouseisWorkedin2019() {
-		return didYourSpouseisWorkedin2019;
+	public List<ResidencyDetailsforStates> getResidencyDetailsforStatesList() {
+		return residencyDetailsforStatesList;
 	}
 
-	public void setDidYourSpouseisWorkedin2019(boolean didYourSpouseisWorkedin2019) {
-		this.didYourSpouseisWorkedin2019 = didYourSpouseisWorkedin2019;
+	public void setResidencyDetailsforStatesList(List<ResidencyDetailsforStates> residencyDetailsforStatesList) {
+		this.residencyDetailsforStatesList = residencyDetailsforStatesList;
+	}
+
+	public boolean isCheckIfITINToBeApplied() {
+		return checkIfITINToBeApplied;
+	}
+
+	public void setCheckIfITINToBeApplied(boolean checkIfITINToBeApplied) {
+		this.checkIfITINToBeApplied = checkIfITINToBeApplied;
+	}
+
+	public boolean isCheckIfITINToBeRenewed() {
+		return checkIfITINToBeRenewed;
+	}
+
+	public void setCheckIfITINToBeRenewed(boolean checkIfITINToBeRenewed) {
+		this.checkIfITINToBeRenewed = checkIfITINToBeRenewed;
+	}
+
+	public boolean isITIN_Renewed() {
+		return ITIN_Renewed;
+	}
+
+	public void setITIN_Renewed(boolean iTIN_Renewed) {
+		ITIN_Renewed = iTIN_Renewed;
+	}
+
+	public boolean isLivingMoreThan6Months() {
+		return isLivingMoreThan6Months;
+	}
+
+	public void setLivingMoreThan6Months(boolean isLivingMoreThan6Months) {
+		this.isLivingMoreThan6Months = isLivingMoreThan6Months;
+	}
+
+	public String getEntryDateIntoUS() {
+		return entryDateIntoUS;
+	}
+
+	public void setEntryDateIntoUS(String entryDateIntoUS) {
+		this.entryDateIntoUS = entryDateIntoUS;
+	}
+
+	public boolean isDidYourSpouseisWorkedinXX() {
+		return didYourSpouseisWorkedinXX;
+	}
+
+	public void setDidYourSpouseisWorkedinXX(boolean didYourSpouseisWorkedinXX) {
+		this.didYourSpouseisWorkedinXX = didYourSpouseisWorkedinXX;
 	}
 
 }

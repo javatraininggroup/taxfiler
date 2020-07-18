@@ -1,74 +1,21 @@
 package com.company.model;
 
-import java.util.Date;
+import java.util.List;
 
 public class ContactDetails {
 
-	private String citizenship;
-	private String currentAddress;
+	private String address;
 	private String city;
 	private String aptNo;
 	private String state;
 	private int zip;
 	private String country;
-	private Long contact;
+	private Long mobilePhone;
 	private Long alternateNumber;
 	private Long indiaNumber;
 	private String email;
 	private String timeZone;
-
-	private int TaxYear;
-	private String stateResided;
-	private Date startDate;
-	private Date endDate;
-
-	public int getTaxYear() {
-		return TaxYear;
-	}
-
-	public void setTaxYear(int taxYear) {
-		TaxYear = taxYear;
-	}
-
-	public String getStateResided() {
-		return stateResided;
-	}
-
-	public void setStateResided(String stateResided) {
-		this.stateResided = stateResided;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public String getCitizenship() {
-		return citizenship;
-	}
-
-	public void setCitizenship(String citizenship) {
-		this.citizenship = citizenship;
-	}
-
-	public String getCurrentAddress() {
-		return currentAddress;
-	}
-
-	public void setCurrentAddress(String currentAddress) {
-		this.currentAddress = currentAddress;
-	}
+	private List<ResidencyDetailsforStates> residencyDetailsforStates;
 
 	public String getCity() {
 		return city;
@@ -110,12 +57,12 @@ public class ContactDetails {
 		this.country = country;
 	}
 
-	public Long getContact() {
-		return contact;
+	public Long getMobilePhone() {
+		return mobilePhone;
 	}
 
-	public void setContact(Long contact) {
-		this.contact = contact;
+	public void setMobilePhone(Long mobilePhone) {
+		this.mobilePhone = mobilePhone;
 	}
 
 	public Long getAlternateNumber() {
@@ -148,6 +95,22 @@ public class ContactDetails {
 
 	public void setTimeZone(String timeZone) {
 		this.timeZone = timeZone;
+	}
+
+	public List<ResidencyDetailsforStates> getResidencyDetailsforStates() {
+		return residencyDetailsforStates;
+	}
+
+	public void setResidencyDetailsforStates(List<ResidencyDetailsforStates> residencyDetailsforStates) {
+		this.residencyDetailsforStates = residencyDetailsforStates;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 }

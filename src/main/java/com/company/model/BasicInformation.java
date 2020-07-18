@@ -4,23 +4,23 @@ import java.util.Date;
 
 public class BasicInformation {
 
-	private boolean martialStatus;
+	private String martialStatus;
 	private Name name;
 	private Long ssn;
 	private Date dateOfBirth;
-	private String Occupation;
+	private String occupation;
 	private Date dateOfMarriage;
 	private Date firstDateOfEntyInUS;
 	private String typeOfVisa;
+	private String citizenship;
 
-	public boolean isMartialStatus() {
+	public String isMartialStatus() {
 		return martialStatus;
 	}
 
-	public void setMartialStatus(boolean martialStatus) {
+	public void setMartialStatus(String martialStatus) {
 		this.martialStatus = martialStatus;
 	}
-
 
 	public Long getSsn() {
 		return ssn;
@@ -39,11 +39,11 @@ public class BasicInformation {
 	}
 
 	public String getOccupation() {
-		return Occupation;
+		return occupation;
 	}
 
 	public void setOccupation(String occupation) {
-		Occupation = occupation;
+		this.occupation = occupation;
 	}
 
 	public Date getDateOfMarriage() {
@@ -78,6 +78,16 @@ public class BasicInformation {
 		this.name = name;
 	}
 
+	public String getCitizenship() {
+		return citizenship;
+	}
 
+	public void setCitizenship(String citizenship) {
+		this.citizenship = citizenship;
+	}
+
+	public String getMartialStatus() {
+		return martialStatus;
+	}
 
 }
