@@ -4,13 +4,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.company.model.RegistraionModel;
+import com.company.model.TaxPayer;
 
 @RestController("/api")
-public class TaxSummaryController {
+public class TaxFillingController {
 
 	@PostMapping("/taxsummary")
-	public Object taxSummary(@RequestBody RegistraionModel registraionModel) {
+	public Object taxSummary(@RequestBody TaxPayer taxpayer) {
 		/**
 		 * 1. do validations
 		 * 2. insert into database
