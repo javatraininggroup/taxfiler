@@ -5,8 +5,8 @@ import java.util.Date;
 public class TaxYearInfo {
 
 	private String stateResided;
-	private Date startDate;
-	private Date endDate;
+	private String startDate;
+	private String endDate;
 
 	public String getStateResided() {
 		return stateResided;
@@ -16,19 +16,19 @@ public class TaxYearInfo {
 		this.stateResided = stateResided;
 	}
 
-	public Date getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 

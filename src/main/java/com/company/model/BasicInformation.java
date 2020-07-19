@@ -7,10 +7,10 @@ public class BasicInformation {
 	private String martialStatus;
 	private Name name;
 	private Long ssn;
-	private Date dateOfBirth;
+	private String dateOfBirth;
 	private String occupation;
-	private Date dateOfMarriage;
-	private Date firstDateOfEntyInUS;
+	private String dateOfMarriage;
+	private String firstDateOfEntyInUS;
 	private String typeOfVisa;
 	private String citizenship;
 
@@ -30,11 +30,12 @@ public class BasicInformation {
 		this.ssn = ssn;
 	}
 
-	public Date getDateOfBirth() {
+
+	public String getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
@@ -46,19 +47,19 @@ public class BasicInformation {
 		this.occupation = occupation;
 	}
 
-	public Date getDateOfMarriage() {
+	public String getDateOfMarriage() {
 		return dateOfMarriage;
 	}
 
-	public void setDateOfMarriage(Date dateOfMarriage) {
+	public void setDateOfMarriage(String dateOfMarriage) {
 		this.dateOfMarriage = dateOfMarriage;
 	}
 
-	public Date getFirstDateOfEntyInUS() {
+	public String getFirstDateOfEntyInUS() {
 		return firstDateOfEntyInUS;
 	}
 
-	public void setFirstDateOfEntyInUS(Date firstDateOfEntyInUS) {
+	public void setFirstDateOfEntyInUS(String firstDateOfEntyInUS) {
 		this.firstDateOfEntyInUS = firstDateOfEntyInUS;
 	}
 

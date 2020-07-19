@@ -1,11 +1,11 @@
 package com.company.model;
 
-import java.util.Date;
+import java.util.List;
 
 public class DependentInformation {
 
-	private String name;
-	private Date DateOfBirth;
+	private Name name;
+	private String dateOfBirth;
 	private String ssn_itin;
 	private boolean check_if_ITIN_to_be_Applied;
 	private boolean check_if_ITIN_to_be_Renewed;
@@ -15,26 +15,23 @@ public class DependentInformation {
 	private boolean check_if_lived_for_more_than_06_months_with_you_in_US_during_the_year_2019;
 	private boolean check_if_you_provided_more_than_50PER_support_during_the_year_2019;
 
-	private int TaxYear;
-	private String stateResided;
-	private Date startDate;
-	private Date endDate;
+	private List<ResidencyDetailsforStates> residencyDetailsforStates;
 	private boolean check_if_you_and_your_spouse_are_working;
 
-	public String getName() {
+	public Name getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(Name name) {
 		this.name = name;
 	}
 
-	public Date getDateOfBirth() {
-		return DateOfBirth;
+	public String getDateOfBirth() {
+		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(Date dateOfBirth) {
-		DateOfBirth = dateOfBirth;
+	public void setDateOfBirth(String dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 
 	public String getSsn_itin() {
@@ -94,36 +91,12 @@ public class DependentInformation {
 		this.check_if_lived_for_more_than_06_months_with_you_in_US_during_the_year_2019 = check_if_lived_for_more_than_06_months_with_you_in_US_during_the_year_2019;
 	}
 
-	public int getTaxYear() {
-		return TaxYear;
+	public List<ResidencyDetailsforStates> getResidencyDetailsforStates() {
+		return residencyDetailsforStates;
 	}
 
-	public void setTaxYear(int taxYear) {
-		TaxYear = taxYear;
-	}
-
-	public String getStateResided() {
-		return stateResided;
-	}
-
-	public void setStateResided(String stateResided) {
-		this.stateResided = stateResided;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public void setResidencyDetailsforStates(List<ResidencyDetailsforStates> residencyDetailsforStates) {
+		this.residencyDetailsforStates = residencyDetailsforStates;
 	}
 
 	public boolean isCheck_if_you_and_your_spouse_are_working() {
