@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.company.taxfiler.model.RegistraionModel;
 import com.company.taxfiler.util.TaxfilerUtil;
+import com.google.gson.Gson;
 
 @RestController
 @RequestMapping("/api")
@@ -27,13 +28,18 @@ public class RegistrationController {
 		/**
 		 * 1. do validations 2. insert into database
 		 */
-		Object validationResult = taxfilerUtil.validateRegistrationEndpointRequestParameters(registraionModel);
-		if (validationResult == null) {
-			//validation success, insert into database
-		} else {
-			//validation failed, return error response
-			return validationResult;
-		}
+
+		/*
+		 * Object validationResult =
+		 * taxfilerUtil.validateRegistrationEndpointRequestParameters(registraionModel);
+		 * if (validationResult == null) { //validation success, insert into database }
+		 * else { //validation failed, return error response return validationResult; }
+		 */
+
+		// Insert into database
+		Gson gson = new Gson();
+		LOGGER.info("postman request data: " + gson.toJson(registraionModel));
+		
 		return null;
 	}
 
