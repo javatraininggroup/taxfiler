@@ -10,11 +10,12 @@ import javax.persistence.Table;
 @Table(name = "basic_info")
 public class BasicInfo {
 	
-	private long id;
+	
 	
 	@Column(name = "tax_filed_year_id")
 	private long taxFiledYearId;
 	
+	private long id;
 	private boolean martialStatus;
 	private String name;
 	private int ssn;
