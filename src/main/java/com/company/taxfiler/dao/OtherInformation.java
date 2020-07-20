@@ -8,6 +8,7 @@ import javax.persistence.Table;
 @Table(name="other_informtion")
 public class OtherInformation {
 	
+	
 	private long id;
 	
 	@Column(name = "tax_filed_year_id")
