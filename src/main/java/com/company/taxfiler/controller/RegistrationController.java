@@ -40,6 +40,10 @@ public class RegistrationController {
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(registraionModel));
 		
+		//insert into db and respond with "registration completed successfully!"
+		
+		
+		
 		return null;
 	}
 
