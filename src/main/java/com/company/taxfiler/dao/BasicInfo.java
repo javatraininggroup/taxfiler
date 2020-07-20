@@ -17,5 +17,12 @@ public class BasicInfo {
 	private Date dateOfMarriage;
 	private Date firstDateOfEnrtyInUS;
 	private String typeOfVisa;
+	
+	public Date getDateOfMarriage() {
+		return dateOfMarriage;
+	}
+	public void setDateOfMarriage(Date dateOfMarriage) {
+		this.dateOfMarriage = dateOfMarriage;
+	}
 
 }
