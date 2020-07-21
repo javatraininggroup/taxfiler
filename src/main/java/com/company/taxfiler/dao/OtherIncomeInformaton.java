@@ -36,6 +36,7 @@ public class OtherIncomeInformaton {
 		this.dividendIncome = dividendIncome;
 	}
 
+	
 	public String getTaxableRefundsFromState() {
 		return taxableRefundsFromState;
 	}

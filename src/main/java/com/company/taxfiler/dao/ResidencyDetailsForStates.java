@@ -19,10 +19,12 @@ public class ResidencyDetailsForStates {
 	}
 
 	public void setTaxYear(long taxYear) {
+
 		this.taxYear = taxYear;
 	}
 
 	public String getStatesResided() {
+
 		return statesResided;
 	}
 

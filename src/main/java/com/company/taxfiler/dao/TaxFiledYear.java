@@ -20,6 +20,7 @@ public class TaxFiledYear {
 	}
 
 	public long getYear() {
+
 		return year;
 	}
 

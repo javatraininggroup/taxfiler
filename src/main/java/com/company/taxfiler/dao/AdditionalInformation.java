@@ -36,6 +36,7 @@ public class AdditionalInformation {
 	}
 
 	public void setMedicalExpenses(String medicalExpenses) {
+		
 		this.medicalExpenses = medicalExpenses;
 	}
 
