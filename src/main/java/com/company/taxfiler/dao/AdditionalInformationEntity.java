@@ -5,7 +5,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "additional_information")
-public class AdditionalInformation {
+public class AdditionalInformationEntity {
 
 	private long id;
 	private String question;

@@ -1,6 +1,7 @@
 package com.company.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class BasicInformation {
 
@@ -13,6 +14,10 @@ public class BasicInformation {
 	private String firstDateOfEntyInUS;
 	private String typeOfVisa;
 	private String citizenship;
+	
+	private ContactDetails contactDetails;
+	private List<ResidencyDetailsforStates> residencyDetailsforStates;
+	
 
 	public String isMartialStatus() {
 		return martialStatus;

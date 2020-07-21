@@ -2,29 +2,19 @@ package com.company.model;
 
 import java.util.List;
 
-import javax.persistence.Column;
-
 public class SpouseDetails {
-     private long id;
-	
+	private long id;
+
 	private Name name;
-	@Column(name="date_of_birth")
 	private String DateOfBirth;
-	@Column(name="ssn_or_Itin")
 	private String ssnOrItin;
-	@Column(name="check_if_ITIN_to_be_applied")
 	private boolean checkIfITINToBeApplied;
-	@Column(name="check_if_ITIN_to_be_renewed")
 	private boolean checkIfITINToBeRenewed;
-	@Column(name="ITIN_renewed")
 	private boolean ITINRenewed;
-	@Column(name="entry_date_into_US")
 	private String entryDateIntoUS;
 	private String occupation;
 	private List<ResidencyDetailsforStates> residencyDetailsforStatesList;
-	@Column(name="did_your_spouse_is_worked_in_XX")
 	private boolean didYourSpouseisWorkedinXX;
-	@Column(name="is_living_more_than_6months")
 	private boolean isLivingMoreThan6Months;
 
 	public Name getName() {
@@ -82,6 +72,7 @@ public class SpouseDetails {
 	public void setCheckIfITINToBeRenewed(boolean checkIfITINToBeRenewed) {
 		this.checkIfITINToBeRenewed = checkIfITINToBeRenewed;
 	}
+
 	public long getId() {
 		return id;
 	}
@@ -97,7 +88,6 @@ public class SpouseDetails {
 	public void setITINRenewed(boolean iTINRenewed) {
 		ITINRenewed = iTINRenewed;
 	}
-
 
 	public boolean isITIN_Renewed() {
 		return ITINRenewed;

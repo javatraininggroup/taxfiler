@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name = "tax_filed_year")
 public class TaxFiledYear {
@@ -12,6 +13,13 @@ public class TaxFiledYear {
 	private long year;
 	@Column(name = "user_id")
 	private long userId;
+	
+	private BasicInfoEntity basicInfo;
+	private ContactDetailsEntity contactDetails;
+	private ResidencyDetailsForStates residencyDetailsforStates;
+	private SpouseDetails spouseDetails;
+	private DependentInformation dependentInformation; 
+	
 
 	public long getId() {
 		return id;

@@ -1,28 +1,34 @@
 package com.company.taxfiler.dao;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
 public class UserEntity {
 
-	 private long id;
+	private long id;
 	private String name;
 	private String email;
 	private String password;
 	private String phone;
 	@Column(name = "alternate_phone")
 	private String alternatePhone;
-	@Column(name="source_of_knowing_site")
+	@Column(name = "source_of_knowing_site")
 	private String sourceOfKnowingSite;
-	@Column(name="time_zone")
+	@Column(name = "time_zone")
 	private String timezone;
-	@Column(name="verification_code")
+	@Column(name = "verification_code")
 	private String verificationCode;
-	@Column(name="confirm_details")
+	@Column(name = "confirm_details")
 	private boolean confirmDetails;
+
+	@OneToMany
+	private List<TaxFiledYear> taxFiledYearList;
 
 	public long getId() {
 		return id;

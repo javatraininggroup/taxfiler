@@ -19,6 +19,10 @@ public class ResidencyDetailsForStates {
 	private Date startDate;
 	@Column(name = "end_date")
 	private Date endDate;
+	@Column(name = "are_details_for_spouse")
+	private boolean areDetailsForSpouse;
+	@Column(name = "type_of_residency_details")
+	private String typeOfResidencyDetails;
 
 	public long getId() {
 		return id;
@@ -60,6 +64,22 @@ public class ResidencyDetailsForStates {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public boolean isAreDetailsForSpouse() {
+		return areDetailsForSpouse;
+	}
+
+	public void setAreDetailsForSpouse(boolean areDetailsForSpouse) {
+		this.areDetailsForSpouse = areDetailsForSpouse;
+	}
+
+	public String getTypeOfResidencyDetails() {
+		return typeOfResidencyDetails;
+	}
+
+	public void setTypeOfResidencyDetails(String typeOfResidencyDetails) {
+		this.typeOfResidencyDetails = typeOfResidencyDetails;
 	}
 
 }

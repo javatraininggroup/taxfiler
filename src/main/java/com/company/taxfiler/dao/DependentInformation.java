@@ -1,10 +1,23 @@
-package com.company.model;
+package com.company.taxfiler.dao;
 
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+import com.company.model.Name;
+import com.company.model.ResidencyDetailsforStates;
+
+@Entity
 public class DependentInformation {
 
-	private Name name;
+	@Column(name = "last_name")
+	private String lastName;
+	@Column(name = "middle_name")
+	private String middleName;
+	@Column(name = "first_name")
+	private String firstName;
+
 	private String dateOfBirth;
 	private String ssn_itin;
 	private boolean check_if_ITIN_to_be_Applied;
@@ -16,14 +29,6 @@ public class DependentInformation {
 	private boolean check_if_you_provided_more_than_50PER_support_during_the_year_2019;
 	private List<ResidencyDetailsforStates> residencyDetailsforStates;
 	private boolean check_if_you_and_your_spouse_are_working;
-
-	public Name getName() {
-		return name;
-	}
-
-	public void setName(Name name) {
-		this.name = name;
-	}
 
 	public String getDateOfBirth() {
 		return dateOfBirth;

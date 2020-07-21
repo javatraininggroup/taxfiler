@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "basic_info")
-public class BasicInfo {
+public class BasicInfoEntity {
 
 	@Column(name = "tax_filed_year_id")
 	private long taxFiledYearId;
