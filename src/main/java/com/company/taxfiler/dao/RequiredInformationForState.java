@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name="required_Information_For_State")
+@Table(name="required_information_for_state")
 public class RequiredInformationForState {
 
 	private String id;
