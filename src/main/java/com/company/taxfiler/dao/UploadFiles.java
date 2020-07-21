@@ -10,18 +10,17 @@ public class UploadFiles {
 	
 	private long id;
 	
-	//@Column(name = "tax_filed_year_id")
+	@Column(name = "tax_filed_year_id")
 	private long taxFiledYearId;
-	private long year;
 	
+	private long year;
 	//@Column(name="file_name")
 	private String fileName;
-	
 	//@Column(name="file_type")
 	private String fileType;
-	
 	private String comment;
 //	private String selectFile;
+	
 	public long getId() {
 		return id;
 	}
