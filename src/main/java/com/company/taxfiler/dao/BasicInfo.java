@@ -15,7 +15,7 @@ public class BasicInfo {
 	@Column(name = "tax_filed_year_id")
 	private long taxFiledYearId;
 	
-	private long id;
+	 private long id;
 	@Column(name="martial_status")
 	private boolean martialStatus;
 	private String name;

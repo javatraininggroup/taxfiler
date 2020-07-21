@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.Column;
 
 public class SpouseDetails {
-    private long id;
+     private long id;
 	
 	private Name name;
 	@Column(name="date_of_birth")

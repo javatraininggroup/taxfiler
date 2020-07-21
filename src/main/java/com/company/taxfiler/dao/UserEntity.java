@@ -8,7 +8,7 @@ import javax.persistence.Table;
 @Table(name = "users")
 public class UserEntity {
 
-	private long id;
+	 private long id;
 	private String name;
 	private String email;
 	private String password;
