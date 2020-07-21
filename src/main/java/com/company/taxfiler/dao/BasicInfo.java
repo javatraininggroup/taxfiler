@@ -25,6 +25,7 @@ public class BasicInfo {
 	private Date dob;
 	private String occupation;
 	
+	
 	@Column(name="date_of_marriage")
 	private Date dateOfMarriage;
 	
