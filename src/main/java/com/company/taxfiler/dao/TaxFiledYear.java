@@ -1,5 +1,6 @@
 package com.company.taxfiler.dao;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -9,7 +10,8 @@ public class TaxFiledYear {
 
 	private long id;
 	private long year;
-	private long user_id;
+	@Column(name = "user_id")
+	private long userId;
 
 	public long getId() {
 		return id;
@@ -24,18 +26,18 @@ public class TaxFiledYear {
 		return year;
 	}
 
-	
 	public void setYear(long year) {
 		this.year = year;
 	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
 	
-
-	public long getUser_id() {
-		return user_id;
-	}
-
-	public void setUser_id(long user_id) {
-		this.user_id = user_id;
-	}
 
 }

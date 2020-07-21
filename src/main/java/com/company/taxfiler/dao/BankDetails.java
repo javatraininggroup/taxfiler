@@ -9,6 +9,8 @@ import javax.persistence.Table;
 @Table(name = "bank_details")
 public class BankDetails {
 
+	private long id;
+	
 	@Column(name = "bank_name")
 	private String bankName;
 
@@ -20,7 +22,7 @@ public class BankDetails {
 
 	@Column(name = "bank_account_type")
 	private String bankAccountTpe;
-	private long id;
+	
 	@Column(name = "tax_filed_year_id")
 	private long taxFiledYearId;
 
