@@ -22,8 +22,11 @@ public class BasicInfo {
 	private int ssn;
 	private Date dob;
 	private String occupation;
+	@Column(name="date_of_marriage")
 	private Date dateOfMarriage;
+	@Column(name="first_date_of_entry_in_US")
 	private Date firstDateOfEnrtyInUS;
+	@Column(name="type_of_visa")
 	private String typeOfVisa;
 	
 	public long getTaxFiledYearId() {
