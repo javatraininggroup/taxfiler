@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="FBAR")
+@Table(name="fbar")
 public class Fbar {
 	private long id;
 	
