@@ -15,15 +15,18 @@ public class BasicInfo {
 	@Column(name = "tax_filed_year_id")
 	private long taxFiledYearId;
 	
-	private long id;
+	 private long id;
 	@Column(name="martial_status")
 	private boolean martialStatus;
 	private String name;
 	private int ssn;
 	private Date dob;
 	private String occupation;
+	@Column(name="date_of_marriage")
 	private Date dateOfMarriage;
+	@Column(name="first_date_of_entry_in_US")
 	private Date firstDateOfEnrtyInUS;
+	@Column(name="type_of_visa")
 	private String typeOfVisa;
 	
 	public long getTaxFiledYearId() {
