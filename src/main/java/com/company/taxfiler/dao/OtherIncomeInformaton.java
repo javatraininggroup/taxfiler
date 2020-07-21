@@ -31,6 +31,7 @@ public class OtherIncomeInformaton {
 	public String getDividendIncome() {
 		return dividendIncome;
 	}
+	
 
 	public void setDividendIncome(String dividendIncome) {
 		this.dividendIncome = dividendIncome;

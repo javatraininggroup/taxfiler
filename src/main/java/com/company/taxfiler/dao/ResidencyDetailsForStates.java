@@ -27,6 +27,7 @@ public class ResidencyDetailsForStates {
 
 		return statesResided;
 	}
+	
 
 	public void setStatesResided(String statesResided) {
 		this.statesResided = statesResided;

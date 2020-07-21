@@ -39,6 +39,7 @@ public class AdditionalInformation {
 		
 		this.medicalExpenses = medicalExpenses;
 	}
+	
 
 	public String getHomeMortgageInterestInUSOrIndia() {
 		return HomeMortgageInterestInUSOrIndia;
