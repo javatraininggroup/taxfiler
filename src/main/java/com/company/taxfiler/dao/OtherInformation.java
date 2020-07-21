@@ -4,17 +4,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Entity	
-@Table(name="other_informtion")
+@Entity
+@Table(name = "other_informtion")
 public class OtherInformation {
-	
-	
+
 	private long id;
-	
+
 	@Column(name = "tax_filed_year_id")
 	private long taxFiledYearId;
 
-	
 	public long getId() {
 		return id;
 	}
@@ -31,15 +29,15 @@ public class OtherInformation {
 		this.taxFiledYearId = taxFiledYearId;
 	}
 
-	@Column(name="please_update_if_any_other_information")
-	
-	private String pleaseUpdateIfAnyOtherInformation;
+	@Column(name = "other_information")
+	private String otherInformation;
 
-	public String getPleaseUpdateIfAnyOtherInformation() {
-		return pleaseUpdateIfAnyOtherInformation;
+	public String getOtherInformation() {
+		return otherInformation;
 	}
 
-	public void setPleaseUpdateIfAnyOtherInformation(String pleaseUpdateIfAnyOtherInformation) {
-		this.pleaseUpdateIfAnyOtherInformation = pleaseUpdateIfAnyOtherInformation;
+	public void setOtherInformation(String otherInformation) {
+		this.otherInformation = otherInformation;
 	}
+
 }

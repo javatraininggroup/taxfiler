@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.mysql.cj.jdbc.Blob;
+
 @Entity
 @Table(name = "upload_files")
 public class UploadFiles {
@@ -19,7 +21,7 @@ public class UploadFiles {
 	@Column(name = "file_type")
 	private String fileType;
 	private String comment;
-//	private String selectFile;
+	private Blob fileContent;
 
 	public long getId() {
 		return id;
@@ -67,6 +69,14 @@ public class UploadFiles {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public Blob getFileContent() {
+		return fileContent;
+	}
+
+	public void setFileContent(Blob fileContent) {
+		this.fileContent = fileContent;
 	}
 
 }
