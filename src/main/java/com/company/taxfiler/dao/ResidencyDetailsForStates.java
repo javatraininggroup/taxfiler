@@ -22,6 +22,7 @@ public class ResidencyDetailsForStates {
 
 		this.taxYear = taxYear;
 	}
+	
 
 	public String getStatesResided() {
 

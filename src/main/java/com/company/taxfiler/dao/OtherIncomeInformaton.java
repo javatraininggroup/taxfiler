@@ -41,6 +41,7 @@ public class OtherIncomeInformaton {
 	public String getTaxableRefundsFromState() {
 		return taxableRefundsFromState;
 	}
+	
 
 	public void setTaxableRefundsFromState(String taxableRefundsFromState) {
 		this.taxableRefundsFromState = taxableRefundsFromState;

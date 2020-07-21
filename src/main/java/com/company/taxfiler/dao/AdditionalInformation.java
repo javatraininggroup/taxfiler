@@ -44,6 +44,7 @@ public class AdditionalInformation {
 	public String getHomeMortgageInterestInUSOrIndia() {
 		return HomeMortgageInterestInUSOrIndia;
 	}
+	
 
 	public void setHomeMortgageInterestInUSOrIndia(String homeMortgageInterestInUSOrIndia) {
 		HomeMortgageInterestInUSOrIndia = homeMortgageInterestInUSOrIndia;

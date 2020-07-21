@@ -28,6 +28,7 @@ public class TaxFiledYear {
 	public void setYear(long year) {
 		this.year = year;
 	}
+	
 
 	public long getUser_id() {
 		return user_id;
