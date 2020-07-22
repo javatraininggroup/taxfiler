@@ -28,7 +28,7 @@ public class UserEntity {
 	private boolean confirmDetails;
 
 	@OneToMany
-	private List<TaxFiledYear> taxFiledYearList;
+	private List<TaxFiledYearEntity> taxFiledYearList;
 
 	public long getId() {
 		return id;

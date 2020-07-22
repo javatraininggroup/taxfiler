@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "other_informtion")
-public class OtherInformation {
+public class OtherInformationEntity {
 
 	private long id;
 

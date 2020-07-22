@@ -8,7 +8,7 @@ import com.mysql.cj.jdbc.Blob;
 
 @Entity
 @Table(name = "upload_files")
-public class UploadFiles {
+public class UploadFilesEntity {
 
 	private long id;
 

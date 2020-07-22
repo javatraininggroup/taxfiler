@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "residency_details_for_states")
-public class ResidencyDetailsForStates {
+public class ResidencyDetailsForStatesEntity {
 
 	private long id;
 	@Column(name = "tax_year")

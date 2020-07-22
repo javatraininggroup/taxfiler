@@ -4,10 +4,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.company.model.DependentInformation;
+import com.company.model.SpouseDetails;
+
 
 @Entity
 @Table(name = "tax_filed_year")
-public class TaxFiledYear {
+public class TaxFiledYearEntity {
 
 	private long id;
 	private long year;
@@ -16,7 +19,7 @@ public class TaxFiledYear {
 	
 	private BasicInfoEntity basicInfo;
 	private ContactDetailsEntity contactDetails;
-	private ResidencyDetailsForStates residencyDetailsforStates;
+	private ResidencyDetailsForStatesEntity residencyDetailsforStates;
 	private SpouseDetails spouseDetails;
 	private DependentInformation dependentInformation; 
 	

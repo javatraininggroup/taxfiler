@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "fbar")
-public class Fbar {
+public class FbarEntity {
 	private long id;
 
 	@Column(name = "tax_filed_year")

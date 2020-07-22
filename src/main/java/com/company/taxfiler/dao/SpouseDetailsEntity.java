@@ -11,7 +11,7 @@ import com.company.model.ResidencyDetailsforStates;
 
 @Entity
 @Table(name = "spouse_details")
-public class SpouseDetails {
+public class SpouseDetailsEntity {
 
 	private long id;
 
