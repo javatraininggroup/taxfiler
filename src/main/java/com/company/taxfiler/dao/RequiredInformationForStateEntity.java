@@ -4,8 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "required_information_for_state")
+//@Entity
+//@Table(name = "required_information_for_state")
 public class RequiredInformationForStateEntity {
 
 	private long id;

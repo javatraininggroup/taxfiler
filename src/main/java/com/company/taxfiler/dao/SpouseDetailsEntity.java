@@ -1,53 +1,93 @@
 package com.company.taxfiler.dao;
 
-import java.util.List;
+import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.company.model.Name;
-import com.company.model.ResidencyDetailsforStates;
 
 @Entity
 @Table(name = "spouse_details")
 public class SpouseDetailsEntity {
 
-	private long id;
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	private TaxFiledYearEntity taxFileYear;
 
-	private Name name;
-	@Column(name = "date_of_birth")
-	private String DateOfBirth;
-	@Column(name = "ssn_or_Itin")
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	@Column(name = "last_name")
+	private String lastName;
+	@Column(name = "middle_name")
+	private String middleName;
+	@Column(name = "first_name")
+	private String firstName;
+	@Column(name = "dob")
+	private Date DateOfBirth;
+	@Column(name = "ssn_or_itin")
 	private String ssnOrItin;
 	@Column(name = "check_if_ITIN_to_be_applied")
 	private boolean checkIfITINToBeApplied;
 	@Column(name = "check_if_ITIN_to_be_renewed")
 	private boolean checkIfITINToBeRenewed;
-	@Column(name = "ITIN_renewed")
+	@Column(name = "itin_renewed")
 	private boolean ITINRenewed;
 	@Column(name = "entry_date_into_US")
-	private String entryDateIntoUS;
+	private Date entryDateIntoUS;
 	private String occupation;
-	private List<ResidencyDetailsforStates> residencyDetailsforStatesList;
+
+	// private List<ResidencyDetailsForStatesEntity> residencyDetailsforStatesList;
+
 	@Column(name = "did_your_spouse_is_worked_in_XX")
 	private boolean didYourSpouseisWorkedinXX;
 	@Column(name = "is_living_more_than_6months")
 	private boolean isLivingMoreThan6Months;
 
-	public Name getName() {
-		return name;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setName(Name name) {
-		this.name = name;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
-	public String getDateOfBirth() {
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public Date getDateOfBirth() {
 		return DateOfBirth;
 	}
 
-	public void setDateOfBirth(String dateOfBirth) {
+	public void setDateOfBirth(Date dateOfBirth) {
 		DateOfBirth = dateOfBirth;
 	}
 
@@ -67,12 +107,18 @@ public class SpouseDetailsEntity {
 		this.occupation = occupation;
 	}
 
-	public List<ResidencyDetailsforStates> getResidencyDetailsforStatesList() {
-		return residencyDetailsforStatesList;
-	}
+	/*
+	 * public List<ResidencyDetailsForStatesEntity>
+	 * getResidencyDetailsforStatesList() { return residencyDetailsforStatesList; }
+	 * 
+	 * public void
+	 * setResidencyDetailsforStatesList(List<ResidencyDetailsForStatesEntity>
+	 * residencyDetailsforStatesList) { this.residencyDetailsforStatesList =
+	 * residencyDetailsforStatesList; }
+	 */
 
-	public void setResidencyDetailsforStatesList(List<ResidencyDetailsforStates> residencyDetailsforStatesList) {
-		this.residencyDetailsforStatesList = residencyDetailsforStatesList;
+	public void setEntryDateIntoUS(Date entryDateIntoUS) {
+		this.entryDateIntoUS = entryDateIntoUS;
 	}
 
 	public boolean isCheckIfITINToBeApplied() {
@@ -89,14 +135,6 @@ public class SpouseDetailsEntity {
 
 	public void setCheckIfITINToBeRenewed(boolean checkIfITINToBeRenewed) {
 		this.checkIfITINToBeRenewed = checkIfITINToBeRenewed;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public boolean isITINRenewed() {
@@ -121,14 +159,6 @@ public class SpouseDetailsEntity {
 
 	public void setLivingMoreThan6Months(boolean isLivingMoreThan6Months) {
 		this.isLivingMoreThan6Months = isLivingMoreThan6Months;
-	}
-
-	public String getEntryDateIntoUS() {
-		return entryDateIntoUS;
-	}
-
-	public void setEntryDateIntoUS(String entryDateIntoUS) {
-		this.entryDateIntoUS = entryDateIntoUS;
 	}
 
 	public boolean isDidYourSpouseisWorkedinXX() {

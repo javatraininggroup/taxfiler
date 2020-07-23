@@ -1,13 +1,34 @@
 package com.company.taxfiler.dao;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "other_income_informaton")
 public class OtherIncomeInformatonEntity {
 
-	private long id;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	private TaxFiledYearEntity taxFileYear;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	private String question;
 	private String answer;
 	private String comments;
@@ -34,14 +55,6 @@ public class OtherIncomeInformatonEntity {
 
 	public void setComments(String comments) {
 		this.comments = comments;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 }

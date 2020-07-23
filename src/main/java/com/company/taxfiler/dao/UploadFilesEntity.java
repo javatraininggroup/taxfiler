@@ -2,6 +2,13 @@ package com.company.taxfiler.dao;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.mysql.cj.jdbc.Blob;
@@ -10,10 +17,13 @@ import com.mysql.cj.jdbc.Blob;
 @Table(name = "upload_files")
 public class UploadFilesEntity {
 
-	private long id;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	private TaxFiledYearEntity taxFileYear;
 
-	@Column(name = "tax_filed_year_id")
-	private long taxFiledYearId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
 	private long year;
 	@Column(name = "file_name")
@@ -21,23 +31,9 @@ public class UploadFilesEntity {
 	@Column(name = "file_type")
 	private String fileType;
 	private String comment;
-	private Blob fileContent;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public long getTaxFiledYearId() {
-		return taxFiledYearId;
-	}
-
-	public void setTaxFiledYearId(long taxFiledYearId) {
-		this.taxFiledYearId = taxFiledYearId;
-	}
+	@Column(name = "file_content")
+	@Lob
+	private byte[] fileContent;
 
 	public long getYear() {
 		return year;
@@ -71,12 +67,28 @@ public class UploadFilesEntity {
 		this.comment = comment;
 	}
 
-	public Blob getFileContent() {
+	public byte[] getFileContent() {
 		return fileContent;
 	}
 
-	public void setFileContent(Blob fileContent) {
+	public void setFileContent(byte[] fileContent) {
 		this.fileContent = fileContent;
+	}
+
+	public TaxFiledYearEntity getTaxFileYear() {
+		return taxFileYear;
+	}
+
+	public void setTaxFileYear(TaxFiledYearEntity taxFileYear) {
+		this.taxFileYear = taxFileYear;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

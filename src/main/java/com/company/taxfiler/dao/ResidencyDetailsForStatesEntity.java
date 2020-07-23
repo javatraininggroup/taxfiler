@@ -4,13 +4,26 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "residency_details_for_states")
 public class ResidencyDetailsForStatesEntity {
 
-	private long id;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	private TaxFiledYearEntity taxFileYear;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
 	@Column(name = "tax_year")
 	private long taxYear;
 	@Column(name = "states_resided")
@@ -19,16 +32,24 @@ public class ResidencyDetailsForStatesEntity {
 	private Date startDate;
 	@Column(name = "end_date")
 	private Date endDate;
-	@Column(name = "are_details_for_spouse")
+	@Column(name = "is_this_spouse")
 	private boolean areDetailsForSpouse;
 	@Column(name = "type_of_residency_details")
 	private String typeOfResidencyDetails;
 
-	public long getId() {
+	public TaxFiledYearEntity getTaxFileYear() {
+		return taxFileYear;
+	}
+
+	public void setTaxFileYear(TaxFiledYearEntity taxFileYear) {
+		this.taxFileYear = taxFileYear;
+	}
+
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

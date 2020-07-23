@@ -4,18 +4,28 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "basic_info")
 public class BasicInfoEntity {
 
-	@Column(name = "tax_filed_year_id")
-	private long taxFiledYearId;
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	private TaxFiledYearEntity taxFileYear;
 
-	private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
 	@Column(name = "martial_status")
-	private boolean martialStatus;
+	private String martialStatus;
 	@Column(name = "last_name")
 	private String lastName;
 	@Column(name = "middle_name")
@@ -31,28 +41,33 @@ public class BasicInfoEntity {
 	private Date firstDateOfEntryInUS;
 	@Column(name = "type_of_visa")
 	private String typeOfVisa;
+	private String citizenship;
 
-	public long getTaxFiledYearId() {
-		return taxFiledYearId;
+	public TaxFiledYearEntity getTaxFileYear() {
+		return taxFileYear;
 	}
 
-	public void setTaxFiledYearId(long taxFiledYearId) {
-		this.taxFiledYearId = taxFiledYearId;
+	public void setTaxFileYear(TaxFiledYearEntity taxFileYear) {
+		this.taxFileYear = taxFileYear;
 	}
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public boolean isMartialStatus() {
+	public String getMartialStatus() {
 		return martialStatus;
 	}
 
-	public void setMartialStatus(boolean martialStatus) {
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String isMartialStatus() {
+		return martialStatus;
+	}
+
+	public void setMartialStatus(String martialStatus) {
 		this.martialStatus = martialStatus;
 	}
 
@@ -126,6 +141,14 @@ public class BasicInfoEntity {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+
+	public String getCitizenship() {
+		return citizenship;
+	}
+
+	public void setCitizenship(String citizenship) {
+		this.citizenship = citizenship;
 	}
 
 }

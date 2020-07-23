@@ -3,7 +3,7 @@ package com.company.model;
 public class BankDetails {
 
 	private String bankName;
-	private String routingNumber;
+	private long routingNumber;
 	private Long bankAccountNumber;
 	private String bankAccountType;
 
@@ -15,11 +15,11 @@ public class BankDetails {
 		this.bankName = bankName;
 	}
 
-	public String getRoutingNumber() {
+	public long getRoutingNumber() {
 		return routingNumber;
 	}
 
-	public void setRoutingNumber(String routingNumber) {
+	public void setRoutingNumber(long routingNumber) {
 		this.routingNumber = routingNumber;
 	}
 

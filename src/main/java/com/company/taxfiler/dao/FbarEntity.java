@@ -2,15 +2,33 @@ package com.company.taxfiler.dao;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "fbar")
 public class FbarEntity {
-	private long id;
 
-	@Column(name = "tax_filed_year")
-	private long taxFiledYearId;
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	private TaxFiledYearEntity taxFileYear;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	@Column(name = "transfer_to_foreign_account")
 	private String transferToForeignAccount;
@@ -38,22 +56,6 @@ public class FbarEntity {
 
 	@Column(name = "type_of_account")
 	private String typeOfAccount;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public long getTaxFiledYearId() {
-		return taxFiledYearId;
-	}
-
-	public void setTaxFiledYearId(long taxFiledYearId) {
-		this.taxFiledYearId = taxFiledYearId;
-	}
 
 	public String getBankName() {
 		return bankName;

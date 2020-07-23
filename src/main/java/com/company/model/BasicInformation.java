@@ -7,7 +7,7 @@ public class BasicInformation {
 
 	private String martialStatus;
 	private Name name;
-	private Long ssn;
+	private int ssn;
 	private String dateOfBirth;
 	private String occupation;
 	private String dateOfMarriage;
@@ -27,11 +27,11 @@ public class BasicInformation {
 		this.martialStatus = martialStatus;
 	}
 
-	public Long getSsn() {
+	public int getSsn() {
 		return ssn;
 	}
 
-	public void setSsn(Long ssn) {
+	public void setSsn(int ssn) {
 		this.ssn = ssn;
 	}
 

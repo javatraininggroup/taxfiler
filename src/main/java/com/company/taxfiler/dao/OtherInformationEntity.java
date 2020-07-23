@@ -2,31 +2,32 @@ package com.company.taxfiler.dao;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "other_informtion")
+@Table(name = "other_information")
 public class OtherInformationEntity {
 
-	private long id;
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	private TaxFiledYearEntity taxFileYear;
 
-	@Column(name = "tax_filed_year_id")
-	private long taxFiledYearId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
-	}
-
-	public long getTaxFiledYearId() {
-		return taxFiledYearId;
-	}
-
-	public void setTaxFiledYearId(long taxFiledYearId) {
-		this.taxFiledYearId = taxFiledYearId;
 	}
 
 	@Column(name = "other_information")
@@ -38,6 +39,14 @@ public class OtherInformationEntity {
 
 	public void setOtherInformation(String otherInformation) {
 		this.otherInformation = otherInformation;
+	}
+
+	public TaxFiledYearEntity getTaxFileYear() {
+		return taxFileYear;
+	}
+
+	public void setTaxFileYear(TaxFiledYearEntity taxFileYear) {
+		this.taxFileYear = taxFileYear;
 	}
 
 }

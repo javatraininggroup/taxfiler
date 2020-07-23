@@ -1,14 +1,34 @@
 package com.company.taxfiler.dao;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
-import com.company.model.ResidencyDetailsforStates;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "dependent_info")
 public class DependentInformationEntity {
+
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	private TaxFiledYearEntity taxFileYear;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	@Column(name = "last_name")
 	private String lastName;
@@ -20,11 +40,11 @@ public class DependentInformationEntity {
 	private String dateOfBirth;
 	@Column(name = "ssn_itin")
 	private String ssnitin;
-	@Column(name = "check_if_ITIN_to_be_applied")
+	@Column(name = "check_if_itin_to_be_applied")
 	private boolean checkIfITINToBeApplied;
-	@Column(name = "check_if_ITIN_to_be_Renewed")
+	@Column(name = "check_if_itin_to_be_renewed")
 	private boolean checkIfITINToBeRenewed;
-	@Column(name = "ITIN_Renewed")
+	@Column(name = "itin_renewed")
 	private boolean ITINRenewed;
 	private String relationship;
 	@Column(name = "visa_status")
@@ -35,12 +55,6 @@ public class DependentInformationEntity {
 	private boolean providedMoreThan50PESupport;
 	@Column(name = "is_you_and_spouse_working")
 	private boolean isYouAndSpouseWorking;
-
-	/**
-	 * hibernate mapping
-	 */
-	@Column(name = "")
-	private List<ResidencyDetailsforStates> residencyDetailsforStates;
 
 	public String getDateOfBirth() {
 		return dateOfBirth;
@@ -64,14 +78,6 @@ public class DependentInformationEntity {
 
 	public void setVisaStatus(String visaStatus) {
 		this.visaStatus = visaStatus;
-	}
-
-	public List<ResidencyDetailsforStates> getResidencyDetailsforStates() {
-		return residencyDetailsforStates;
-	}
-
-	public void setResidencyDetailsforStates(List<ResidencyDetailsforStates> residencyDetailsforStates) {
-		this.residencyDetailsforStates = residencyDetailsforStates;
 	}
 
 	public String getLastName() {

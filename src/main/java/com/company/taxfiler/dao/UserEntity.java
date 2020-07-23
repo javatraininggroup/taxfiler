@@ -2,8 +2,13 @@ package com.company.taxfiler.dao;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -11,7 +16,9 @@ import javax.persistence.Table;
 @Table(name = "users")
 public class UserEntity {
 
-	private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	private String name;
 	private String email;
 	private String password;
@@ -20,23 +27,15 @@ public class UserEntity {
 	private String alternatePhone;
 	@Column(name = "source_of_knowing_site")
 	private String sourceOfKnowingSite;
-	@Column(name = "time_zone")
+	@Column(name = "timezone")
 	private String timezone;
-	@Column(name = "verification_code")
-	private String verificationCode;
+	/*@Column(name = "verification_code")
+	private String verificationCode;*/
 	@Column(name = "confirm_details")
 	private boolean confirmDetails;
 
-	@OneToMany
+	@OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<TaxFiledYearEntity> taxFiledYearList;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
@@ -86,13 +85,13 @@ public class UserEntity {
 		this.sourceOfKnowingSite = sourceOfKnowingSite;
 	}
 
-	public String getVerificationCode() {
+	/*public String getVerificationCode() {
 		return verificationCode;
 	}
 
 	public void setVerificationCode(String verificationCode) {
 		this.verificationCode = verificationCode;
-	}
+	}*/
 
 	public boolean isConfirmDetails() {
 		return confirmDetails;
@@ -100,6 +99,30 @@ public class UserEntity {
 
 	public void setConfirmDetails(boolean confirmDetails) {
 		this.confirmDetails = confirmDetails;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getTimezone() {
+		return timezone;
+	}
+
+	public void setTimezone(String timezone) {
+		this.timezone = timezone;
+	}
+
+	public List<TaxFiledYearEntity> getTaxFiledYearList() {
+		return taxFiledYearList;
+	}
+
+	public void setTaxFiledYearList(List<TaxFiledYearEntity> taxFiledYearList) {
+		this.taxFiledYearList = taxFiledYearList;
 	}
 
 }

@@ -10,11 +10,11 @@ public class ContactDetails {
 	private String state;
 	private int zip;
 	private String country;
-	private Long mobilePhone;
-	private Long alternateNumber;
-	private Long indiaNumber;
+	private String mobilePhone;
+	private String alternateNumber;
+	private String indiaNumber;
 	private String email;
-	private String timeZone;
+	private String timezone;
 	private List<ResidencyDetailsforStates> residencyDetailsforStates;
 
 	public String getCity() {
@@ -57,44 +57,12 @@ public class ContactDetails {
 		this.country = country;
 	}
 
-	public Long getMobilePhone() {
-		return mobilePhone;
-	}
-
-	public void setMobilePhone(Long mobilePhone) {
-		this.mobilePhone = mobilePhone;
-	}
-
-	public Long getAlternateNumber() {
-		return alternateNumber;
-	}
-
-	public void setAlternateNumber(Long alternateNumber) {
-		this.alternateNumber = alternateNumber;
-	}
-
-	public Long getIndiaNumber() {
-		return indiaNumber;
-	}
-
-	public void setIndiaNumber(Long indiaNumber) {
-		this.indiaNumber = indiaNumber;
-	}
-
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getTimeZone() {
-		return timeZone;
-	}
-
-	public void setTimeZone(String timeZone) {
-		this.timeZone = timeZone;
 	}
 
 	public List<ResidencyDetailsforStates> getResidencyDetailsforStates() {
@@ -111,6 +79,38 @@ public class ContactDetails {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getMobilePhone() {
+		return mobilePhone;
+	}
+
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
+	}
+
+	public String getAlternateNumber() {
+		return alternateNumber;
+	}
+
+	public void setAlternateNumber(String alternateNumber) {
+		this.alternateNumber = alternateNumber;
+	}
+
+	public String getIndiaNumber() {
+		return indiaNumber;
+	}
+
+	public void setIndiaNumber(String indiaNumber) {
+		this.indiaNumber = indiaNumber;
+	}
+
+	public String getTimezone() {
+		return timezone;
+	}
+
+	public void setTimezone(String timezone) {
+		this.timezone = timezone;
 	}
 
 }

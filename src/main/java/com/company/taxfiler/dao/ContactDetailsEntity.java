@@ -2,22 +2,39 @@ package com.company.taxfiler.dao;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "contact_details")
 public class ContactDetailsEntity {
 
-	private long id;
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	private TaxFiledYearEntity taxFileYear;
 
-	@Column(name = "tax_filed_year_id")
-	private long taxFiledYearId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	private String address;
 	private String city;
 	private String aptNo;
 	private String state;
-	private String zip;
+	private int zip;
 	private String country;
 	@Column(name = "mobile_phone")
 	private String mobilePhone;
@@ -27,22 +44,6 @@ public class ContactDetailsEntity {
 	private String indiaNumber;
 	private String email;
 	private String timezone;
-
-	public long getTaxFiledYearId() {
-		return taxFiledYearId;
-	}
-
-	public void setTaxFiledYearId(long taxFiledYearId) {
-		this.taxFiledYearId = taxFiledYearId;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public String getTimezone() {
 		return timezone;
@@ -84,11 +85,11 @@ public class ContactDetailsEntity {
 		this.state = state;
 	}
 
-	public String getZip() {
+	public int getZip() {
 		return zip;
 	}
 
-	public void setZip(String zip) {
+	public void setZip(int zip) {
 		this.zip = zip;
 	}
 

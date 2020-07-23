@@ -2,13 +2,33 @@ package com.company.taxfiler.dao;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "bank_details")
 public class BankDetailsEntity {
 
-	private long id;
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	private TaxFiledYearEntity taxFileYear;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	@Column(name = "bank_name")
 	private String bankName;
@@ -21,9 +41,6 @@ public class BankDetailsEntity {
 
 	@Column(name = "bank_account_type")
 	private String bankAccountTpe;
-
-	@Column(name = "tax_filed_year_id")
-	private long taxFiledYearId;
 
 	public String getBankName() {
 		return bankName;
@@ -57,20 +74,12 @@ public class BankDetailsEntity {
 		this.bankAccountTpe = bankAccountTpe;
 	}
 
-	public long getId() {
-		return id;
+	public TaxFiledYearEntity getTaxFileYear() {
+		return taxFileYear;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public long getTaxFiledYearId() {
-		return taxFiledYearId;
-	}
-
-	public void setTaxFiledYearId(long taxFiledYearId) {
-		this.taxFiledYearId = taxFiledYearId;
+	public void setTaxFileYear(TaxFiledYearEntity taxFileYear) {
+		this.taxFileYear = taxFileYear;
 	}
 
 }
