@@ -6,6 +6,9 @@ public class TaxPayer {
 	private SpouseDetails spouseDetails;
 	private DependentInformation dependentInformation;
 	private BankDetails bankDetails;
+	private OtherIncomeInfoModel otherIncomeInfoModel;
+	private AdditionalInfoModel additionalInfoModel;
+	private Fbar fbar;
 
 	public BasicInformation getBasicInformation() {
 		return basicInformation;
@@ -45,6 +48,30 @@ public class TaxPayer {
 
 	public void setBankDetails(BankDetails bankDetails) {
 		this.bankDetails = bankDetails;
+	}
+
+	public OtherIncomeInfoModel getOtherIncomeInfoModel() {
+		return otherIncomeInfoModel;
+	}
+
+	public void setOtherIncomeInfoModel(OtherIncomeInfoModel otherIncomeInfoModel) {
+		this.otherIncomeInfoModel = otherIncomeInfoModel;
+	}
+
+	public AdditionalInfoModel getAdditionalInfoModel() {
+		return additionalInfoModel;
+	}
+
+	public void setAdditionalInfoModel(AdditionalInfoModel additionalInfoModel) {
+		this.additionalInfoModel = additionalInfoModel;
+	}
+
+	public Fbar getFbar() {
+		return fbar;
+	}
+
+	public void setFbar(Fbar fbar) {
+		this.fbar = fbar;
 	}
 
 }

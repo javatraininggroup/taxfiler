@@ -1,8 +1,8 @@
 package com.company.taxfiler.dao;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,14 +11,12 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.mysql.cj.jdbc.Blob;
-
 @Entity
 @Table(name = "upload_files")
 public class UploadFilesEntity {
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
 	private TaxFiledYearEntity taxFileYear;
 
 	@Id
@@ -30,7 +28,7 @@ public class UploadFilesEntity {
 	private String fileName;
 	@Column(name = "file_type")
 	private String fileType;
-	private String comment;
+	private String comments;
 	@Column(name = "file_content")
 	@Lob
 	private byte[] fileContent;
@@ -59,12 +57,12 @@ public class UploadFilesEntity {
 		this.fileType = fileType;
 	}
 
-	public String getComment() {
-		return comment;
+	public String getComments() {
+		return comments;
 	}
 
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 
 	public byte[] getFileContent() {

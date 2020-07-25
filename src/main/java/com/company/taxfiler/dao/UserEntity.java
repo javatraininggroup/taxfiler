@@ -1,6 +1,7 @@
 package com.company.taxfiler.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,13 +30,14 @@ public class UserEntity {
 	private String sourceOfKnowingSite;
 	@Column(name = "timezone")
 	private String timezone;
-	/*@Column(name = "verification_code")
-	private String verificationCode;*/
+	/*
+	 * @Column(name = "verification_code") private String verificationCode;
+	 */
 	@Column(name = "confirm_details")
 	private boolean confirmDetails;
 
-	@OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<TaxFiledYearEntity> taxFiledYearList;
+	@OneToMany(orphanRemoval = true, mappedBy = "userEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = TaxFiledYearEntity.class)
+	private Set<TaxFiledYearEntity> taxFiledYearList;
 
 	public String getName() {
 		return name;
@@ -85,13 +87,12 @@ public class UserEntity {
 		this.sourceOfKnowingSite = sourceOfKnowingSite;
 	}
 
-	/*public String getVerificationCode() {
-		return verificationCode;
-	}
-
-	public void setVerificationCode(String verificationCode) {
-		this.verificationCode = verificationCode;
-	}*/
+	/*
+	 * public String getVerificationCode() { return verificationCode; }
+	 * 
+	 * public void setVerificationCode(String verificationCode) {
+	 * this.verificationCode = verificationCode; }
+	 */
 
 	public boolean isConfirmDetails() {
 		return confirmDetails;
@@ -117,11 +118,11 @@ public class UserEntity {
 		this.timezone = timezone;
 	}
 
-	public List<TaxFiledYearEntity> getTaxFiledYearList() {
+	public Set<TaxFiledYearEntity> getTaxFiledYearList() {
 		return taxFiledYearList;
 	}
 
-	public void setTaxFiledYearList(List<TaxFiledYearEntity> taxFiledYearList) {
+	public void setTaxFiledYearList(Set<TaxFiledYearEntity> taxFiledYearList) {
 		this.taxFiledYearList = taxFiledYearList;
 	}
 

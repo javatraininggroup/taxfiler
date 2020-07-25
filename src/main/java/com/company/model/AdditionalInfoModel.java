@@ -1,16 +1,16 @@
 package com.company.model;
 
-import java.util.List;
+import java.util.Set;
 
 public class AdditionalInfoModel {
 
-	private List<OtherIncomeInfoData> additionalInfoDataList;
+	private Set<OtherIncomeInfoData> additionalInfoDataList;
 
-	public List<OtherIncomeInfoData> getAdditionalInfoDataList() {
+	public Set<OtherIncomeInfoData> getAdditionalInfoDataList() {
 		return additionalInfoDataList;
 	}
 
-	public void setAdditionalInfoDataList(List<OtherIncomeInfoData> additionalInfoDataList) {
+	public void setAdditionalInfoDataList(Set<OtherIncomeInfoData> additionalInfoDataList) {
 		this.additionalInfoDataList = additionalInfoDataList;
 	}
 

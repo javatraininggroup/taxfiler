@@ -2,9 +2,9 @@ package com.company.taxfiler.dao;
 
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,8 +16,8 @@ import javax.persistence.Table;
 @Table(name = "spouse_details")
 public class SpouseDetailsEntity {
 
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
 	private TaxFiledYearEntity taxFileYear;
 
 	@Id
@@ -167,6 +167,18 @@ public class SpouseDetailsEntity {
 
 	public void setDidYourSpouseisWorkedinXX(boolean didYourSpouseisWorkedinXX) {
 		this.didYourSpouseisWorkedinXX = didYourSpouseisWorkedinXX;
+	}
+
+	public TaxFiledYearEntity getTaxFileYear() {
+		return taxFileYear;
+	}
+
+	public void setTaxFileYear(TaxFiledYearEntity taxFileYear) {
+		this.taxFileYear = taxFileYear;
+	}
+
+	public Date getEntryDateIntoUS() {
+		return entryDateIntoUS;
 	}
 
 }

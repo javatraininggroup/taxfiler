@@ -1,7 +1,7 @@
 package com.company.taxfiler.dao;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,8 +13,8 @@ import javax.persistence.Table;
 @Table(name = "other_income_informaton")
 public class OtherIncomeInformatonEntity {
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
 	private TaxFiledYearEntity taxFileYear;
 
 	@Id
@@ -55,6 +55,14 @@ public class OtherIncomeInformatonEntity {
 
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+
+	public TaxFiledYearEntity getTaxFileYear() {
+		return taxFileYear;
+	}
+
+	public void setTaxFileYear(TaxFiledYearEntity taxFileYear) {
+		this.taxFileYear = taxFileYear;
 	}
 
 }

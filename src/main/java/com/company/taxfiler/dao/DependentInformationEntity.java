@@ -1,8 +1,10 @@
 package com.company.taxfiler.dao;
 
+import java.sql.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,8 +16,8 @@ import javax.persistence.Table;
 @Table(name = "dependent_info")
 public class DependentInformationEntity {
 
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
 	private TaxFiledYearEntity taxFileYear;
 
 	@Id
@@ -37,7 +39,7 @@ public class DependentInformationEntity {
 	@Column(name = "first_name")
 	private String firstName;
 	@Column(name = "dob")
-	private String dateOfBirth;
+	private Date dateOfBirth;
 	@Column(name = "ssn_itin")
 	private String ssnitin;
 	@Column(name = "check_if_itin_to_be_applied")
@@ -56,11 +58,11 @@ public class DependentInformationEntity {
 	@Column(name = "is_you_and_spouse_working")
 	private boolean isYouAndSpouseWorking;
 
-	public String getDateOfBirth() {
+	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(String dateOfBirth) {
+	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 

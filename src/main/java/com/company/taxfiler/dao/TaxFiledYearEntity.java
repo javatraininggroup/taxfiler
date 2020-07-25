@@ -1,6 +1,6 @@
 package com.company.taxfiler.dao;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -24,42 +24,42 @@ public class TaxFiledYearEntity {
 
 	private int year;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "users_id", nullable = false)
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "users_id", referencedColumnName = "id")
 	private UserEntity userEntity;
 
-	@OneToOne(mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private BasicInfoEntity basicInfo;
 
-	@OneToOne(mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private ContactDetailsEntity contactDetails;
 
-	@OneToMany(mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<ResidencyDetailsForStatesEntity> residencyDetailsforStatesList;
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<ResidencyDetailsForStatesEntity> residencyDetailsforStatesList;
 
-	@OneToOne(mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private SpouseDetailsEntity spouseDetails;
 
-	@OneToOne(mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private DependentInformationEntity dependentInformation;
 
-	@OneToOne(mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private BankDetailsEntity bankDetails;
 
-	@OneToMany(mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<OtherIncomeInformatonEntity> otherIncomeInformatonEntityList;
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<OtherIncomeInformatonEntity> otherIncomeInformatonEntityList;
 
-	@OneToMany(mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<AdditionalInformationEntity> additionalInformationEntityList;
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<AdditionalInformationEntity> additionalInformationEntityList;
 
-	@OneToOne(mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private FbarEntity fbarEntity;
 
-	@OneToOne(mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private OtherInformationEntity otherInformationEntity;
 
-	@OneToMany(mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<UploadFilesEntity> UploadFilesEntityList;
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<UploadFilesEntity> UploadFilesEntityList;
 
 	public int getId() {
 		return id;
@@ -101,12 +101,8 @@ public class TaxFiledYearEntity {
 		this.contactDetails = contactDetails;
 	}
 
-	public List<ResidencyDetailsForStatesEntity> getResidencyDetailsforStatesList() {
+	public Set<ResidencyDetailsForStatesEntity> getResidencyDetailsforStatesList() {
 		return residencyDetailsforStatesList;
-	}
-
-	public void setResidencyDetailsforStatesList(List<ResidencyDetailsForStatesEntity> residencyDetailsforStatesList) {
-		this.residencyDetailsforStatesList = residencyDetailsforStatesList;
 	}
 
 	public SpouseDetailsEntity getSpouseDetails() {
@@ -133,28 +129,32 @@ public class TaxFiledYearEntity {
 		this.bankDetails = bankDetails;
 	}
 
-	public List<OtherIncomeInformatonEntity> getOtherIncomeInformatonEntityList() {
+	public Set<OtherIncomeInformatonEntity> getOtherIncomeInformatonEntityList() {
 		return otherIncomeInformatonEntityList;
 	}
 
-	public void setOtherIncomeInformatonEntityList(List<OtherIncomeInformatonEntity> otherIncomeInformatonEntityList) {
+	public void setOtherIncomeInformatonEntityList(Set<OtherIncomeInformatonEntity> otherIncomeInformatonEntityList) {
 		this.otherIncomeInformatonEntityList = otherIncomeInformatonEntityList;
 	}
 
-	public List<AdditionalInformationEntity> getAdditionalInformationEntityList() {
+	public Set<AdditionalInformationEntity> getAdditionalInformationEntityList() {
 		return additionalInformationEntityList;
 	}
 
-	public void setAdditionalInformationEntityList(List<AdditionalInformationEntity> additionalInformationEntityList) {
+	public void setAdditionalInformationEntityList(Set<AdditionalInformationEntity> additionalInformationEntityList) {
 		this.additionalInformationEntityList = additionalInformationEntityList;
 	}
 
-	public List<UploadFilesEntity> getUploadFilesEntityList() {
+	public Set<UploadFilesEntity> getUploadFilesEntityList() {
 		return UploadFilesEntityList;
 	}
 
-	public void setUploadFilesEntityList(List<UploadFilesEntity> uploadFilesEntityList) {
+	public void setUploadFilesEntityList(Set<UploadFilesEntity> uploadFilesEntityList) {
 		UploadFilesEntityList = uploadFilesEntityList;
+	}
+
+	public void setResidencyDetailsforStatesList(Set<ResidencyDetailsForStatesEntity> residencyDetailsforStatesList) {
+		this.residencyDetailsforStatesList = residencyDetailsforStatesList;
 	}
 
 	public FbarEntity getFbarEntity() {

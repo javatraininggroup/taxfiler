@@ -6,16 +6,16 @@ public class DependentInformation {
 
 	private Name name;
 	private String dateOfBirth;
-	private String ssn_itin;
-	private boolean check_if_ITIN_to_be_Applied;
-	private boolean check_if_ITIN_to_be_Renewed;
-	private boolean ITIN_Renewed;
+	private String ssnOrItin;
+	private boolean checkIfITINToBeApplied;
+	private boolean checkIfITINToBeRenewed;
+	private boolean ITINRenewed;
 	private String relationship;
 	private String visaStatus;
-	private boolean check_if_lived_for_more_than_06_months_with_you_in_US_during_the_year_2019;
-	private boolean check_if_you_provided_more_than_50PER_support_during_the_year_2019;
+	private boolean isLivingMoreThan6Months;
+	private boolean ifProvidedMoreThan50PERSupportDuringTheYearXX;
 	private List<ResidencyDetailsforStates> residencyDetailsforStates;
-	private boolean check_if_you_and_your_spouse_are_working;
+	private boolean ifYouAndYourSpouseAreWorking;
 
 	public Name getName() {
 		return name;
@@ -31,38 +31,6 @@ public class DependentInformation {
 
 	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
-	}
-
-	public String getSsn_itin() {
-		return ssn_itin;
-	}
-
-	public void setSsn_itin(String ssn_itin) {
-		this.ssn_itin = ssn_itin;
-	}
-
-	public boolean isCheck_if_ITIN_to_be_Applied() {
-		return check_if_ITIN_to_be_Applied;
-	}
-
-	public void setCheck_if_ITIN_to_be_Applied(boolean check_if_ITIN_to_be_Applied) {
-		this.check_if_ITIN_to_be_Applied = check_if_ITIN_to_be_Applied;
-	}
-
-	public boolean isCheck_if_ITIN_to_be_Renewed() {
-		return check_if_ITIN_to_be_Renewed;
-	}
-
-	public void setCheck_if_ITIN_to_be_Renewed(boolean check_if_ITIN_to_be_Renewed) {
-		this.check_if_ITIN_to_be_Renewed = check_if_ITIN_to_be_Renewed;
-	}
-
-	public boolean isITIN_Renewed() {
-		return ITIN_Renewed;
-	}
-
-	public void setITIN_Renewed(boolean iTIN_Renewed) {
-		ITIN_Renewed = iTIN_Renewed;
 	}
 
 	public String getRelationship() {
@@ -81,15 +49,6 @@ public class DependentInformation {
 		this.visaStatus = visaStatus;
 	}
 
-	public boolean isCheck_if_lived_for_more_than_06_months_with_you_in_US_during_the_year_2019() {
-		return check_if_lived_for_more_than_06_months_with_you_in_US_during_the_year_2019;
-	}
-
-	public void setCheck_if_lived_for_more_than_06_months_with_you_in_US_during_the_year_2019(
-			boolean check_if_lived_for_more_than_06_months_with_you_in_US_during_the_year_2019) {
-		this.check_if_lived_for_more_than_06_months_with_you_in_US_during_the_year_2019 = check_if_lived_for_more_than_06_months_with_you_in_US_during_the_year_2019;
-	}
-
 	public List<ResidencyDetailsforStates> getResidencyDetailsforStates() {
 		return residencyDetailsforStates;
 	}
@@ -98,21 +57,61 @@ public class DependentInformation {
 		this.residencyDetailsforStates = residencyDetailsforStates;
 	}
 
-	public boolean isCheck_if_you_and_your_spouse_are_working() {
-		return check_if_you_and_your_spouse_are_working;
+	public String getSsnOrItin() {
+		return ssnOrItin;
 	}
 
-	public void setCheck_if_you_and_your_spouse_are_working(boolean check_if_you_and_your_spouse_are_working) {
-		this.check_if_you_and_your_spouse_are_working = check_if_you_and_your_spouse_are_working;
+	public void setSsnOrItin(String ssnOrItin) {
+		this.ssnOrItin = ssnOrItin;
 	}
 
-	public boolean isCheck_if_you_provided_more_than_50PER_support_during_the_year_2019() {
-		return check_if_you_provided_more_than_50PER_support_during_the_year_2019;
+	public boolean isCheckIfITINToBeApplied() {
+		return checkIfITINToBeApplied;
 	}
 
-	public void setCheck_if_you_provided_more_than_50PER_support_during_the_year_2019(
-			boolean check_if_you_provided_more_than_50PER_support_during_the_year_2019) {
-		this.check_if_you_provided_more_than_50PER_support_during_the_year_2019 = check_if_you_provided_more_than_50PER_support_during_the_year_2019;
+	public void setCheckIfITINToBeApplied(boolean checkIfITINToBeApplied) {
+		this.checkIfITINToBeApplied = checkIfITINToBeApplied;
+	}
+
+	public boolean isCheckIfITINToBeRenewed() {
+		return checkIfITINToBeRenewed;
+	}
+
+	public void setCheckIfITINToBeRenewed(boolean checkIfITINToBeRenewed) {
+		this.checkIfITINToBeRenewed = checkIfITINToBeRenewed;
+	}
+
+	public boolean isITINRenewed() {
+		return ITINRenewed;
+	}
+
+	public void setITINRenewed(boolean iTINRenewed) {
+		ITINRenewed = iTINRenewed;
+	}
+
+	public boolean isLivingMoreThan6Months() {
+		return isLivingMoreThan6Months;
+	}
+
+	public void setLivingMoreThan6Months(boolean isLivingMoreThan6Months) {
+		this.isLivingMoreThan6Months = isLivingMoreThan6Months;
+	}
+
+	public boolean isIfProvidedMoreThan50PERSupportDuringTheYearXX() {
+		return ifProvidedMoreThan50PERSupportDuringTheYearXX;
+	}
+
+	public void setIfProvidedMoreThan50PERSupportDuringTheYearXX(
+			boolean ifProvidedMoreThan50PERSupportDuringTheYearXX) {
+		this.ifProvidedMoreThan50PERSupportDuringTheYearXX = ifProvidedMoreThan50PERSupportDuringTheYearXX;
+	}
+
+	public boolean isIfYouAndYourSpouseAreWorking() {
+		return ifYouAndYourSpouseAreWorking;
+	}
+
+	public void setIfYouAndYourSpouseAreWorking(boolean ifYouAndYourSpouseAreWorking) {
+		this.ifYouAndYourSpouseAreWorking = ifYouAndYourSpouseAreWorking;
 	}
 
 }

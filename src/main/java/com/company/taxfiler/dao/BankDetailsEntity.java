@@ -1,8 +1,8 @@
 package com.company.taxfiler.dao;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,8 +14,8 @@ import javax.persistence.Table;
 @Table(name = "bank_details")
 public class BankDetailsEntity {
 
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "tax_file_year_id", nullable = false)
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
 	private TaxFiledYearEntity taxFileYear;
 
 	@Id

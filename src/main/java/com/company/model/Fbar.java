@@ -1,60 +1,25 @@
-package com.company.taxfiler.dao;
+package com.company.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+public class Fbar {
 
-@Entity
-@Table(name = "fbar")
-public class FbarEntity {
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
-	private TaxFiledYearEntity taxFileYear;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	@Column(name = "transfer_to_foreign_account")
 	private String transferToForeignAccount;
 
-	@Column(name = "acc_belongs_to")
 	private String accBelongsTo;
 
-	@Column(name = "bank_name")
 	private String bankName;
 
-	@Column(name = "bank_address")
 	private String bankAddress;
 
 	private String city;
+	
 	private String state;
 
-	@Column(name = "pincode")
-	private long pinCode;
+	private long pincode;
 
-	@Column(name = "maximum_value_in_acc")
 	private long maximumValueInTheAcINR;
 
-	@Column(name = "acc_no")
-	private String accNo;
+	private long accNo;
 
-	@Column(name = "type_of_account")
 	private String typeOfAccount;
 
 	public String getBankName() {
@@ -89,12 +54,12 @@ public class FbarEntity {
 		this.state = state;
 	}
 
-	public long getPinCode() {
-		return pinCode;
+	public long getPincode() {
+		return pincode;
 	}
 
-	public void setPinCode(long pinCode) {
-		this.pinCode = pinCode;
+	public void setPincode(long pincode) {
+		this.pincode = pincode;
 	}
 
 	public String getTransferToForeignAccount() {
@@ -121,11 +86,11 @@ public class FbarEntity {
 		this.maximumValueInTheAcINR = maximumValueInTheAcINR;
 	}
 
-	public String getAccNo() {
+	public long getAccNo() {
 		return accNo;
 	}
 
-	public void setAccNo(String accNo) {
+	public void setAccNo(long accNo) {
 		this.accNo = accNo;
 	}
 

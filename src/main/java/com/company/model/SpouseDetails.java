@@ -13,7 +13,7 @@ public class SpouseDetails {
 	private boolean ITINRenewed;
 	private String entryDateIntoUS;
 	private String occupation;
-	private List<ResidencyDetailsforStates> residencyDetailsforStatesList;
+	private List<ResidencyDetailsforStates> residencyDetailsforStates;
 	private boolean didYourSpouseisWorkedinXX;
 	private boolean isLivingMoreThan6Months;
 
@@ -49,12 +49,12 @@ public class SpouseDetails {
 		this.occupation = occupation;
 	}
 
-	public List<ResidencyDetailsforStates> getResidencyDetailsforStatesList() {
-		return residencyDetailsforStatesList;
+	public List<ResidencyDetailsforStates> getResidencyDetailsforStates() {
+		return residencyDetailsforStates;
 	}
 
-	public void setResidencyDetailsforStatesList(List<ResidencyDetailsforStates> residencyDetailsforStatesList) {
-		this.residencyDetailsforStatesList = residencyDetailsforStatesList;
+	public void setResidencyDetailsforStates(List<ResidencyDetailsforStates> residencyDetailsforStates) {
+		this.residencyDetailsforStates = residencyDetailsforStates;
 	}
 
 	public boolean isCheckIfITINToBeApplied() {
