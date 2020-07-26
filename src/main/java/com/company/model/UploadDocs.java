@@ -6,7 +6,6 @@ public class UploadDocs {
 	private String fileName;
 	private String fileType;
 	private String comment;
-	private String selectFile;
 
 	public int getYear() {
 		return year;
@@ -39,13 +38,4 @@ public class UploadDocs {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-
-	public String getSelectFile() {
-		return selectFile;
-	}
-
-	public void setSelectFile(String selectFile) {
-		this.selectFile = selectFile;
-	}
-
 }

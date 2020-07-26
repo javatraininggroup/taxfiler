@@ -46,10 +46,10 @@ public class FbarEntity {
 	private String state;
 
 	@Column(name = "pincode")
-	private long pinCode;
+	private int pinCode;
 
 	@Column(name = "maximum_value_in_acc")
-	private long maximumValueInTheAcINR;
+	private String maximumValueInTheAcINR;
 
 	@Column(name = "acc_no")
 	private String accNo;
@@ -89,11 +89,11 @@ public class FbarEntity {
 		this.state = state;
 	}
 
-	public long getPinCode() {
+	public int getPinCode() {
 		return pinCode;
 	}
 
-	public void setPinCode(long pinCode) {
+	public void setPinCode(int pinCode) {
 		this.pinCode = pinCode;
 	}
 
@@ -113,11 +113,11 @@ public class FbarEntity {
 		this.accBelongsTo = accBelongsTo;
 	}
 
-	public long getMaximumValueInTheAcINR() {
+	public String getMaximumValueInTheAcINR() {
 		return maximumValueInTheAcINR;
 	}
 
-	public void setMaximumValueInTheAcINR(long maximumValueInTheAcINR) {
+	public void setMaximumValueInTheAcINR(String maximumValueInTheAcINR) {
 		this.maximumValueInTheAcINR = maximumValueInTheAcINR;
 	}
 
@@ -136,5 +136,15 @@ public class FbarEntity {
 	public void setTypeOfAccount(String typeOfAccount) {
 		this.typeOfAccount = typeOfAccount;
 	}
+
+	public TaxFiledYearEntity getTaxFileYear() {
+		return taxFileYear;
+	}
+
+	public void setTaxFileYear(TaxFiledYearEntity taxFileYear) {
+		this.taxFileYear = taxFileYear;
+	}
+	
+	
 
 }

@@ -21,6 +21,7 @@ public class UploadFilesEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
 
 	private long year;
@@ -32,6 +33,11 @@ public class UploadFilesEntity {
 	@Column(name = "file_content")
 	@Lob
 	private byte[] fileContent;
+	private String date;
+	@Column(name = "download_id")
+	private String downloadId;
+	@Column(name = "req_file_type")
+	private String reqFileType;
 
 	public long getYear() {
 		return year;
@@ -87,6 +93,30 @@ public class UploadFilesEntity {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public String getDownloadId() {
+		return downloadId;
+	}
+
+	public void setDownloadId(String downloadId) {
+		this.downloadId = downloadId;
+	}
+
+	public String getReqFileType() {
+		return reqFileType;
+	}
+
+	public void setReqFileType(String reqFileType) {
+		this.reqFileType = reqFileType;
 	}
 
 }

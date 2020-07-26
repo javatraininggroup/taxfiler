@@ -162,4 +162,12 @@ public class DependentInformationEntity {
 		this.isYouAndSpouseWorking = isYouAndSpouseWorking;
 	}
 
+	public TaxFiledYearEntity getTaxFileYear() {
+		return taxFileYear;
+	}
+
+	public void setTaxFileYear(TaxFiledYearEntity taxFileYear) {
+		this.taxFileYear = taxFileYear;
+	}
+
 }

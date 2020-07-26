@@ -9,6 +9,7 @@ public class TaxPayer {
 	private OtherIncomeInfoModel otherIncomeInfoModel;
 	private AdditionalInfoModel additionalInfoModel;
 	private Fbar fbar;
+	private OtherInformation otherInformation;
 
 	public BasicInformation getBasicInformation() {
 		return basicInformation;
@@ -72,6 +73,14 @@ public class TaxPayer {
 
 	public void setFbar(Fbar fbar) {
 		this.fbar = fbar;
+	}
+
+	public OtherInformation getOtherInformation() {
+		return otherInformation;
+	}
+
+	public void setOtherInformation(OtherInformation otherInformation) {
+		this.otherInformation = otherInformation;
 	}
 
 }

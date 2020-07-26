@@ -14,11 +14,11 @@ public class Fbar {
 	
 	private String state;
 
-	private long pincode;
+	private int pincode;
 
-	private long maximumValueInTheAcINR;
+	private String maximumValueInTheAcINR;
 
-	private long accNo;
+	private String accNo;
 
 	private String typeOfAccount;
 
@@ -54,11 +54,11 @@ public class Fbar {
 		this.state = state;
 	}
 
-	public long getPincode() {
+	public int getPincode() {
 		return pincode;
 	}
 
-	public void setPincode(long pincode) {
+	public void setPincode(int pincode) {
 		this.pincode = pincode;
 	}
 
@@ -78,19 +78,19 @@ public class Fbar {
 		this.accBelongsTo = accBelongsTo;
 	}
 
-	public long getMaximumValueInTheAcINR() {
+	public String getMaximumValueInTheAcINR() {
 		return maximumValueInTheAcINR;
 	}
 
-	public void setMaximumValueInTheAcINR(long maximumValueInTheAcINR) {
+	public void setMaximumValueInTheAcINR(String maximumValueInTheAcINR) {
 		this.maximumValueInTheAcINR = maximumValueInTheAcINR;
 	}
 
-	public long getAccNo() {
+	public String getAccNo() {
 		return accNo;
 	}
 
-	public void setAccNo(long accNo) {
+	public void setAccNo(String accNo) {
 		this.accNo = accNo;
 	}
 
