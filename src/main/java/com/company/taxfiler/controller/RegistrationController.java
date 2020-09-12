@@ -2,9 +2,12 @@ package com.company.taxfiler.controller;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +30,8 @@ public class RegistrationController {
 
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private HttpServletResponse response;
 
 	@PostMapping("/register")
 	public Object registerUser(@RequestBody RegistraionModel registraionModel) throws IOException {
@@ -47,7 +52,9 @@ public class RegistrationController {
 
 		// insert into db and respond with "registration completed successfully!"
 		try {
-			UserEntity userEntity = new UserEntity();
+			UserEntity userEntity = userRepository.findByEmail(registraionModel.getEmail());
+			if(null == userEntity) {
+			userEntity = new UserEntity();
 			userEntity.setAlternatePhone(registraionModel.getAlternatePhone());
 			userEntity.setPhone(registraionModel.getPhone());
 			userEntity.setEmail(registraionModel.getEmail());
@@ -56,6 +63,10 @@ public class RegistrationController {
 			userEntity.setSourceOfKnowingSite(registraionModel.getSourceOfKnowingSite());
 			userEntity.setTimezone(registraionModel.getPreferredTimezone());
 			userRepository.save(userEntity);
+			}else {
+				response.setStatus(HttpStatus.BAD_REQUEST.value(), "email is already registered");
+				return "email is already registered";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

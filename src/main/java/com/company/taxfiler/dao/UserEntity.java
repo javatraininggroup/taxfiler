@@ -1,6 +1,6 @@
 package com.company.taxfiler.dao;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -36,7 +36,7 @@ public class UserEntity {
 	@Column(name = "confirm_details")
 	private boolean confirmDetails;
 
-	@OneToMany(orphanRemoval = true, mappedBy = "userEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = TaxFiledYearEntity.class)
+	@OneToMany(orphanRemoval = true, mappedBy = "userEntity", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = TaxFiledYearEntity.class)
 	private Set<TaxFiledYearEntity> taxFiledYearList;
 
 	public String getName() {
@@ -119,6 +119,9 @@ public class UserEntity {
 	}
 
 	public Set<TaxFiledYearEntity> getTaxFiledYearList() {
+		if(null == taxFiledYearList) {
+			taxFiledYearList = new HashSet<>();
+		}
 		return taxFiledYearList;
 	}
 
