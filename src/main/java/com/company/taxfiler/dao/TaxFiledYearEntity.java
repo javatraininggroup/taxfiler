@@ -61,6 +61,9 @@ public class TaxFiledYearEntity {
 	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<UploadFilesEntity> UploadFilesEntityList;
 
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<MessagesEntity> messagesEntityList;
+
 	public int getId() {
 		return id;
 	}
@@ -171,6 +174,14 @@ public class TaxFiledYearEntity {
 
 	public void setOtherInformationEntity(OtherInformationEntity otherInformationEntity) {
 		this.otherInformationEntity = otherInformationEntity;
+	}
+
+	public Set<MessagesEntity> getMessagesEntityList() {
+		return messagesEntityList;
+	}
+
+	public void setMessagesEntityList(Set<MessagesEntity> messagesEntityList) {
+		this.messagesEntityList = messagesEntityList;
 	}
 
 }

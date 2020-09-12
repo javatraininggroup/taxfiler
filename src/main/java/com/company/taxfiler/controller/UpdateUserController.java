@@ -1,5 +1,6 @@
 package com.company.taxfiler.controller;
 
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,8 +15,10 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,12 +44,14 @@ import com.company.taxfiler.dao.BasicInfoEntity;
 import com.company.taxfiler.dao.ContactDetailsEntity;
 import com.company.taxfiler.dao.DependentInformationEntity;
 import com.company.taxfiler.dao.FbarEntity;
+import com.company.taxfiler.dao.MessagesEntity;
 import com.company.taxfiler.dao.OtherIncomeInformatonEntity;
 import com.company.taxfiler.dao.OtherInformationEntity;
 import com.company.taxfiler.dao.ResidencyDetailsForStatesEntity;
 import com.company.taxfiler.dao.SpouseDetailsEntity;
 import com.company.taxfiler.dao.TaxFiledYearEntity;
 import com.company.taxfiler.dao.UserEntity;
+import com.company.taxfiler.model.MessageModel;
 import com.company.taxfiler.repository.UserRepository;
 import com.google.gson.Gson;
 
@@ -506,10 +511,12 @@ public class UpdateUserController {
 						bankDetailsEntity.setBankName(bankDetails.getBankName());
 						bankDetailsEntity.setRoutingNumber(bankDetails.getRoutingNumber());
 
-						bankDetailsEntity.setTaxFileYear(taxFiledYearEntity);
 						taxFiledYearEntity.setBankDetails(bankDetailsEntity);
+						bankDetailsEntity.setTaxFileYear(taxFiledYearEntity);
+						taxFiledYearEntity.setUserEntity(userEntity);
 						taxFiledYearEntityList.add(taxFiledYearEntity);
-						userEntity.setTaxFiledYearList(taxFiledYearEntityList);
+						userEntity.getTaxFiledYearList().addAll(taxFiledYearEntityList);
+						// userEntity.setTaxFiledYearList(taxFiledYearEntityList);
 						userRepository.save(userEntity);
 					}
 
@@ -880,6 +887,113 @@ public class UpdateUserController {
 			return "an error has occured";
 		}
 		return "no content";
+	}
+
+	@PostMapping(value = "/updateuser/{user_id}/{tax_year}/message", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Object postMessage(@RequestBody MessageModel messageModel, @PathVariable("user_id") int userId,
+			@PathVariable("tax_year") int taxYear) {
+		try {
+			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
+			if (optionalUserEntity.isPresent()) {
+				UserEntity userEntity = optionalUserEntity.get();
+				Set<TaxFiledYearEntity> taxFiledYearEntityList = userEntity.getTaxFiledYearList();
+				if (null != taxFiledYearEntityList && taxFiledYearEntityList.size() > 0) {
+					for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
+						if (taxFiledYearEntity.getYear() == taxYear) {
+							Set<MessagesEntity> messagesEntitySet = taxFiledYearEntity.getMessagesEntityList();
+							if (null == messagesEntitySet) {
+								messagesEntitySet = new HashSet<MessagesEntity>();
+							}
+							MessagesEntity messagesEntity = new MessagesEntity();
+							messagesEntity.setDate(new Date(System.currentTimeMillis()));
+							messagesEntity.setSubject(messageModel.getSubject());
+							messagesEntity.setMessage(messageModel.getMessage());
+							messagesEntity.setSentMessage(messageModel.isSentMessage());
+							messagesEntity.setReceivedMessage(messageModel.isReceivedMessage());
+							messagesEntitySet.add(messagesEntity);
+						}
+					}
+				}
+			} else {
+				return "invalid userid";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "an error has occured";
+		}
+		return "success";
+	}
+
+	@GetMapping(value = "/{user_id}/{tax_year}/receivedMessages", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Object getReceivedMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+		try {
+			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
+			if (optionalUserEntity.isPresent()) {
+				UserEntity userEntity = optionalUserEntity.get();
+				Set<TaxFiledYearEntity> taxFiledYearEntityList = userEntity.getTaxFiledYearList();
+				if (null != taxFiledYearEntityList && taxFiledYearEntityList.size() > 0) {
+					for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
+						if (taxFiledYearEntity.getYear() == taxYear) {
+							Set<MessagesEntity> messagesEntitySet = taxFiledYearEntity.getMessagesEntityList();
+							if (null == messagesEntitySet) {
+								return "no messages";
+							} else {
+								Set<MessagesEntity> messagesEntitySetResponse = new HashSet<>();
+								for (MessagesEntity entity : messagesEntitySet) {
+									if (entity.isReceivedMessage()) {
+										messagesEntitySetResponse.add(entity);
+									}
+								}
+								return messagesEntitySetResponse;
+							}
+
+						}
+					}
+				}
+			} else {
+				return "invalid userid";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "an error has occured";
+		}
+		return "success";
+	}
+
+	@GetMapping(value = "/{user_id}/{tax_year}/sentMessages", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Object getSentMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+		try {
+			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
+			if (optionalUserEntity.isPresent()) {
+				UserEntity userEntity = optionalUserEntity.get();
+				Set<TaxFiledYearEntity> taxFiledYearEntityList = userEntity.getTaxFiledYearList();
+				if (null != taxFiledYearEntityList && taxFiledYearEntityList.size() > 0) {
+					for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
+						if (taxFiledYearEntity.getYear() == taxYear) {
+							Set<MessagesEntity> messagesEntitySet = taxFiledYearEntity.getMessagesEntityList();
+							if (null == messagesEntitySet) {
+								return "no messages";
+							} else {
+								Set<MessagesEntity> messagesEntitySetResponse = new HashSet<>();
+								for (MessagesEntity entity : messagesEntitySet) {
+									if (entity.isSentMessage()) {
+										messagesEntitySetResponse.add(entity);
+									}
+								}
+								return messagesEntitySetResponse;
+							}
+
+						}
+					}
+				}
+			} else {
+				return "invalid userid";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "an error has occured";
+		}
+		return "success";
 	}
 
 	public java.sql.Date convertStringDateToSqlDate(String date) throws ParseException {
