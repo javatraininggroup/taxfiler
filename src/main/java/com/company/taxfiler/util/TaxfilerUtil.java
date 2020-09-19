@@ -6,9 +6,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 
 import javax.crypto.KeyGenerator;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,6 +120,16 @@ public class TaxfilerUtil {
 
 	public static TtlHashMap getTtlhashmap() {
 		return ttlHashMap;
+	}
+	public Object verifySessionId(HttpServletRequest request){
+		if (StringUtils.isNotBlank(request.getHeader("sessionId"))){
+			if(null == getTtlhashmap().get(request.getHeader("sessionId"))){
+				return "invalid sessioId";
+			}
+			return true;
+		}else{
+			return "invalid sessioId";
+		}
 	}
 
 }

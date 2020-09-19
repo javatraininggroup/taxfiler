@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
@@ -53,6 +54,7 @@ import com.company.taxfiler.dao.TaxFiledYearEntity;
 import com.company.taxfiler.dao.UserEntity;
 import com.company.taxfiler.model.MessageModel;
 import com.company.taxfiler.repository.UserRepository;
+import com.company.taxfiler.util.TaxfilerUtil;
 import com.google.gson.Gson;
 
 @RestController
@@ -64,6 +66,10 @@ public class UpdateUserController {
 
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private TaxfilerUtil taxfilerUtil;
+	@Autowired
+	private HttpServletRequest httpServletRequest;
 
 	private SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -72,6 +78,10 @@ public class UpdateUserController {
 			@PathVariable("tax_year") int taxYear) {
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
+
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
@@ -114,11 +124,9 @@ public class UpdateUserController {
 					basicInfo = taxFiledYearEntity.getBasicInfo() != null ? taxFiledYearEntity.getBasicInfo()
 							: new BasicInfoEntity();
 					contactDetailsEntity = taxFiledYearEntity.getContactDetails() != null
-							? taxFiledYearEntity.getContactDetails()
-							: new ContactDetailsEntity();
+							? taxFiledYearEntity.getContactDetails() : new ContactDetailsEntity();
 					spouseDetailsEntity = taxFiledYearEntity.getSpouseDetails() != null
-							? taxFiledYearEntity.getSpouseDetails()
-							: new SpouseDetailsEntity();
+							? taxFiledYearEntity.getSpouseDetails() : new SpouseDetailsEntity();
 					residencyDetailsForStatesEntityList = taxFiledYearEntity.getResidencyDetailsforStatesList() != null
 							? taxFiledYearEntity.getResidencyDetailsforStatesList()
 							: new HashSet<ResidencyDetailsForStatesEntity>();
@@ -254,11 +262,15 @@ public class UpdateUserController {
 	public Object updateUserDependentInfo(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
 			@PathVariable("tax_year") int taxYear) {
 		/**
-		 * 1. updateUser information if that parameter is exist 2. Modify the latest
-		 * data in the database .
+		 * 1. updateUser information if that parameter is exist 2. Modify the
+		 * latest data in the database .
 		 */
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
+
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 
 		try {
 			DependentInformation dependentInformation = taxPayerModel.getDependentInformation();
@@ -358,6 +370,11 @@ public class UpdateUserController {
 	@GetMapping("/updateuser/{user_id}/{tax_year}/dependentInfo")
 	public Object getUserDependentInfo(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
 		DependentInformation dependentInformation = new DependentInformation();
+
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
+
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {
@@ -465,12 +482,16 @@ public class UpdateUserController {
 	public Object updateUserBankInfo(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
 			@PathVariable("tax_year") int taxYear) {
 		/**
-		 * 1. updateUser information if that parameter is exist 2. Modify the latest
-		 * data in the database .
+		 * 1. updateUser information if that parameter is exist 2. Modify the
+		 * latest data in the database .
 		 */
 
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
+
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 
 		try {
 			BankDetails bankDetails = taxPayerModel.getBankDetails();
@@ -536,6 +557,10 @@ public class UpdateUserController {
 	@GetMapping("/updateuser/{user_id}/{tax_year}/bankInfo")
 	public Object getUserBankInfo(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
 		BankDetails bankDetails = new BankDetails();
+
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 		try {
 			if (null != bankDetails) {
 				Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
@@ -575,11 +600,15 @@ public class UpdateUserController {
 	}
 
 	@PutMapping("/updateuser/{user_id}/{tax_year}/otherIncomeInfo")
-	public String otherIncomeInformation(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
+	public Object otherIncomeInformation(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
 			@PathVariable("tax_year") int taxYear) {
 
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
+
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 
 		try {
 			OtherIncomeInfoModel otherIncomeInfoModel = taxPayerModel.getOtherIncomeInfoModel();
@@ -624,6 +653,10 @@ public class UpdateUserController {
 			@PathVariable("tax_year") int taxYear) {
 		OtherIncomeInfoModel otherIncomeInfoModel = new OtherIncomeInfoModel();
 		Set<OtherIncomeInfoData> otherIncomeInfoDataList = new HashSet<>();
+
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {
@@ -655,10 +688,13 @@ public class UpdateUserController {
 	}
 
 	@PutMapping("/updateuser/{user_id}/{tax_year}/additionalInfo")
-	public String additionalInformation(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
+	public Object additionalInformation(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
 			@PathVariable("tax_year") int taxYear) {
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 
 		try {
 			AdditionalInfoModel additionalInfoModel = taxPayerModel.getAdditionalInfoModel();
@@ -702,6 +738,9 @@ public class UpdateUserController {
 	public Object getAdditionalInformation(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
 		AdditionalInfoModel additionalInfoModel = new AdditionalInfoModel();
 		Set<OtherIncomeInfoData> additionalInfoDataList = new HashSet<>();
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {
@@ -733,10 +772,13 @@ public class UpdateUserController {
 	}
 
 	@PutMapping("/updateuser/{user_id}/{tax_year}/otherInfo")
-	public String otherInformation(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
+	public Object otherInformation(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
 			@PathVariable("tax_year") int taxYear) {
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 
 		try {
 			OtherInformation otherInfo = taxPayerModel.getOtherInformation();
@@ -774,6 +816,9 @@ public class UpdateUserController {
 
 	@GetMapping("/updateuser/{user_id}/{tax_year}/otherInfo")
 	public Object getOtherInformation(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 		try {
 			OtherInformation otherInfo = new OtherInformation();
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
@@ -803,10 +848,13 @@ public class UpdateUserController {
 	}
 
 	@PutMapping("/updateuser/{user_id}/{tax_year}/fbar")
-	public String fbar(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
+	public Object fbar(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
 			@PathVariable("tax_year") int taxYear) {
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 
 		try {
 			Fbar fbar = taxPayerModel.getFbar();
@@ -853,6 +901,9 @@ public class UpdateUserController {
 
 	@GetMapping("/updateuser/{user_id}/{tax_year}/fbar")
 	public Object getFbar(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 		try {
 			Fbar fbar = new Fbar();
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
@@ -892,6 +943,10 @@ public class UpdateUserController {
 	@PostMapping(value = "/updateuser/{user_id}/{tax_year}/message", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Object postMessage(@RequestBody MessageModel messageModel, @PathVariable("user_id") int userId,
 			@PathVariable("tax_year") int taxYear) {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
+
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {
@@ -926,6 +981,9 @@ public class UpdateUserController {
 
 	@GetMapping(value = "/{user_id}/{tax_year}/receivedMessages", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Object getReceivedMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if(verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse; 
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {
@@ -962,6 +1020,9 @@ public class UpdateUserController {
 
 	@GetMapping(value = "/{user_id}/{tax_year}/sentMessages", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Object getSentMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if(verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse; 
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {

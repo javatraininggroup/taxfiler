@@ -56,18 +56,18 @@ public class LoginController {
 
 					jsonResponse.put("sessionId", sessionId);
 
-					return jsonResponse.toMap();
+					return jsonResponse.toString();
 				} else {
 					response.setStatus(HttpStatus.BAD_REQUEST.value());
 					jsonResponse.put("error", "username/password dont match");
 					LOGGER.error(jsonResponse.toString());
-					return jsonResponse.toMap();
+					return jsonResponse.toString();
 				}
 			} else {
 				response.setStatus(HttpStatus.BAD_REQUEST.value());
 				jsonResponse.put("error", "user not registered");
 				LOGGER.error(jsonResponse.toString());
-				return jsonResponse.toMap();
+				return jsonResponse.toString();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
