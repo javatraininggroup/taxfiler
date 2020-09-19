@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.company.taxfiler.dao.UserEntity;
 import com.company.taxfiler.model.RegistraionModel;
 import com.company.taxfiler.repository.UserRepository;
+import com.company.taxfiler.util.TaxfilerUtil;
 
 @RestController
 @RequestMapping("/api")
@@ -26,6 +27,8 @@ public class LoginController {
 	private UserRepository userRepository;
 	@Autowired
 	private HttpServletResponse response;
+	@Autowired
+	private TaxfilerUtil taxfilerUtil;
 
 	@PostMapping("/login")
 	public Object loginUser(@RequestBody RegistraionModel loginModel) {
@@ -42,8 +45,17 @@ public class LoginController {
 				if (userEntity.getPassword().equals(loginModel.getPassword())) {
 					jsonResponse.put("username", userEntity.getName());
 					jsonResponse.put("id", userEntity.getId());
-					jsonResponse.put("email",userEntity.getEmail());
-					jsonResponse.put("phone",userEntity.getPhone());
+					jsonResponse.put("email", userEntity.getEmail());
+					jsonResponse.put("phone", userEntity.getPhone());
+
+					/**
+					 * generating a unique sessionId for each user
+					 */
+					String sessionId = taxfilerUtil.createHMAC256TokenWithEmptyPayload();
+					taxfilerUtil.getTtlhashmap().put(sessionId, userEntity.getEmail());
+
+					jsonResponse.put("sessionId", sessionId);
+
 					return jsonResponse.toMap();
 				} else {
 					response.setStatus(HttpStatus.BAD_REQUEST.value());

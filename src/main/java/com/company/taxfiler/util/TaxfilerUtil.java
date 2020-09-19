@@ -1,19 +1,36 @@
 package com.company.taxfiler.util;
 
 import java.io.IOException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeUnit;
 
+import javax.crypto.KeyGenerator;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import com.company.taxfiler.model.RegistraionModel;
 import com.company.taxfiler.model.ResponseModel;
 
 @Component
 public class TaxfilerUtil {
+
+	private Logger LOGGER = LoggerFactory.getLogger(getClass());
+
+	private final String HMACSHA256 = "HmacSHA256";
+
+	private static final TtlHashMap ttlHashMap = new TtlHashMap(TimeUnit.MINUTES, 60);
+
+	// PassiveExpiringMap passiveExpiringMap = new PassiveExpiringMap();
 
 	@Autowired
 	private HttpServletResponse httpServletResponse;
@@ -65,6 +82,42 @@ public class TaxfilerUtil {
 				.get(parameter.getValue()));
 		httpServletResponse.setStatus(HttpStatus.BAD_REQUEST.value());
 		return errorResponse;
+	}
+
+	/**
+	 * This is used to create HMAC256 Token using HMACSHA256 algorithm
+	 * 
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws NoSuchAlgorithmException
+	 */
+	public String createHMAC256TokenWithEmptyPayload() throws IllegalArgumentException, NoSuchAlgorithmException {
+		String token = null;
+		try {
+			Key key = generateKey(HMACSHA256);
+			Algorithm algorithm = Algorithm.HMAC256(key.toString());
+			token = JWT.create().sign(algorithm);
+		} catch (JWTCreationException exception) {
+			LOGGER.error(exception.getMessage());
+		}
+		return token;
+	}
+
+	/**
+	 * This is used to Generate a Key
+	 * 
+	 * @param algorithm
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 */
+	public Key generateKey(String algorithm) throws NoSuchAlgorithmException {
+		KeyGenerator keyGen = KeyGenerator.getInstance(algorithm);
+		Key key = keyGen.generateKey();
+		return key;
+	}
+
+	public static TtlHashMap getTtlhashmap() {
+		return ttlHashMap;
 	}
 
 }
