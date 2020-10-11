@@ -19,23 +19,19 @@ public class MessagesEntity {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
 	private TaxFiledYearEntity taxFileYear;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-
 	private String subject;
-
 	private String message;
-
 	private Date date;
-
-	private String status;
-
+	@Column(name = "main_status")
+	private String mainStatus;
+	@Column(name = "sub_status")
+	private String subStatus;
 	@Column(name = "is_sent_message")
 	private boolean isSentMessage;
-
 	@Column(name = "is_received_message")
 	private boolean isReceivedMessage;
 
@@ -79,12 +75,20 @@ public class MessagesEntity {
 		this.date = date;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getMainStatus() {
+		return mainStatus;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setMainStatus(String mainStatus) {
+		this.mainStatus = mainStatus;
+	}
+
+	public String getSubStatus() {
+		return subStatus;
+	}
+
+	public void setSubStatus(String subStatus) {
+		this.subStatus = subStatus;
 	}
 
 	public boolean isSentMessage() {

@@ -18,12 +18,10 @@ public class UploadFilesEntity {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
 	private TaxFiledYearEntity taxFileYear;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-
 	private long year;
 	@Column(name = "file_name")
 	private String fileName;
@@ -38,6 +36,10 @@ public class UploadFilesEntity {
 	private String downloadId;
 	@Column(name = "req_file_type")
 	private String reqFileType;
+	@Column(name = "main_status")
+	private String mainStatus;
+	@Column(name = "sub_status")
+	private String subStatus;
 
 	public long getYear() {
 		return year;
@@ -117,6 +119,22 @@ public class UploadFilesEntity {
 
 	public void setReqFileType(String reqFileType) {
 		this.reqFileType = reqFileType;
+	}
+
+	public String getMainStatus() {
+		return mainStatus;
+	}
+
+	public void setMainStatus(String mainStatus) {
+		this.mainStatus = mainStatus;
+	}
+
+	public String getSubStatus() {
+		return subStatus;
+	}
+
+	public void setSubStatus(String subStatus) {
+		this.subStatus = subStatus;
 	}
 
 }

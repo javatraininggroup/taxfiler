@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ import com.company.taxfiler.dao.TaxFiledYearEntity;
 import com.company.taxfiler.dao.UploadFilesEntity;
 import com.company.taxfiler.dao.UserEntity;
 import com.company.taxfiler.repository.UserRepository;
+import com.company.taxfiler.util.TaxfilerUtil;
 
 @RestController
 @RequestMapping("/api")
@@ -40,11 +42,20 @@ public class UploadDownloadDocsController {
 
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private TaxfilerUtil taxfilerUtil;
+	@Autowired
+	private HttpServletRequest httpServletRequest;
+	private final static String DEFAULT_MAIN_STATUS = "SCHEDULING";
+	private final static String DEFAULT_SUB_STATUS = "PENDING";
 
 	@PostMapping("/upload/{user_id}/{tax_year}")
 	public Object uploadDocs(@RequestParam("fileName") String fileName, @RequestParam("fileType") String fileType,
 			@RequestParam("comment") String comment, @PathVariable("user_id") int userId,
 			@PathVariable("tax_year") int taxYear, @RequestParam("file") MultipartFile file) throws Exception {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 		if (!file.isEmpty()) {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {
@@ -68,8 +79,10 @@ public class UploadDownloadDocsController {
 							uploadFilesEntity.setYear(taxYear);
 							uploadFilesEntity.setDate(new Date().toString());
 							uploadFilesEntity.setDownloadId(String.valueOf(System.nanoTime()));
-							uploadFilesEntitySet.add(uploadFilesEntity);
 							uploadFilesEntity.setTaxFileYear(taxFiledYearEntity);
+							uploadFilesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
+							uploadFilesEntity.setSubStatus(DEFAULT_SUB_STATUS);
+							uploadFilesEntitySet.add(uploadFilesEntity);
 							return prepareFilesDetailsForDownload(uploadFilesEntitySet);
 						}
 					}
@@ -87,6 +100,9 @@ public class UploadDownloadDocsController {
 	@GetMapping("/download/{user_id}/{tax_year}/{fileId}")
 	public Object downloadFile(@PathVariable("fileId") String fileId, @PathVariable("user_id") int userId,
 			@PathVariable("tax_year") int taxYear) throws Exception {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {
@@ -122,6 +138,9 @@ public class UploadDownloadDocsController {
 
 	@GetMapping("/docs/{user_id}/{tax_year}")
 	public Object getAllUploadDocs(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {

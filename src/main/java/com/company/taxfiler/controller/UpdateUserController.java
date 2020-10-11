@@ -70,8 +70,9 @@ public class UpdateUserController {
 	private TaxfilerUtil taxfilerUtil;
 	@Autowired
 	private HttpServletRequest httpServletRequest;
-
 	private SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+	private final static String DEFAULT_MAIN_STATUS = "SCHEDULING";
+	private final static String DEFAULT_SUB_STATUS = "PENDING";
 
 	@PutMapping("/updateuser/{user_id}/{tax_year}/basicInfo")
 	public Object updateUserBasicInfo(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
@@ -124,9 +125,11 @@ public class UpdateUserController {
 					basicInfo = taxFiledYearEntity.getBasicInfo() != null ? taxFiledYearEntity.getBasicInfo()
 							: new BasicInfoEntity();
 					contactDetailsEntity = taxFiledYearEntity.getContactDetails() != null
-							? taxFiledYearEntity.getContactDetails() : new ContactDetailsEntity();
+							? taxFiledYearEntity.getContactDetails()
+							: new ContactDetailsEntity();
 					spouseDetailsEntity = taxFiledYearEntity.getSpouseDetails() != null
-							? taxFiledYearEntity.getSpouseDetails() : new SpouseDetailsEntity();
+							? taxFiledYearEntity.getSpouseDetails()
+							: new SpouseDetailsEntity();
 					residencyDetailsForStatesEntityList = taxFiledYearEntity.getResidencyDetailsforStatesList() != null
 							? taxFiledYearEntity.getResidencyDetailsforStatesList()
 							: new HashSet<ResidencyDetailsForStatesEntity>();
@@ -262,8 +265,8 @@ public class UpdateUserController {
 	public Object updateUserDependentInfo(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
 			@PathVariable("tax_year") int taxYear) {
 		/**
-		 * 1. updateUser information if that parameter is exist 2. Modify the
-		 * latest data in the database .
+		 * 1. updateUser information if that parameter is exist 2. Modify the latest
+		 * data in the database .
 		 */
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
@@ -482,8 +485,8 @@ public class UpdateUserController {
 	public Object updateUserBankInfo(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
 			@PathVariable("tax_year") int taxYear) {
 		/**
-		 * 1. updateUser information if that parameter is exist 2. Modify the
-		 * latest data in the database .
+		 * 1. updateUser information if that parameter is exist 2. Modify the latest
+		 * data in the database .
 		 */
 
 		Gson gson = new Gson();
@@ -965,6 +968,8 @@ public class UpdateUserController {
 							messagesEntity.setMessage(messageModel.getMessage());
 							messagesEntity.setSentMessage(messageModel.isSentMessage());
 							messagesEntity.setReceivedMessage(messageModel.isReceivedMessage());
+							messagesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
+							messagesEntity.setSubStatus(DEFAULT_SUB_STATUS);
 							messagesEntitySet.add(messagesEntity);
 						}
 					}
@@ -982,8 +987,8 @@ public class UpdateUserController {
 	@GetMapping(value = "/{user_id}/{tax_year}/receivedMessages", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Object getReceivedMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
-		if(verifySessionIdResponse instanceof String)
-			return verifySessionIdResponse; 
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {
@@ -1021,8 +1026,8 @@ public class UpdateUserController {
 	@GetMapping(value = "/{user_id}/{tax_year}/sentMessages", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Object getSentMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
-		if(verifySessionIdResponse instanceof String)
-			return verifySessionIdResponse; 
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {
