@@ -356,8 +356,11 @@ public class UpdateUserController {
 					}if(!isUpdatedOrInserted) {
 						LOGGER.info("inserting dependent information");
 						//insert data
-						taxFiledYearEntityList = new HashSet<>();
+						if(null == taxFiledYearEntityList) {
+							taxFiledYearEntityList = new HashSet<>();
+						}
 						TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
+						taxFiledYearEntity.setYear(taxYear);
 						DependentInformationEntity dependentInformationEntity = new DependentInformationEntity();
 						dependentInformationEntity.setFirstName(dependentInformation.getName().getFirstName());
 						dependentInformationEntity
@@ -714,6 +717,7 @@ public class UpdateUserController {
 							taxFiledYearEntityList = new HashSet<>();
 						}
 						TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
+						taxFiledYearEntity.setYear(taxYear);
 						Set<OtherIncomeInformatonEntity> otherIncomeInformatonEntitySet = new HashSet<>();
 						for (OtherIncomeInfoData otherIncomeInfoData : otherIncomeInfoModel
 								.getOtherInfoDataList()) {
@@ -823,6 +827,7 @@ public class UpdateUserController {
 							taxFiledYearEntityList = new HashSet<>();
 						}
 						TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
+						taxFiledYearEntity.setYear(taxYear);
 						Set<AdditionalInformationEntity> additionalInformatonEntitySet = new HashSet<>();
 						for (OtherIncomeInfoData otherIncomeInfoData : additionalInfoModel
 								.getAdditionalInfoDataList()) {
@@ -924,6 +929,7 @@ public class UpdateUserController {
 							taxFiledYearEntityList = new HashSet<>();
 						}
 						TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
+						taxFiledYearEntity.setYear(taxYear);
 						OtherInformationEntity otherInformationEntity = new OtherInformationEntity();
 						otherInformationEntity.setOtherInformation(otherInfo.getOtherinformation());
 						otherInformationEntity.setTaxFileYear(taxFiledYearEntity);
@@ -1025,6 +1031,7 @@ public class UpdateUserController {
 							taxFiledYearEntityList = new HashSet<>();
 						}
 						TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
+						taxFiledYearEntity.setYear(taxYear);
 						FbarEntity fbarEntity = new FbarEntity(); 
 						fbarEntity.setAccBelongsTo(fbar.getAccBelongsTo());
 						fbarEntity.setAccNo(fbar.getAccNo());
@@ -1114,6 +1121,7 @@ public class UpdateUserController {
 							Set<MessagesEntity> messagesEntitySet = taxFiledYearEntity.getMessagesEntityList();
 							if (null == messagesEntitySet) {
 								messagesEntitySet = new HashSet<MessagesEntity>();
+								taxFiledYearEntity.setMessagesEntityList(messagesEntitySet);
 							}
 							MessagesEntity messagesEntity = new MessagesEntity();
 							messagesEntity.setDate(new Date(System.currentTimeMillis()));
@@ -1123,7 +1131,9 @@ public class UpdateUserController {
 							messagesEntity.setReceivedMessage(messageModel.isReceivedMessage());
 							messagesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
 							messagesEntity.setSubStatus(DEFAULT_SUB_STATUS);
+							messagesEntity.setTaxFileYear(taxFiledYearEntity);
 							messagesEntitySet.add(messagesEntity);
+							isUpdatedOrInserted = true;
 						}
 					}
 				}if(!isUpdatedOrInserted) {
@@ -1131,7 +1141,7 @@ public class UpdateUserController {
 						taxFiledYearEntityList = new HashSet<>();
 					}
 					TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
-					
+					taxFiledYearEntity.setYear(taxYear);
 					Set<MessagesEntity> messagesEntitySet = new HashSet<MessagesEntity>();
 					MessagesEntity messagesEntity = new MessagesEntity();
 					messagesEntity.setDate(new Date(System.currentTimeMillis()));
@@ -1141,6 +1151,7 @@ public class UpdateUserController {
 					messagesEntity.setReceivedMessage(messageModel.isReceivedMessage());
 					messagesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
 					messagesEntity.setSubStatus(DEFAULT_SUB_STATUS);
+					messagesEntity.setTaxFileYear(taxFiledYearEntity);
 					messagesEntitySet.add(messagesEntity);
 					taxFiledYearEntity.setMessagesEntityList(messagesEntitySet);
 					taxFiledYearEntityList.add(taxFiledYearEntity);
