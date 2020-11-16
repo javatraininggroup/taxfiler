@@ -170,11 +170,11 @@ public class UpdateUserController {
 					contactDetailsEntity.setEmail(contactDetails.getEmail());
 					contactDetailsEntity.setTimezone(contactDetails.getTimezone());
 
-					if (null != contactDetails.getResidencyDetailsforStates()
-							&& contactDetails.getResidencyDetailsforStates().size() > 0) {
+					if (null != contactDetails.getAddressOfLivingInTaxYear()
+							&& contactDetails.getAddressOfLivingInTaxYear().size() > 0) {
 
-						List<ResidencyDetailsforStates> residencyDetailsforStatesList = contactDetails
-								.getResidencyDetailsforStates();
+						Set<ResidencyDetailsforStates> residencyDetailsforStatesList = contactDetails
+								.getAddressOfLivingInTaxYear();
 						clearResidencyStatesDetails(residencyDetailsForStatesEntityList, "basic");
 						for (ResidencyDetailsforStates residencyDetailsforStates : residencyDetailsforStatesList) {
 							for (TaxYearInfo taxYearInfo : residencyDetailsforStates.getTaxYearInfoList()) {
@@ -217,12 +217,12 @@ public class UpdateUserController {
 					spouseDetailsEntity.setLivingMoreThan6Months(spouseDetails.isLivingMoreThan6Months());
 					spouseDetailsEntity.setDidYourSpouseisWorkedinXX(spouseDetails.isDidYourSpouseisWorkedinXX());
 
-					LOGGER.info("residency size: " + spouseDetails.getResidencyDetailsforStates().size());
+					LOGGER.info("residency size: " + spouseDetails.getAddressOfLivingInTaxYear().size());
 
-					if (null != spouseDetails.getResidencyDetailsforStates()
-							&& spouseDetails.getResidencyDetailsforStates().size() > 0) {
-						List<ResidencyDetailsforStates> residencyDetailsforStatesList = spouseDetails
-								.getResidencyDetailsforStates();
+					if (null != spouseDetails.getAddressOfLivingInTaxYear()
+							&& spouseDetails.getAddressOfLivingInTaxYear().size() > 0) {
+						Set<ResidencyDetailsforStates> residencyDetailsforStatesList = spouseDetails
+								.getAddressOfLivingInTaxYear();
 						LOGGER.info("spouse residency list: " + residencyDetailsforStatesList.size());
 						clearResidencyStatesDetails(residencyDetailsForStatesEntityList, "spouse");
 						for (ResidencyDetailsforStates residencyDetailsforStates : residencyDetailsforStatesList) {
@@ -259,6 +259,84 @@ public class UpdateUserController {
 		}
 
 		return "an error has occured";
+	}
+
+	@GetMapping("/{user_id}/{tax_year}/basicInfo")
+	public Object getUserBasicInfo(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
+
+		TaxPayer taxPayerModel = new TaxPayer();
+
+		try {
+			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
+			if (optionalUserEntity.isPresent()) {
+				UserEntity userEntity = optionalUserEntity.get();
+
+				Set<TaxFiledYearEntity> taxFiledYearEntityList = userEntity.getTaxFiledYearList();
+				if (null == taxFiledYearEntityList || taxFiledYearEntityList.size() == 0) {
+					return "details not available";
+				} else {
+					for (TaxFiledYearEntity taxFiledYearEntityTemp : taxFiledYearEntityList) {
+						if (taxFiledYearEntityTemp.getYear() == taxYear) {
+
+							/**
+							 * get basic info details
+							 */
+							BasicInfoEntity basicEntity = taxFiledYearEntityTemp.getBasicInfo();
+							String basicEntityStr = taxfilerUtil.convertObjectTOString(basicEntity);
+							BasicInformation basicInfoModel = (BasicInformation) taxfilerUtil
+							.convertStringToObject(basicEntityStr, BasicInformation.class);
+							Name name = new Name();
+							name.setFirstName(basicEntity.getFirstName());
+							name.setMiddleName(basicEntity.getMiddleName());
+							name.setLastName(basicEntity.getLastName());
+							basicInfoModel.setName(name);
+							basicInfoModel.setDateOfBirth(basicEntity.getDob().toString());
+							basicInfoModel.setFirstDateOfEntyInUS(basicEntity.getFirstDateOfEntryInUS().toString());
+							basicInfoModel.setFilingStatus(basicEntity.getMartialStatus());
+							taxPayerModel.setBasicInformation(basicInfoModel);
+
+							/**
+							 * get contact details
+							 */
+							ContactDetailsEntity contactEntity = taxFiledYearEntityTemp.getContactDetails();
+							String contactEntityStr = taxfilerUtil.convertObjectTOString(contactEntity);
+							ContactDetails contactDetailsModel = (ContactDetails) taxfilerUtil
+							.convertStringToObject(contactEntityStr, ContactDetails.class);
+							String residencyDetailsStr = taxfilerUtil.convertObjectTOString(taxFiledYearEntityTemp.getResidencyDetailsforStatesList());
+							Set<ResidencyDetailsforStates> residencyDetailsforStatesSetModel = (Set<ResidencyDetailsforStates>)taxfilerUtil.convertStringToObject(residencyDetailsStr, Set.class);
+							contactDetailsModel.setAddressOfLivingInTaxYear(residencyDetailsforStatesSetModel);
+							taxPayerModel.setContactDetails(contactDetailsModel);
+
+							/**
+							 * get spouse details
+							 */
+							SpouseDetailsEntity spouseDetailsEntity = taxFiledYearEntityTemp.getSpouseDetails();
+							String spouseEntityStr = taxfilerUtil.convertObjectTOString(spouseDetailsEntity);
+							SpouseDetails spouseDetailsModel = (SpouseDetails) taxfilerUtil
+							.convertStringToObject(spouseEntityStr, SpouseDetails.class);
+							Name spouseName = new Name();
+							spouseName.setFirstName(spouseDetailsEntity.getFirstName());
+							spouseName.setMiddleName(spouseDetailsEntity.getMiddleName());
+							spouseName.setLastName(spouseDetailsEntity.getLastName());
+							spouseDetailsModel.setName(spouseName);
+							spouseDetailsModel.setAddressOfLivingInTaxYear(residencyDetailsforStatesSetModel);
+							taxPayerModel.setSpouseDetails(spouseDetailsModel);
+							return taxPayerModel;
+						}
+					}
+				}
+			} else {
+				return "userId not found";
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+		return "details not available";
 	}
 
 	@PutMapping("/updateuser/{user_id}/{tax_year}/dependentInfo")
@@ -353,23 +431,23 @@ public class UpdateUserController {
 								isUpdatedOrInserted = true;
 							}
 						}
-					}if(!isUpdatedOrInserted) {
+					}
+					if (!isUpdatedOrInserted) {
 						LOGGER.info("inserting dependent information");
-						//insert data
-						if(null == taxFiledYearEntityList) {
+						// insert data
+						if (null == taxFiledYearEntityList) {
 							taxFiledYearEntityList = new HashSet<>();
 						}
 						TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
 						taxFiledYearEntity.setYear(taxYear);
 						DependentInformationEntity dependentInformationEntity = new DependentInformationEntity();
 						dependentInformationEntity.setFirstName(dependentInformation.getName().getFirstName());
-						dependentInformationEntity
-								.setMiddleName(dependentInformation.getName().getMiddleName());
+						dependentInformationEntity.setMiddleName(dependentInformation.getName().getMiddleName());
 						dependentInformationEntity.setLastName(dependentInformation.getName().getLastName());
 						dependentInformationEntity.setSsnitin(dependentInformation.getSsnOrItin());
 
-						dependentInformationEntity.setDateOfBirth(
-								convertStringDateToSqlDate(dependentInformation.getDateOfBirth()));
+						dependentInformationEntity
+								.setDateOfBirth(convertStringDateToSqlDate(dependentInformation.getDateOfBirth()));
 
 						dependentInformationEntity
 								.setCheckIfITINToBeApplied(dependentInformation.isCheckIfITINToBeApplied());
@@ -393,17 +471,15 @@ public class UpdateUserController {
 									.getResidencyDetailsforStates();
 							LOGGER.info("spouse residency list: " + residencyDetailsforStatesList.size());
 							Set<ResidencyDetailsForStatesEntity> residencyStatesSet = new HashSet<>();
-							//clearResidencyStatesDetails(residencyStatesSet, "dependent");
+							// clearResidencyStatesDetails(residencyStatesSet, "dependent");
 							for (ResidencyDetailsforStates residencyDetailsforStates : residencyDetailsforStatesList) {
 								for (TaxYearInfo taxYearInfo : residencyDetailsforStates.getTaxYearInfoList()) {
 									ResidencyDetailsForStatesEntity residencyDetailsForStatesEntity = new ResidencyDetailsForStatesEntity();
-									residencyDetailsForStatesEntity
-											.setTaxYear(residencyDetailsforStates.getTaxYear());
-									residencyDetailsForStatesEntity
-											.setStatesResided(taxYearInfo.getStateResided());
+									residencyDetailsForStatesEntity.setTaxYear(residencyDetailsforStates.getTaxYear());
+									residencyDetailsForStatesEntity.setStatesResided(taxYearInfo.getStateResided());
 
-									residencyDetailsForStatesEntity.setStartDate(
-											convertStringDateToSqlDate(taxYearInfo.getStartDate()));
+									residencyDetailsForStatesEntity
+											.setStartDate(convertStringDateToSqlDate(taxYearInfo.getStartDate()));
 									residencyDetailsForStatesEntity
 											.setEndDate(convertStringDateToSqlDate(taxYearInfo.getEndDate()));
 
@@ -488,7 +564,7 @@ public class UpdateUserController {
 							if (null != residencyDetailsForStatesEntitySet
 									&& residencyDetailsForStatesEntitySet.size() > 0) {
 								List<ResidencyDetailsforStates> residencyDetailsforStatesList = new ArrayList<>();
-								List<TaxYearInfo> taxYearInfoList = new ArrayList<>();
+								Set<TaxYearInfo> taxYearInfoList = new HashSet<>();
 								ResidencyDetailsforStates residencyDetailsforStates = new ResidencyDetailsforStates();
 								for (ResidencyDetailsForStatesEntity residencyDetailsForStatesEntity : residencyDetailsForStatesEntitySet) {
 									if (residencyDetailsForStatesEntity.getTypeOfResidencyDetails()
@@ -578,10 +654,10 @@ public class UpdateUserController {
 									bankDetailsEntity = new BankDetailsEntity();
 									taxFiledYearEntity.setBankDetails(bankDetailsEntity);
 								}
-								bankDetailsEntity.setBankAccountNumber(bankDetails.getBankAccountNumber());
-								bankDetailsEntity.setBankAccountTpe(bankDetails.getBankAccountType());
-								bankDetailsEntity.setBankName(bankDetails.getBankName());
-								bankDetailsEntity.setRoutingNumber(bankDetails.getRoutingNumber());
+								bankDetailsEntity.setBankAccountNumber(bankDetails.getUSBankAccountNumber());
+								bankDetailsEntity.setBankAccountTpe(bankDetails.getTypeOfAccount());
+								bankDetailsEntity.setBankName(bankDetails.getNameOfTheBank());
+								bankDetailsEntity.setRoutingNumber(bankDetails.getBankRoutingNumber());
 								bankDetailsEntity.setTaxFileYear(taxFiledYearEntity);
 
 								LOGGER.info("bank details updated successfully!");
@@ -589,20 +665,20 @@ public class UpdateUserController {
 							}
 						}
 					}
-					/* else */if(!isUpdatedOrInserted) {
+					/* else */if (!isUpdatedOrInserted) {
 						LOGGER.info("inserting into db as no records found");
 
-						if(null == taxFiledYearEntityList) {
+						if (null == taxFiledYearEntityList) {
 							taxFiledYearEntityList = new HashSet<>();
 						}
 						TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
 						taxFiledYearEntity.setYear(taxYear);
 
 						BankDetailsEntity bankDetailsEntity = new BankDetailsEntity();
-						bankDetailsEntity.setBankAccountNumber(bankDetails.getBankAccountNumber());
-						bankDetailsEntity.setBankAccountTpe(bankDetails.getBankAccountType());
-						bankDetailsEntity.setBankName(bankDetails.getBankName());
-						bankDetailsEntity.setRoutingNumber(bankDetails.getRoutingNumber());
+						bankDetailsEntity.setBankAccountNumber(bankDetails.getUSBankAccountNumber());
+						bankDetailsEntity.setBankAccountTpe(bankDetails.getTypeOfAccount());
+						bankDetailsEntity.setBankName(bankDetails.getNameOfTheBank());
+						bankDetailsEntity.setRoutingNumber(bankDetails.getBankRoutingNumber());
 
 						taxFiledYearEntity.setBankDetails(bankDetailsEntity);
 						bankDetailsEntity.setTaxFileYear(taxFiledYearEntity);
@@ -648,10 +724,10 @@ public class UpdateUserController {
 								if (null == bankDetailsEntity) {
 									return "";
 								}
-								bankDetails.setBankAccountNumber(bankDetailsEntity.getBankAccountNumber());
-								bankDetails.setBankAccountType(bankDetailsEntity.getBankAccountTpe());
-								bankDetails.setBankName(bankDetailsEntity.getBankName());
-								bankDetails.setRoutingNumber(bankDetailsEntity.getRoutingNumber());
+								bankDetails.setUSBankAccountNumber(bankDetailsEntity.getBankAccountNumber());
+								bankDetails.setTypeOfAccount(bankDetailsEntity.getBankAccountTpe());
+								bankDetails.setNameOfTheBank(bankDetailsEntity.getBankName());
+								bankDetails.setBankRoutingNumber(bankDetailsEntity.getRoutingNumber());
 								return bankDetails;
 							}
 						}
@@ -712,15 +788,15 @@ public class UpdateUserController {
 								break;
 							}
 						}
-					}if(!isUpdatedOrInserted) {
-						if(null == taxFiledYearEntityList) {
+					}
+					if (!isUpdatedOrInserted) {
+						if (null == taxFiledYearEntityList) {
 							taxFiledYearEntityList = new HashSet<>();
 						}
 						TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
 						taxFiledYearEntity.setYear(taxYear);
 						Set<OtherIncomeInformatonEntity> otherIncomeInformatonEntitySet = new HashSet<>();
-						for (OtherIncomeInfoData otherIncomeInfoData : otherIncomeInfoModel
-								.getOtherInfoDataList()) {
+						for (OtherIncomeInfoData otherIncomeInfoData : otherIncomeInfoModel.getOtherInfoDataList()) {
 							OtherIncomeInformatonEntity otherIncomeInformatonEntity = new OtherIncomeInformatonEntity();
 							otherIncomeInformatonEntity.setQuestion(otherIncomeInfoData.getQuestion());
 							otherIncomeInformatonEntity.setAnswer(otherIncomeInfoData.getAnswer());
@@ -822,8 +898,9 @@ public class UpdateUserController {
 								break;
 							}
 						}
-					}if(!isUpdatedOrInserted) {
-						if(null == taxFiledYearEntityList) {
+					}
+					if (!isUpdatedOrInserted) {
+						if (null == taxFiledYearEntityList) {
 							taxFiledYearEntityList = new HashSet<>();
 						}
 						TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
@@ -924,8 +1001,9 @@ public class UpdateUserController {
 								break;
 							}
 						}
-					}if(!isUpdatedOrInserted) {
-						if(null == taxFiledYearEntityList) {
+					}
+					if (!isUpdatedOrInserted) {
+						if (null == taxFiledYearEntityList) {
 							taxFiledYearEntityList = new HashSet<>();
 						}
 						TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
@@ -1012,7 +1090,7 @@ public class UpdateUserController {
 								fbarEntity.setAccBelongsTo(fbar.getAccBelongsTo());
 								fbarEntity.setAccNo(fbar.getAccNo());
 								fbarEntity.setBankAddress(fbar.getBankAddress());
-								fbarEntity.setBankName(fbar.getBankName());
+								fbarEntity.setBankName(fbar.getNameOfTheBank());
 								fbarEntity.setCity(fbar.getCity());
 								fbarEntity.setState(fbar.getState());
 								fbarEntity.setMaximumValueInTheAcINR(fbar.getMaximumValueInTheAcINR());
@@ -1025,18 +1103,19 @@ public class UpdateUserController {
 								break;
 							}
 						}
-					}if(!isUpdatedOrInserted) {
-						
-						if(null == taxFiledYearEntityList) {
+					}
+					if (!isUpdatedOrInserted) {
+
+						if (null == taxFiledYearEntityList) {
 							taxFiledYearEntityList = new HashSet<>();
 						}
 						TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
 						taxFiledYearEntity.setYear(taxYear);
-						FbarEntity fbarEntity = new FbarEntity(); 
+						FbarEntity fbarEntity = new FbarEntity();
 						fbarEntity.setAccBelongsTo(fbar.getAccBelongsTo());
 						fbarEntity.setAccNo(fbar.getAccNo());
 						fbarEntity.setBankAddress(fbar.getBankAddress());
-						fbarEntity.setBankName(fbar.getBankName());
+						fbarEntity.setBankName(fbar.getNameOfTheBank());
 						fbarEntity.setCity(fbar.getCity());
 						fbarEntity.setState(fbar.getState());
 						fbarEntity.setMaximumValueInTheAcINR(fbar.getMaximumValueInTheAcINR());
@@ -1082,7 +1161,7 @@ public class UpdateUserController {
 								fbar.setAccBelongsTo(fbarEntity.getAccBelongsTo());
 								fbar.setAccNo(fbarEntity.getAccNo());
 								fbar.setBankAddress(fbarEntity.getBankAddress());
-								fbar.setBankName(fbarEntity.getBankName());
+								fbar.setNameOfTheBank(fbarEntity.getBankName());
 								fbar.setCity(fbarEntity.getCity());
 								fbar.setState(fbarEntity.getState());
 								fbar.setMaximumValueInTheAcINR(fbarEntity.getMaximumValueInTheAcINR());
@@ -1136,8 +1215,9 @@ public class UpdateUserController {
 							isUpdatedOrInserted = true;
 						}
 					}
-				}if(!isUpdatedOrInserted) {
-					if(null == taxFiledYearEntityList) {
+				}
+				if (!isUpdatedOrInserted) {
+					if (null == taxFiledYearEntityList) {
 						taxFiledYearEntityList = new HashSet<>();
 					}
 					TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();

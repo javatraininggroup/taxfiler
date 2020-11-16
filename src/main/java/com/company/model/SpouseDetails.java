@@ -1,6 +1,6 @@
 package com.company.model;
 
-import java.util.List;
+import java.util.Set;
 
 public class SpouseDetails {
 	private long id;
@@ -13,7 +13,7 @@ public class SpouseDetails {
 	private boolean ITINRenewed;
 	private String entryDateIntoUS;
 	private String occupation;
-	private List<ResidencyDetailsforStates> residencyDetailsforStates;
+	private Set<ResidencyDetailsforStates> addressOfLivingInTaxYear;
 	private boolean didYourSpouseisWorkedinXX;
 	private boolean isLivingMoreThan6Months;
 
@@ -49,12 +49,12 @@ public class SpouseDetails {
 		this.occupation = occupation;
 	}
 
-	public List<ResidencyDetailsforStates> getResidencyDetailsforStates() {
-		return residencyDetailsforStates;
+	public Set<ResidencyDetailsforStates> getAddressOfLivingInTaxYear() {
+		return addressOfLivingInTaxYear;
 	}
 
-	public void setResidencyDetailsforStates(List<ResidencyDetailsforStates> residencyDetailsforStates) {
-		this.residencyDetailsforStates = residencyDetailsforStates;
+	public void setAddressOfLivingInTaxYear(Set<ResidencyDetailsforStates> addressOfLivingInTaxYear) {
+		this.addressOfLivingInTaxYear = addressOfLivingInTaxYear;
 	}
 
 	public boolean isCheckIfITINToBeApplied() {

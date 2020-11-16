@@ -12,12 +12,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "spouse_details")
 public class SpouseDetailsEntity {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
+	@JsonManagedReference
 	private TaxFiledYearEntity taxFileYear;
 
 	@Id

@@ -181,7 +181,7 @@ public class ClientDetailsController {
 								if (null != residencyDetailsForStatesEntitySet
 										&& residencyDetailsForStatesEntitySet.size() > 0) {
 									List<ResidencyDetailsforStates> residencyDetailsforStatesList = new ArrayList<>();
-									List<TaxYearInfo> taxYearInfoList = new ArrayList<>();
+									Set<TaxYearInfo> taxYearInfoList = new HashSet<>();
 									ResidencyDetailsforStates residencyDetailsforStates = new ResidencyDetailsforStates();
 									for (ResidencyDetailsForStatesEntity residencyDetailsForStatesEntity : residencyDetailsForStatesEntitySet) {
 										if (residencyDetailsForStatesEntity.getTypeOfResidencyDetails()
@@ -262,7 +262,7 @@ public class ClientDetailsController {
 								fbar.setAccBelongsTo(fbarEntity.getAccBelongsTo());
 								fbar.setAccNo(fbarEntity.getAccNo());
 								fbar.setBankAddress(fbarEntity.getBankAddress());
-								fbar.setBankName(fbarEntity.getBankName());
+								fbar.setNameOfTheBank(fbarEntity.getBankName());
 								fbar.setCity(fbarEntity.getCity());
 								fbar.setState(fbarEntity.getState());
 								fbar.setMaximumValueInTheAcINR(fbarEntity.getMaximumValueInTheAcINR());
@@ -278,10 +278,10 @@ public class ClientDetailsController {
 							if (null != bankDetailsEntity) {
 
 								LOGGER.info("getting existing BankDetailsEntity details");
-								bankDetails.setBankAccountNumber(bankDetailsEntity.getBankAccountNumber());
-								bankDetails.setBankAccountType(bankDetailsEntity.getBankAccountTpe());
-								bankDetails.setBankName(bankDetailsEntity.getBankName());
-								bankDetails.setRoutingNumber(bankDetailsEntity.getRoutingNumber());
+								bankDetails.setUSBankAccountNumber(bankDetailsEntity.getBankAccountNumber());
+								bankDetails.setTypeOfAccount(bankDetailsEntity.getBankAccountTpe());
+								bankDetails.setNameOfTheBank(bankDetailsEntity.getBankName());
+								bankDetails.setBankRoutingNumber(bankDetailsEntity.getRoutingNumber());
 								clientModel.setBankDetails(bankDetails);
 							}	//End of BankDetailsEntity
 
@@ -295,7 +295,7 @@ public class ClientDetailsController {
 								basicInformation.setDateOfBirth(convertDateToString(basicInfoEntity.getDob()));
 								basicInformation.setDateOfMarriage(convertDateToString(basicInfoEntity.getDateOfMarriage()));
 								basicInformation.setFirstDateOfEntyInUS(convertDateToString(basicInfoEntity.getFirstDateOfEntryInUS()));
-								basicInformation.setMartialStatus(basicInfoEntity.getMartialStatus());
+								basicInformation.setFilingStatus(basicInfoEntity.getMartialStatus());
 								Name name=new Name();
 								name.setFirstName(basicInfoEntity.getFirstName());
 								name.setLastName(basicInfoEntity.getLastName());
@@ -329,8 +329,8 @@ public class ClientDetailsController {
 
 								if (null != residencyDetailsForStatesEntitySet
 										&& residencyDetailsForStatesEntitySet.size() > 0) {
-									List<ResidencyDetailsforStates> residencyDetailsforStatesList = new ArrayList<>();
-									List<TaxYearInfo> taxYearInfoList = new ArrayList<>();
+									Set<ResidencyDetailsforStates> residencyDetailsforStatesList = new HashSet<>();
+									Set<TaxYearInfo> taxYearInfoList = new HashSet<>();
 									ResidencyDetailsforStates residencyDetailsforStates = new ResidencyDetailsforStates();
 									for (ResidencyDetailsForStatesEntity residencyDetailsForStatesEntity : residencyDetailsForStatesEntitySet) {
 										if (residencyDetailsForStatesEntity.getTypeOfResidencyDetails()
@@ -348,7 +348,7 @@ public class ClientDetailsController {
 										}
 									}
 									residencyDetailsforStatesList.add(residencyDetailsforStates);
-									contactDetails.setResidencyDetailsforStates(residencyDetailsforStatesList);
+									contactDetails.setAddressOfLivingInTaxYear(residencyDetailsforStatesList);
 
 							}
 
@@ -383,8 +383,8 @@ public class ClientDetailsController {
 
 								if (null != residencyDetailsForStatesEntitySet
 										&& residencyDetailsForStatesEntitySet.size() > 0) {
-									List<ResidencyDetailsforStates> residencyDetailsforStatesList = new ArrayList<>();
-									List<TaxYearInfo> taxYearInfoList = new ArrayList<>();
+									Set<ResidencyDetailsforStates> residencyDetailsforStatesList = new HashSet<>();
+									Set<TaxYearInfo> taxYearInfoList = new HashSet<>();
 									ResidencyDetailsforStates residencyDetailsforStates = new ResidencyDetailsforStates();
 									for (ResidencyDetailsForStatesEntity residencyDetailsForStatesEntity : residencyDetailsForStatesEntitySet) {
 										if (residencyDetailsForStatesEntity.getTypeOfResidencyDetails()
@@ -403,7 +403,7 @@ public class ClientDetailsController {
 									
 									}
 									residencyDetailsforStatesList.add(residencyDetailsforStates);
-									spouseDetails.setResidencyDetailsforStates(residencyDetailsforStatesList);
+									spouseDetails.setAddressOfLivingInTaxYear(residencyDetailsforStatesList);
 								}
 								clientModel.setSpouseDetails(spouseDetails);
 							}//End of SpouseDetails

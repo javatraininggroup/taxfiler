@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "users")
 public class UserEntity {
@@ -37,6 +39,7 @@ public class UserEntity {
 	private boolean confirmDetails;
 
 	@OneToMany(orphanRemoval = true, mappedBy = "userEntity", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = TaxFiledYearEntity.class)
+	@JsonBackReference
 	private Set<TaxFiledYearEntity> taxFiledYearList;
 
 	public String getName() {

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,7 +60,9 @@ public class RegistrationController {
 			userEntity.setPhone(registraionModel.getPhone());
 			userEntity.setEmail(registraionModel.getEmail());
 			userEntity.setName(registraionModel.getName());
-			userEntity.setPassword(registraionModel.getPassword());
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			String hashedPassword = passwordEncoder.encode(registraionModel.getPassword());
+			userEntity.setPassword(hashedPassword);
 			userEntity.setSourceOfKnowingSite(registraionModel.getSourceOfKnowingSite());
 			userEntity.setTimezone(registraionModel.getPreferredTimezone());
 			userRepository.save(userEntity);

@@ -1,6 +1,7 @@
 package com.company.model;
 
 import java.util.List;
+import java.util.Set;
 
 public class ContactDetails {
 
@@ -15,7 +16,7 @@ public class ContactDetails {
 	private String indiaNumber;
 	private String email;
 	private String timezone;
-	private List<ResidencyDetailsforStates> residencyDetailsforStates;
+	private Set<ResidencyDetailsforStates> addressOfLivingInTaxYear;
 
 	public String getCity() {
 		return city;
@@ -65,12 +66,12 @@ public class ContactDetails {
 		this.email = email;
 	}
 
-	public List<ResidencyDetailsforStates> getResidencyDetailsforStates() {
-		return residencyDetailsforStates;
+	public Set<ResidencyDetailsforStates> getAddressOfLivingInTaxYear() {
+		return addressOfLivingInTaxYear;
 	}
 
-	public void setResidencyDetailsforStates(List<ResidencyDetailsforStates> residencyDetailsforStates) {
-		this.residencyDetailsforStates = residencyDetailsforStates;
+	public void setAddressOfLivingInTaxYear(Set<ResidencyDetailsforStates> addressOfLivingInTaxYear) {
+		this.addressOfLivingInTaxYear = addressOfLivingInTaxYear;
 	}
 
 	public String getAddress() {

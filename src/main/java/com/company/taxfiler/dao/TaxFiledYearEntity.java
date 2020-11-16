@@ -14,6 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "tax_file_year")
 public class TaxFiledYearEntity {
@@ -26,42 +29,55 @@ public class TaxFiledYearEntity {
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "users_id", referencedColumnName = "id")
+	@JsonManagedReference
 	private UserEntity userEntity;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private BasicInfoEntity basicInfo;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private ContactDetailsEntity contactDetails;
 
 	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private Set<ResidencyDetailsForStatesEntity> residencyDetailsforStatesList;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private SpouseDetailsEntity spouseDetails;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private DependentInformationEntity dependentInformation;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private BankDetailsEntity bankDetails;
 
 	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private Set<OtherIncomeInformatonEntity> otherIncomeInformatonEntityList;
 
 	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private Set<AdditionalInformationEntity> additionalInformationEntityList;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private FbarEntity fbarEntity;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private OtherInformationEntity otherInformationEntity;
 
 	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private Set<UploadFilesEntity> UploadFilesEntityList;
 
 	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private Set<MessagesEntity> messagesEntityList;
 
 	public int getId() {

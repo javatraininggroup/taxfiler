@@ -2,41 +2,41 @@ package com.company.model;
 
 public class BankDetails {
 
-	private String bankName;
-	private long routingNumber;
-	private Long bankAccountNumber;
-	private String bankAccountType;
+	private String nameOfTheBank;
+	private long bankRoutingNumber;
+	private Long usBankAccountNumber;
+	private String typeOfAccount;
 
-	public String getBankName() {
-		return bankName;
+	public String getNameOfTheBank() {
+		return nameOfTheBank;
 	}
 
-	public void setBankName(String bankName) {
-		this.bankName = bankName;
+	public void setNameOfTheBank(String nameOfTheBank) {
+		this.nameOfTheBank = nameOfTheBank;
 	}
 
-	public long getRoutingNumber() {
-		return routingNumber;
+	public long getBankRoutingNumber() {
+		return bankRoutingNumber;
 	}
 
-	public void setRoutingNumber(long routingNumber) {
-		this.routingNumber = routingNumber;
+	public void setBankRoutingNumber(long bankRoutingNumber) {
+		this.bankRoutingNumber = bankRoutingNumber;
 	}
 
-	public Long getBankAccountNumber() {
-		return bankAccountNumber;
+	public Long getUSBankAccountNumber() {
+		return usBankAccountNumber;
 	}
 
-	public void setBankAccountNumber(Long bankAccountNumber) {
-		this.bankAccountNumber = bankAccountNumber;
+	public void setUSBankAccountNumber(Long usBankAccountNumber) {
+		this.usBankAccountNumber = usBankAccountNumber;
 	}
 
-	public String getBankAccountType() {
-		return bankAccountType;
+	public String getTypeOfAccount() {
+		return typeOfAccount;
 	}
 
-	public void setBankAccountType(String bankAccountType) {
-		this.bankAccountType = bankAccountType;
+	public void setTypeOfAccount(String typeOfAccount) {
+		this.typeOfAccount = typeOfAccount;
 	}
 
 }

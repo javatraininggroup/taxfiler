@@ -1,11 +1,11 @@
 package com.company.model;
 
-import java.util.List;
+import java.util.Set;
 
 public class ResidencyDetailsforStates {
 
 	private int taxYear;
-	private List<TaxYearInfo> taxYearInfoList;
+	private Set<TaxYearInfo> taxYearInfoList;
 
 	public int getTaxYear() {
 		return taxYear;
@@ -15,11 +15,11 @@ public class ResidencyDetailsforStates {
 		this.taxYear = taxYear;
 	}
 
-	public List<TaxYearInfo> getTaxYearInfoList() {
+	public Set<TaxYearInfo> getTaxYearInfoList() {
 		return taxYearInfoList;
 	}
 
-	public void setTaxYearInfoList(List<TaxYearInfo> taxYearInfoList) {
+	public void setTaxYearInfoList(Set<TaxYearInfo> taxYearInfoList) {
 		this.taxYearInfoList = taxYearInfoList;
 	}
 

@@ -6,7 +6,7 @@ public class Fbar {
 
 	private String accBelongsTo;
 
-	private String bankName;
+	private String nameOfTheBank;
 
 	private String bankAddress;
 
@@ -22,12 +22,12 @@ public class Fbar {
 
 	private String typeOfAccount;
 
-	public String getBankName() {
-		return bankName;
+	public String getNameOfTheBank() {
+		return nameOfTheBank;
 	}
 
-	public void setBankName(String bankName) {
-		this.bankName = bankName;
+	public void setNameOfTheBank(String nameOfTheBank) {
+		this.nameOfTheBank = nameOfTheBank;
 	}
 
 	public String getBankAddress() {

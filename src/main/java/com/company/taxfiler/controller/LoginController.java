@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +44,11 @@ public class LoginController {
 		try {
 			UserEntity userEntity = userRepository.findByEmail(loginModel.getEmail());
 			if (null != userEntity) {
+				//String generatedSecuredPasswordHash = BCrypt.hashpw(loginModel.getPassword(), BCrypt.gensalt(12));
+		        //System.out.println(generatedSecuredPasswordHash);
+		         
+		        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+				//if (!passwordEncoder.matches(userEntity.getPassword(), loginModel.getPassword())) {
 				if (userEntity.getPassword().equals(loginModel.getPassword())) {
 					jsonResponse.put("username", userEntity.getName());
 					jsonResponse.put("id", userEntity.getId());
@@ -71,8 +78,9 @@ public class LoginController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return e.getMessage();
 		}
-		return null;
+		//return "an error has occured";
 	}
 
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class BasicInformation {
 
-	private String martialStatus;
+	private String filingStatus;
 	private Name name;
 	private int ssn;
 	private String dateOfBirth;
@@ -19,12 +19,12 @@ public class BasicInformation {
 	private List<ResidencyDetailsforStates> residencyDetailsforStates;
 	
 
-	public String isMartialStatus() {
-		return martialStatus;
+	public String isFilingStatus() {
+		return filingStatus;
 	}
 
-	public void setMartialStatus(String martialStatus) {
-		this.martialStatus = martialStatus;
+	public void setFilingStatus(String filingStatus) {
+		this.filingStatus = filingStatus;
 	}
 
 	public int getSsn() {
@@ -93,7 +93,7 @@ public class BasicInformation {
 	}
 
 	public String getMartialStatus() {
-		return martialStatus;
+		return filingStatus;
 	}
 
 }
