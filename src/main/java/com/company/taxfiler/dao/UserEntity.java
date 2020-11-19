@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "users")
@@ -39,7 +40,8 @@ public class UserEntity {
 	private boolean confirmDetails;
 
 	@OneToMany(orphanRemoval = true, mappedBy = "userEntity", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = TaxFiledYearEntity.class)
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonManagedReference
 	private Set<TaxFiledYearEntity> taxFiledYearList;
 
 	public String getName() {

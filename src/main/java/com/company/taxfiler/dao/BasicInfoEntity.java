@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "basic_info")
@@ -20,7 +20,8 @@ public class BasicInfoEntity {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
-	@JsonManagedReference
+	//@JsonManagedReference
+	@JsonBackReference
 	private TaxFiledYearEntity taxFileYear;
 
 	@Id

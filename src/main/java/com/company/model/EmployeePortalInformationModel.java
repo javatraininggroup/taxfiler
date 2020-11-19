@@ -15,9 +15,10 @@ public class EmployeePortalInformationModel implements Serializable {
 	private String username;
 	private String email;
 
-	private List<MessagesEntity> messagesList;
+	private List<MessageResponseModel> messagesList;
 
-	private List<UploadFilesEntity> uploadedFilesList;
+	private List<DocsResponseModel> uploadedFilesList;
+	//private List<UploadFilesEntity> uploadedFilesList;
 
 	public String getUsername() {
 		return username;
@@ -35,20 +36,29 @@ public class EmployeePortalInformationModel implements Serializable {
 		this.email = email;
 	}
 
-	public List<MessagesEntity> getMessagesList() {
+	public List<MessageResponseModel> getMessagesList() {
 		return messagesList;
 	}
 
-	public void setMessagesList(List<MessagesEntity> messagesList) {
+	public void setMessagesList(List<MessageResponseModel> messagesList) {
 		this.messagesList = messagesList;
 	}
 
-	public List<UploadFilesEntity> getUploadedFilesList() {
+	public List<DocsResponseModel> getUploadedFilesList() {
+		return uploadedFilesList;
+	}
+
+	public void setUploadedFilesList(List<DocsResponseModel> uploadedFilesList) {
+		this.uploadedFilesList = uploadedFilesList;
+	}
+
+/*	public List<UploadFilesEntity> getUploadedFilesList() {
 		return uploadedFilesList;
 	}
 
 	public void setUploadedFilesList(List<UploadFilesEntity> uploadedFilesList) {
 		this.uploadedFilesList = uploadedFilesList;
 	}
+	*/
 
 }

@@ -1325,70 +1325,60 @@ public class UpdateUserController {
 		}
 		return "success";
 	}
-@GetMapping("/updateuser/{user_id}/{tax_year}/basicInfo")
-	public Object getUserBasicInfo(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
-		BasicInformation basicInformation = new BasicInformation();
-		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
-		if (verifySessionIdResponse instanceof String)
-			return verifySessionIdResponse;
-		try {
 
-
-				Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
-				if (optionalUserEntity.isPresent()) {
-					UserEntity userEntity = optionalUserEntity.get();
-					Set<TaxFiledYearEntity> taxFiledYearEntityList = userEntity.getTaxFiledYearList();
-					boolean taxYearStatus=false;
-
-					if (null != taxFiledYearEntityList && taxFiledYearEntityList.size() > 0) {
-						for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
-							if (taxFiledYearEntity.getYear() == taxYear) {
-								LOGGER.info("get the Basic info details");
-								BasicInfoEntity basicInfoEntity = taxFiledYearEntity.getBasicInfo();
-								taxYearStatus=true;
-
-								if (null != basicInfoEntity) {
-
-									LOGGER.info("getting existing basicInfoEntity details");
-									basicInformation.setCitizenship(basicInfoEntity.getCitizenship());
-									basicInformation.setDateOfBirth(convertDateToString(basicInfoEntity.getDob()));
-									basicInformation.setDateOfMarriage(convertDateToString(basicInfoEntity.getDateOfMarriage()));
-									basicInformation.setFirstDateOfEntyInUS(convertDateToString(basicInfoEntity.getFirstDateOfEntryInUS()));
-									basicInformation.setMartialStatus(basicInfoEntity.getMartialStatus());
-									Name name=new Name();
-									name.setFirstName(basicInfoEntity.getFirstName());
-									name.setLastName(basicInfoEntity.getLastName());
-									name.setMiddleName(basicInfoEntity.getMiddleName());
-									basicInformation.setName(name);
-									basicInformation.setOccupation(basicInfoEntity.getOccupation());
-									basicInformation.setSsn(basicInfoEntity.getSsn());
-									basicInformation.setTypeOfVisa(basicInfoEntity.getTypeOfVisa());
-
-									return basicInformation;
-								}else {
-									 return "No Basic Info found";
-								}
-							}
-
-						}
-							if(!taxYearStatus) return "Tax is not filed for this year";
-
-					}
-					
-			
-
-				} else {
-					return "user not found";
-				}
-			
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "an error has occured";
-		}
-
-		return "";
-	}
+	/*
+	 * @GetMapping("/updateuser/{user_id}/{tax_year}/basicInfo") public Object
+	 * getUserBasicInfo(@PathVariable("user_id") int
+	 * userId, @PathVariable("tax_year") int taxYear) { BasicInformation
+	 * basicInformation = new BasicInformation(); Object verifySessionIdResponse =
+	 * taxfilerUtil.verifySessionId(httpServletRequest); if (verifySessionIdResponse
+	 * instanceof String) return verifySessionIdResponse; try {
+	 * 
+	 * 
+	 * Optional<UserEntity> optionalUserEntity = userRepository.findById(userId); if
+	 * (optionalUserEntity.isPresent()) { UserEntity userEntity =
+	 * optionalUserEntity.get(); Set<TaxFiledYearEntity> taxFiledYearEntityList =
+	 * userEntity.getTaxFiledYearList(); boolean taxYearStatus=false;
+	 * 
+	 * if (null != taxFiledYearEntityList && taxFiledYearEntityList.size() > 0) {
+	 * for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) { if
+	 * (taxFiledYearEntity.getYear() == taxYear) {
+	 * LOGGER.info("get the Basic info details"); BasicInfoEntity basicInfoEntity =
+	 * taxFiledYearEntity.getBasicInfo(); taxYearStatus=true;
+	 * 
+	 * if (null != basicInfoEntity) {
+	 * 
+	 * LOGGER.info("getting existing basicInfoEntity details");
+	 * basicInformation.setCitizenship(basicInfoEntity.getCitizenship());
+	 * basicInformation.setDateOfBirth(convertDateToString(basicInfoEntity.getDob())
+	 * ); basicInformation.setDateOfMarriage(convertDateToString(basicInfoEntity.
+	 * getDateOfMarriage()));
+	 * basicInformation.setFirstDateOfEntyInUS(convertDateToString(basicInfoEntity.
+	 * getFirstDateOfEntryInUS()));
+	 * basicInformation.setMartialStatus(basicInfoEntity.getMartialStatus()); Name
+	 * name=new Name(); name.setFirstName(basicInfoEntity.getFirstName());
+	 * name.setLastName(basicInfoEntity.getLastName());
+	 * name.setMiddleName(basicInfoEntity.getMiddleName());
+	 * basicInformation.setName(name);
+	 * basicInformation.setOccupation(basicInfoEntity.getOccupation());
+	 * basicInformation.setSsn(basicInfoEntity.getSsn());
+	 * basicInformation.setTypeOfVisa(basicInfoEntity.getTypeOfVisa());
+	 * 
+	 * return basicInformation; }else { return "No Basic Info found"; } }
+	 * 
+	 * } if(!taxYearStatus) return "Tax is not filed for this year";
+	 * 
+	 * }
+	 * 
+	 * 
+	 * 
+	 * } else { return "user not found"; }
+	 * 
+	 * 
+	 * } catch (Exception e) { e.printStackTrace(); return "an error has occured"; }
+	 * 
+	 * return ""; }
+	 */
 	public java.sql.Date convertStringDateToSqlDate(String date) throws ParseException {
 		java.util.Date parsed = (java.util.Date) format.parse(date);
 		return new java.sql.Date(parsed.getTime());
