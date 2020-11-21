@@ -1,5 +1,6 @@
 package com.company.taxfiler.dao;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -134,6 +135,9 @@ public class TaxFiledYearEntity {
 	}
 
 	public Set<ResidencyDetailsForStatesEntity> getResidencyDetailsforStatesList() {
+		if(null == residencyDetailsforStatesList) {
+			residencyDetailsforStatesList = new HashSet<>();
+		}
 		return residencyDetailsforStatesList;
 	}
 

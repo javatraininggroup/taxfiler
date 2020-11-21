@@ -18,7 +18,7 @@ public class FbarEntity {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
-	//@JsonManagedReference
+	// @JsonManagedReference
 	@JsonBackReference
 	private TaxFiledYearEntity taxFileYear;
 
@@ -60,6 +60,22 @@ public class FbarEntity {
 
 	@Column(name = "type_of_account")
 	private String typeOfAccount;
+
+	private String ownership;
+	@Column(name = "street_address")
+	private String streetAddress;
+	@Column(name = "account_maintenance_currency")
+	private String accountMaintenanceCurrency;
+	@Column(name = "joint_owner_name")
+	private String jointOwnerName;
+	@Column(name = "any_income_earned_in_XX")
+	private boolean anyIncomeEarnedInXX;
+	@Column(name = "income_earned_details")
+	private String incomeEarnedInXXDetails;
+	@Column(name = "max_value")
+	private String maxValue;
+	@Column(name = "value_of_account")
+	private String valueOfAccount;
 
 	public String getBankName() {
 		return bankName;
@@ -148,7 +164,69 @@ public class FbarEntity {
 	public void setTaxFileYear(TaxFiledYearEntity taxFileYear) {
 		this.taxFileYear = taxFileYear;
 	}
-	
-	
+
+	public String getOwnership() {
+		return ownership;
+	}
+
+	public void setOwnership(String ownership) {
+		this.ownership = ownership;
+	}
+
+	public String getStreetAddress() {
+		return streetAddress;
+	}
+
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress;
+	}
+
+	public String getAccountMaintenanceCurrency() {
+		return accountMaintenanceCurrency;
+	}
+
+	public void setAccountMaintenanceCurrency(String accountMaintenanceCurrency) {
+		this.accountMaintenanceCurrency = accountMaintenanceCurrency;
+	}
+
+	public String getJointOwnerName() {
+		return jointOwnerName;
+	}
+
+	public void setJointOwnerName(String jointOwnerName) {
+		this.jointOwnerName = jointOwnerName;
+	}
+
+	public boolean isAnyIncomeEarnedInXX() {
+		return anyIncomeEarnedInXX;
+	}
+
+	public void setAnyIncomeEarnedInXX(boolean anyIncomeEarnedInXX) {
+		this.anyIncomeEarnedInXX = anyIncomeEarnedInXX;
+	}
+
+	public String getIncomeEarnedInXXDetails() {
+		return incomeEarnedInXXDetails;
+	}
+
+	public void setIncomeEarnedInXXDetails(String incomeEarnedInXXDetails) {
+		this.incomeEarnedInXXDetails = incomeEarnedInXXDetails;
+	}
+
+	public String getMaxValue() {
+		return maxValue;
+	}
+
+	public void setMaxValue(String maxValue) {
+		this.maxValue = maxValue;
+	}
+
+	public String getValueOfAccount() {
+		return valueOfAccount;
+	}
+
+	public void setValueOfAccount(String valueOfAccount) {
+		this.valueOfAccount = valueOfAccount;
+	}
 
 }

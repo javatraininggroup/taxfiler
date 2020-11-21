@@ -6,6 +6,7 @@ public class BankDetails {
 	private long bankRoutingNumber;
 	private Long usBankAccountNumber;
 	private String typeOfAccount;
+	private String nameOfTheAccount;
 
 	public String getNameOfTheBank() {
 		return nameOfTheBank;
@@ -37,6 +38,22 @@ public class BankDetails {
 
 	public void setTypeOfAccount(String typeOfAccount) {
 		this.typeOfAccount = typeOfAccount;
+	}
+
+	public Long getUsBankAccountNumber() {
+		return usBankAccountNumber;
+	}
+
+	public void setUsBankAccountNumber(Long usBankAccountNumber) {
+		this.usBankAccountNumber = usBankAccountNumber;
+	}
+
+	public String getNameOfTheAccount() {
+		return nameOfTheAccount;
+	}
+
+	public void setNameOfTheAccount(String nameOfTheAccount) {
+		this.nameOfTheAccount = nameOfTheAccount;
 	}
 
 }

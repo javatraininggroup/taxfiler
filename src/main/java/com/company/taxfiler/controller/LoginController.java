@@ -54,6 +54,7 @@ public class LoginController {
 					jsonResponse.put("id", userEntity.getId());
 					jsonResponse.put("email", userEntity.getEmail());
 					jsonResponse.put("phone", userEntity.getPhone());
+					jsonResponse.put("role", userEntity.getRole());
 
 					/**
 					 * generating a unique sessionId for each user

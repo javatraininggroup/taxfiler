@@ -11,7 +11,7 @@ public class Fbar {
 	private String bankAddress;
 
 	private String city;
-	
+
 	private String state;
 
 	private int pincode;
@@ -21,6 +21,15 @@ public class Fbar {
 	private String accNo;
 
 	private String typeOfAccount;
+
+	private String ownership;
+	private String streetAddress;
+	private String accountMaintenanceCurrency;
+	private String jointOwnerName;
+	private boolean anyIncomeEarnedInXX;
+	private String incomeEarnedInXXDetails;
+	private String maxValue;
+	private String valueOfAccount;
 
 	public String getNameOfTheBank() {
 		return nameOfTheBank;
@@ -100,6 +109,70 @@ public class Fbar {
 
 	public void setTypeOfAccount(String typeOfAccount) {
 		this.typeOfAccount = typeOfAccount;
+	}
+
+	public String getOwnership() {
+		return ownership;
+	}
+
+	public void setOwnership(String ownership) {
+		this.ownership = ownership;
+	}
+
+	public String getStreetAddress() {
+		return streetAddress;
+	}
+
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress;
+	}
+
+	public String getAccountMaintenanceCurrency() {
+		return accountMaintenanceCurrency;
+	}
+
+	public void setAccountMaintenanceCurrency(String accountMaintenanceCurrency) {
+		this.accountMaintenanceCurrency = accountMaintenanceCurrency;
+	}
+
+	public String getJointOwnerName() {
+		return jointOwnerName;
+	}
+
+	public void setJointOwnerName(String jointOwnerName) {
+		this.jointOwnerName = jointOwnerName;
+	}
+
+	public boolean isAnyIncomeEarnedInXX() {
+		return anyIncomeEarnedInXX;
+	}
+
+	public void setAnyIncomeEarnedInXX(boolean anyIncomeEarnedInXX) {
+		this.anyIncomeEarnedInXX = anyIncomeEarnedInXX;
+	}
+
+	public String getIncomeEarnedInXXDetails() {
+		return incomeEarnedInXXDetails;
+	}
+
+	public void setIncomeEarnedInXXDetails(String incomeEarnedInXXDetails) {
+		this.incomeEarnedInXXDetails = incomeEarnedInXXDetails;
+	}
+
+	public String getMaxValue() {
+		return maxValue;
+	}
+
+	public void setMaxValue(String maxValue) {
+		this.maxValue = maxValue;
+	}
+
+	public String getValueOfAccount() {
+		return valueOfAccount;
+	}
+
+	public void setValueOfAccount(String valueOfAccount) {
+		this.valueOfAccount = valueOfAccount;
 	}
 
 }

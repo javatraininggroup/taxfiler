@@ -99,6 +99,7 @@ public class UpdateUserController {
 
 				if (null == taxFiledYearEntityList || taxFiledYearEntityList.size() == 0) {
 					taxFiledYearEntityList = new HashSet<>();
+					userEntity.setTaxFiledYearList(taxFiledYearEntityList);
 				} else {
 					for (TaxFiledYearEntity taxFiledYearEntityTemp : taxFiledYearEntityList) {
 						if (taxFiledYearEntityTemp.getYear() == taxYear) {
@@ -111,13 +112,17 @@ public class UpdateUserController {
 					}
 				}
 				if (null == taxFiledYearEntity) {
+					LOGGER.info("new tax file year {}", taxYear);
 					taxFiledYearEntity = new TaxFiledYearEntity();
 					taxFiledYearEntity.setYear(taxYear);
+					taxFiledYearEntity.setUserEntity(userEntity);
+					taxFiledYearEntityList.add(taxFiledYearEntity);
 
 					basicInfo = new BasicInfoEntity();
 					contactDetailsEntity = new ContactDetailsEntity();
 					spouseDetailsEntity = new SpouseDetailsEntity();
 					residencyDetailsForStatesEntityList = new HashSet<>();
+					taxFiledYearEntity.setResidencyDetailsforStatesList(residencyDetailsForStatesEntityList);
 				} else {
 					if (taxFiledYearEntity.getBasicInfo() == null) {
 						LOGGER.info("basic info obj is null");
@@ -135,7 +140,7 @@ public class UpdateUserController {
 							: new HashSet<ResidencyDetailsForStatesEntity>();
 				}
 				if (null != basicInformationModel) {
-
+					LOGGER.info("settin up basic info");
 					basicInfo.setMartialStatus(basicInformationModel.getMartialStatus());
 					basicInfo.setFirstName(basicInformationModel.getName().getFirstName());
 					basicInfo.setMiddleName(basicInformationModel.getName().getMiddleName());
@@ -154,10 +159,12 @@ public class UpdateUserController {
 					basicInfo.setTaxFileYear(taxFiledYearEntity);
 
 					taxFiledYearEntity.setBasicInfo(basicInfo);
+				} else {
+					LOGGER.info("basic info req obj not available");
 				}
 				ContactDetails contactDetails = taxPayerModel.getContactDetails();
 				if (null != contactDetails) {
-
+					LOGGER.info("settin up contact info");
 					contactDetailsEntity.setAddress(contactDetails.getAddress());
 					contactDetailsEntity.setCity(contactDetails.getCity());
 					contactDetailsEntity.setAptNo(contactDetails.getAptNo());
@@ -196,8 +203,11 @@ public class UpdateUserController {
 					}
 					contactDetailsEntity.setTaxFileYear(taxFiledYearEntity);
 					taxFiledYearEntity.setContactDetails(contactDetailsEntity);
+				} else {
+					LOGGER.info("contact info req obj not available");
 				}
 				if (null != taxPayerModel.getSpouseDetails()) {
+					LOGGER.info("settin up spouse info");
 					SpouseDetails spouseDetails = taxPayerModel.getSpouseDetails();
 
 					spouseDetailsEntity.setFirstName(spouseDetails.getName().getFirstName());
@@ -216,6 +226,15 @@ public class UpdateUserController {
 					spouseDetailsEntity.setOccupation(spouseDetails.getOccupation());
 					spouseDetailsEntity.setLivingMoreThan6Months(spouseDetails.isLivingMoreThan6Months());
 					spouseDetailsEntity.setDidYourSpouseisWorkedinXX(spouseDetails.isDidYourSpouseisWorkedinXX());
+					if (spouseDetails.isDidYourSpouseisWorkedinXX()) {
+						spouseDetailsEntity.setSpouseWorkStatusComments(spouseDetails.getSpouseWorkStatusComments());
+					}
+					spouseDetailsEntity
+							.setDidYouWorkMoreThanOneEmployerInXX(spouseDetails.isDidYouWorkMoreThanOneEmployerInXX());
+					if (spouseDetails.isDidYouWorkMoreThanOneEmployerInXX()) {
+						spouseDetailsEntity.setMoreThanOneEmployerWorkStatusComments(
+								spouseDetails.getMoreThanOneEmployerWorkStatusComments());
+					}
 
 					LOGGER.info("residency size: " + spouseDetails.getAddressOfLivingInTaxYear().size());
 
@@ -239,7 +258,9 @@ public class UpdateUserController {
 								residencyDetailsForStatesEntity.setTypeOfResidencyDetails("spouse");
 								residencyDetailsForStatesEntity.setTaxFileYear(taxFiledYearEntity);
 								LOGGER.info("adding residency details for spouse");
-								residencyDetailsForStatesEntityList.add(residencyDetailsForStatesEntity);
+								// residencyDetailsForStatesEntityList.add(residencyDetailsForStatesEntity);
+								taxFiledYearEntity.getResidencyDetailsforStatesList()
+										.add(residencyDetailsForStatesEntity);
 							}
 						}
 					}
@@ -248,7 +269,8 @@ public class UpdateUserController {
 				} else {
 					LOGGER.info("no spouse details");
 				}
-				taxFiledYearEntity.setResidencyDetailsforStatesList(residencyDetailsForStatesEntityList);
+				// taxFiledYearEntity.setResidencyDetailsforStatesList(residencyDetailsForStatesEntityList);
+				// taxFiledYearEntity.getResidencyDetailsforStatesList().
 				userRepository.save(userEntity);
 				return "successfully updated info";
 			} else {
@@ -287,7 +309,7 @@ public class UpdateUserController {
 							BasicInfoEntity basicEntity = taxFiledYearEntityTemp.getBasicInfo();
 							String basicEntityStr = taxfilerUtil.convertObjectTOString(basicEntity);
 							BasicInformation basicInfoModel = (BasicInformation) taxfilerUtil
-							.convertStringToObject(basicEntityStr, BasicInformation.class);
+									.convertStringToObject(basicEntityStr, BasicInformation.class);
 							Name name = new Name();
 							name.setFirstName(basicEntity.getFirstName());
 							name.setMiddleName(basicEntity.getMiddleName());
@@ -304,9 +326,31 @@ public class UpdateUserController {
 							ContactDetailsEntity contactEntity = taxFiledYearEntityTemp.getContactDetails();
 							String contactEntityStr = taxfilerUtil.convertObjectTOString(contactEntity);
 							ContactDetails contactDetailsModel = (ContactDetails) taxfilerUtil
-							.convertStringToObject(contactEntityStr, ContactDetails.class);
-							String residencyDetailsStr = taxfilerUtil.convertObjectTOString(taxFiledYearEntityTemp.getResidencyDetailsforStatesList());
-							Set<ResidencyDetailsforStates> residencyDetailsforStatesSetModel = (Set<ResidencyDetailsforStates>)taxfilerUtil.convertStringToObject(residencyDetailsStr, Set.class);
+									.convertStringToObject(contactEntityStr, ContactDetails.class);
+
+							Set<ResidencyDetailsForStatesEntity> residencyStatesEntitySet = taxFiledYearEntityTemp
+									.getResidencyDetailsforStatesList();
+							Set<ResidencyDetailsforStates> residencyDetailsforStatesSetModel = new HashSet<>();
+							Set<TaxYearInfo> taxYearInfoList = new HashSet<>();
+							LOGGER.info("residencyStatesEntitySet size {}", residencyStatesEntitySet.size());
+							ResidencyDetailsforStates model = new ResidencyDetailsforStates();
+							for (ResidencyDetailsForStatesEntity entity : residencyStatesEntitySet) {
+								model.setTaxYear((int) entity.getTaxYear());
+								TaxYearInfo info = new TaxYearInfo();
+								info.setStartDate(entity.getStartDate().toString());
+								info.setEndDate(entity.getEndDate().toString());
+								info.setStateResided(entity.getStatesResided());
+								taxYearInfoList.add(info);
+								model.setTaxYearInfoList(taxYearInfoList);
+								residencyDetailsforStatesSetModel.add(model);
+
+							}
+
+							// String residencyDetailsStr =
+							// taxfilerUtil.convertObjectTOString(taxFiledYearEntityTemp.getResidencyDetailsforStatesList());
+							// Set<ResidencyDetailsforStates> residencyDetailsforStatesSetModel =
+							// (Set<ResidencyDetailsforStates>)taxfilerUtil.convertStringToObject(residencyDetailsStr,
+							// Set.class);
 							contactDetailsModel.setAddressOfLivingInTaxYear(residencyDetailsforStatesSetModel);
 							taxPayerModel.setContactDetails(contactDetailsModel);
 
@@ -316,7 +360,7 @@ public class UpdateUserController {
 							SpouseDetailsEntity spouseDetailsEntity = taxFiledYearEntityTemp.getSpouseDetails();
 							String spouseEntityStr = taxfilerUtil.convertObjectTOString(spouseDetailsEntity);
 							SpouseDetails spouseDetailsModel = (SpouseDetails) taxfilerUtil
-							.convertStringToObject(spouseEntityStr, SpouseDetails.class);
+									.convertStringToObject(spouseEntityStr, SpouseDetails.class);
 							Name spouseName = new Name();
 							spouseName.setFirstName(spouseDetailsEntity.getFirstName());
 							spouseName.setMiddleName(spouseDetailsEntity.getMiddleName());
@@ -658,6 +702,7 @@ public class UpdateUserController {
 								bankDetailsEntity.setBankAccountTpe(bankDetails.getTypeOfAccount());
 								bankDetailsEntity.setBankName(bankDetails.getNameOfTheBank());
 								bankDetailsEntity.setRoutingNumber(bankDetails.getBankRoutingNumber());
+								bankDetailsEntity.setNameOfTheAccount(bankDetails.getNameOfTheAccount());
 								bankDetailsEntity.setTaxFileYear(taxFiledYearEntity);
 
 								LOGGER.info("bank details updated successfully!");
@@ -679,6 +724,7 @@ public class UpdateUserController {
 						bankDetailsEntity.setBankAccountTpe(bankDetails.getTypeOfAccount());
 						bankDetailsEntity.setBankName(bankDetails.getNameOfTheBank());
 						bankDetailsEntity.setRoutingNumber(bankDetails.getBankRoutingNumber());
+						bankDetailsEntity.setNameOfTheAccount(bankDetails.getNameOfTheAccount());
 
 						taxFiledYearEntity.setBankDetails(bankDetailsEntity);
 						bankDetailsEntity.setTaxFileYear(taxFiledYearEntity);
@@ -728,6 +774,7 @@ public class UpdateUserController {
 								bankDetails.setTypeOfAccount(bankDetailsEntity.getBankAccountTpe());
 								bankDetails.setNameOfTheBank(bankDetailsEntity.getBankName());
 								bankDetails.setBankRoutingNumber(bankDetailsEntity.getRoutingNumber());
+								bankDetails.setNameOfTheAccount(bankDetailsEntity.getNameOfTheAccount());
 								return bankDetails;
 							}
 						}
@@ -1097,6 +1144,14 @@ public class UpdateUserController {
 								fbarEntity.setPinCode(fbar.getPincode());
 								fbarEntity.setTransferToForeignAccount(fbar.getTransferToForeignAccount());
 								fbarEntity.setTypeOfAccount(fbar.getTypeOfAccount());
+								fbarEntity.setOwnership(fbar.getOwnership());
+								fbarEntity.setStreetAddress(fbar.getStreetAddress());
+								fbarEntity.setAccountMaintenanceCurrency(fbar.getAccountMaintenanceCurrency());
+								fbarEntity.setJointOwnerName(fbar.getJointOwnerName());
+								fbarEntity.setAnyIncomeEarnedInXX(fbar.isAnyIncomeEarnedInXX());
+								fbarEntity.setIncomeEarnedInXXDetails(fbar.getIncomeEarnedInXXDetails());
+								fbarEntity.setMaxValue(fbar.getMaxValue());
+								fbarEntity.setValueOfAccount(fbar.getValueOfAccount());
 
 								fbarEntity.setTaxFileYear(taxFiledYearEntity);
 								isUpdatedOrInserted = true;
@@ -1122,6 +1177,14 @@ public class UpdateUserController {
 						fbarEntity.setPinCode(fbar.getPincode());
 						fbarEntity.setTransferToForeignAccount(fbar.getTransferToForeignAccount());
 						fbarEntity.setTypeOfAccount(fbar.getTypeOfAccount());
+						fbarEntity.setOwnership(fbar.getOwnership());
+						fbarEntity.setStreetAddress(fbar.getStreetAddress());
+						fbarEntity.setAccountMaintenanceCurrency(fbar.getAccountMaintenanceCurrency());
+						fbarEntity.setJointOwnerName(fbar.getJointOwnerName());
+						fbarEntity.setAnyIncomeEarnedInXX(fbar.isAnyIncomeEarnedInXX());
+						fbarEntity.setIncomeEarnedInXXDetails(fbar.getIncomeEarnedInXXDetails());
+						fbarEntity.setMaxValue(fbar.getMaxValue());
+						fbarEntity.setValueOfAccount(fbar.getValueOfAccount());
 						taxFiledYearEntity.setFbarEntity(fbarEntity);
 						fbarEntity.setTaxFileYear(taxFiledYearEntity);
 						taxFiledYearEntityList.add(taxFiledYearEntity);
@@ -1168,6 +1231,14 @@ public class UpdateUserController {
 								fbar.setPincode(fbarEntity.getPinCode());
 								fbar.setTransferToForeignAccount(fbarEntity.getTransferToForeignAccount());
 								fbar.setTypeOfAccount(fbarEntity.getTypeOfAccount());
+								fbar.setOwnership(fbarEntity.getOwnership());
+								fbar.setStreetAddress(fbarEntity.getStreetAddress());
+								fbar.setAccountMaintenanceCurrency(fbarEntity.getAccountMaintenanceCurrency());
+								fbar.setJointOwnerName(fbarEntity.getJointOwnerName());
+								fbar.setAnyIncomeEarnedInXX(fbarEntity.isAnyIncomeEarnedInXX());
+								fbar.setIncomeEarnedInXXDetails(fbarEntity.getIncomeEarnedInXXDetails());
+								fbar.setMaxValue(fbarEntity.getMaxValue());
+								fbar.setValueOfAccount(fbarEntity.getValueOfAccount());
 								return fbar;
 							}
 						}
@@ -1383,8 +1454,9 @@ public class UpdateUserController {
 		java.util.Date parsed = (java.util.Date) format.parse(date);
 		return new java.sql.Date(parsed.getTime());
 	}
-	public String convertDateToString(Date date){
-		String strDate=format.format(date);
+
+	public String convertDateToString(Date date) {
+		String strDate = format.format(date);
 
 		return strDate;
 	}

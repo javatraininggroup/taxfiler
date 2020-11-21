@@ -16,6 +16,9 @@ public class SpouseDetails {
 	private Set<ResidencyDetailsforStates> addressOfLivingInTaxYear;
 	private boolean didYourSpouseisWorkedinXX;
 	private boolean isLivingMoreThan6Months;
+	private String spouseWorkStatusComments;
+	private boolean didYouWorkMoreThanOneEmployerInXX;
+	private String moreThanOneEmployerWorkStatusComments;
 
 	public Name getName() {
 		return name;
@@ -119,6 +122,30 @@ public class SpouseDetails {
 
 	public void setDidYourSpouseisWorkedinXX(boolean didYourSpouseisWorkedinXX) {
 		this.didYourSpouseisWorkedinXX = didYourSpouseisWorkedinXX;
+	}
+
+	public String getSpouseWorkStatusComments() {
+		return spouseWorkStatusComments;
+	}
+
+	public void setSpouseWorkStatusComments(String spouseWorkStatusComments) {
+		this.spouseWorkStatusComments = spouseWorkStatusComments;
+	}
+
+	public boolean isDidYouWorkMoreThanOneEmployerInXX() {
+		return didYouWorkMoreThanOneEmployerInXX;
+	}
+
+	public void setDidYouWorkMoreThanOneEmployerInXX(boolean didYouWorkMoreThanOneEmployerInXX) {
+		this.didYouWorkMoreThanOneEmployerInXX = didYouWorkMoreThanOneEmployerInXX;
+	}
+
+	public String getMoreThanOneEmployerWorkStatusComments() {
+		return moreThanOneEmployerWorkStatusComments;
+	}
+
+	public void setMoreThanOneEmployerWorkStatusComments(String moreThanOneEmployerWorkStatusComments) {
+		this.moreThanOneEmployerWorkStatusComments = moreThanOneEmployerWorkStatusComments;
 	}
 
 }

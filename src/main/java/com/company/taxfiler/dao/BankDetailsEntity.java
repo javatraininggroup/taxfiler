@@ -45,6 +45,9 @@ public class BankDetailsEntity {
 
 	@Column(name = "bank_account_type")
 	private String bankAccountTpe;
+	
+	@Column(name = "name_of_the_account")
+	private String nameOfTheAccount;
 
 	public String getBankName() {
 		return bankName;
@@ -85,5 +88,15 @@ public class BankDetailsEntity {
 	public void setTaxFileYear(TaxFiledYearEntity taxFileYear) {
 		this.taxFileYear = taxFileYear;
 	}
+
+	public String getNameOfTheAccount() {
+		return nameOfTheAccount;
+	}
+
+	public void setNameOfTheAccount(String nameOfTheAccount) {
+		this.nameOfTheAccount = nameOfTheAccount;
+	}
+	
+	
 
 }

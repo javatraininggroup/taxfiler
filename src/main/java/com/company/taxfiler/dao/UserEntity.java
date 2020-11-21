@@ -38,9 +38,10 @@ public class UserEntity {
 	 */
 	@Column(name = "confirm_details")
 	private boolean confirmDetails;
+	private String role;
 
-	@OneToMany(orphanRemoval = true, mappedBy = "userEntity", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = TaxFiledYearEntity.class)
-	//@JsonBackReference
+	@OneToMany(/* orphanRemoval = true, */ mappedBy = "userEntity", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = TaxFiledYearEntity.class)
+	// @JsonBackReference
 	@JsonManagedReference
 	private Set<TaxFiledYearEntity> taxFiledYearList;
 
@@ -124,7 +125,7 @@ public class UserEntity {
 	}
 
 	public Set<TaxFiledYearEntity> getTaxFiledYearList() {
-		if(null == taxFiledYearList) {
+		if (null == taxFiledYearList) {
 			taxFiledYearList = new HashSet<>();
 		}
 		return taxFiledYearList;
@@ -132,6 +133,14 @@ public class UserEntity {
 
 	public void setTaxFiledYearList(Set<TaxFiledYearEntity> taxFiledYearList) {
 		this.taxFiledYearList = taxFiledYearList;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 }

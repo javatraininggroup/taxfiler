@@ -62,6 +62,12 @@ public class SpouseDetailsEntity {
 	private boolean didYourSpouseisWorkedinXX;
 	@Column(name = "is_living_more_than_6months")
 	private boolean isLivingMoreThan6Months;
+	@Column(name="spouse_work_status_comments")
+	private String spouseWorkStatusComments;
+	@Column(name="did_you_work_more_than_one_employer_in_XX")
+	private boolean didYouWorkMoreThanOneEmployerInXX;
+	@Column(name="more_than_one_employer_work_status_comments")
+	private String moreThanOneEmployerWorkStatusComments;
 
 	public String getLastName() {
 		return lastName;
@@ -184,5 +190,31 @@ public class SpouseDetailsEntity {
 	public Date getEntryDateIntoUS() {
 		return entryDateIntoUS;
 	}
+
+	public String getSpouseWorkStatusComments() {
+		return spouseWorkStatusComments;
+	}
+
+	public void setSpouseWorkStatusComments(String spouseWorkStatusComments) {
+		this.spouseWorkStatusComments = spouseWorkStatusComments;
+	}
+
+	public boolean isDidYouWorkMoreThanOneEmployerInXX() {
+		return didYouWorkMoreThanOneEmployerInXX;
+	}
+
+	public void setDidYouWorkMoreThanOneEmployerInXX(boolean didYouWorkMoreThanOneEmployerInXX) {
+		this.didYouWorkMoreThanOneEmployerInXX = didYouWorkMoreThanOneEmployerInXX;
+	}
+
+	public String getMoreThanOneEmployerWorkStatusComments() {
+		return moreThanOneEmployerWorkStatusComments;
+	}
+
+	public void setMoreThanOneEmployerWorkStatusComments(String moreThanOneEmployerWorkStatusComments) {
+		this.moreThanOneEmployerWorkStatusComments = moreThanOneEmployerWorkStatusComments;
+	}
+	
+	
 
 }
