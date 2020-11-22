@@ -41,6 +41,7 @@ public class LoginController {
 		 * 1. validate (username and password) 2. If username and password is correct go
 		 * through the BUSINESS LOGIC 3. Else show the error message
 		 */
+		
 		try {
 			UserEntity userEntity = userRepository.findByEmail(loginModel.getEmail());
 			if (null != userEntity) {
@@ -48,7 +49,9 @@ public class LoginController {
 		        //System.out.println(generatedSecuredPasswordHash);
 		         
 		        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-				//if (!passwordEncoder.matches(userEntity.getPassword(), loginModel.getPassword())) {
+				//if (!passwordEncoder.matches(loginModel.getPassword(),userEntity.getPassword())) {
+
+
 				if (userEntity.getPassword().equals(loginModel.getPassword())) {
 					jsonResponse.put("username", userEntity.getName());
 					jsonResponse.put("id", userEntity.getId());
@@ -71,6 +74,7 @@ public class LoginController {
 					LOGGER.error(jsonResponse.toString());
 					return jsonResponse.toString();
 				}
+				
 			} else {
 				response.setStatus(HttpStatus.BAD_REQUEST.value());
 				jsonResponse.put("error", "user not registered");
