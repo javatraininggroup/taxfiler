@@ -1,9 +1,12 @@
 package com.company.taxfiler.util;
 
-import static java.util.Collections.*;
+import static java.util.Collections.unmodifiableCollection;
+import static java.util.Collections.unmodifiableSet;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -12,10 +15,14 @@ public class TtlHashMap<K, V> implements Map<K, V> {
 
 	private final HashMap<K, V> store = new HashMap<>();
 	private final HashMap<K, Long> timestamps = new HashMap<>();
+	//this is to supprt employee and super_admin session with 12Hrs validity
+	private final List<K> otherSessionIds = new ArrayList<>();
 	private final long ttl;
+	private final long otherTTL;
 
-	public TtlHashMap(TimeUnit ttlUnit, long ttlValue) {
+	public TtlHashMap(TimeUnit ttlUnit, long ttlValue, long otherTTLValue) {
 		this.ttl = ttlUnit.toNanos(ttlValue);
+		this.otherTTL = ttlUnit.toNanos(otherTTLValue);
 	}
 
 	@Override
@@ -25,6 +32,7 @@ public class TtlHashMap<K, V> implements Map<K, V> {
 		if (value != null && expired(key, value)) {
 			store.remove(key);
 			timestamps.remove(key);
+			otherSessionIds.remove(key);
 			return null;
 		} else {
 			return value;
@@ -32,7 +40,11 @@ public class TtlHashMap<K, V> implements Map<K, V> {
 	}
 
 	private boolean expired(Object key, V value) {
+		if(otherSessionIds.contains(key)) {
+			return (System.nanoTime() - timestamps.get(key)) > this.otherTTL;
+		}else {
 		return (System.nanoTime() - timestamps.get(key)) > this.ttl;
+		}
 	}
 
 	@Override
@@ -65,6 +77,8 @@ public class TtlHashMap<K, V> implements Map<K, V> {
 	@Override
 	public V remove(Object key) {
 		timestamps.remove(key);
+		if(otherSessionIds.contains(key))
+			otherSessionIds.remove(key);
 		return store.remove(key);
 	}
 
@@ -79,6 +93,7 @@ public class TtlHashMap<K, V> implements Map<K, V> {
 	public void clear() {
 		timestamps.clear();
 		store.clear();
+		otherSessionIds.clear();
 	}
 
 	@Override
@@ -104,5 +119,11 @@ public class TtlHashMap<K, V> implements Map<K, V> {
 			this.get(k);
 		}
 	}
+
+	public List<K> getOtherSessionIds() {
+		return otherSessionIds;
+	}
+	
+	
 
 }

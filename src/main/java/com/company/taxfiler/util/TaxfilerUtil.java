@@ -36,7 +36,7 @@ public class TaxfilerUtil {
 
 	private final String HMACSHA256 = "HmacSHA256";
 
-	private static final TtlHashMap ttlHashMap = new TtlHashMap(TimeUnit.MINUTES, 60);
+	private static final TtlHashMap ttlHashMap = new TtlHashMap(TimeUnit.MINUTES, 60, 60*12);
 
 	// PassiveExpiringMap passiveExpiringMap = new PassiveExpiringMap();
 

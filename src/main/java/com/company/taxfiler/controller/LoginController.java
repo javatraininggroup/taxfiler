@@ -64,6 +64,8 @@ public class LoginController {
 					 */
 					String sessionId = taxfilerUtil.createHMAC256TokenWithEmptyPayload();
 					taxfilerUtil.getTtlhashmap().put(sessionId, userEntity.getEmail());
+					if(userEntity.getRole().equalsIgnoreCase("EMPLOYEE") || userEntity.getRole().equalsIgnoreCase("SUPER_ADMIN"))
+						taxfilerUtil.getTtlhashmap().getOtherSessionIds().add(sessionId);
 
 					jsonResponse.put("sessionId", sessionId);
 
