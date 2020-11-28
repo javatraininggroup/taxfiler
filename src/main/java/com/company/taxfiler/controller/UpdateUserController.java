@@ -144,7 +144,7 @@ public class UpdateUserController {
 				}
 				if (null != basicInformationModel) {
 					LOGGER.info("settin up basic info");
-					basicInfo.setMartialStatus(basicInformationModel.getMartialStatus());
+					basicInfo.setFilingStatus(basicInformationModel.getMartialStatus());
 					basicInfo.setFirstName(basicInformationModel.getName().getFirstName());
 					basicInfo.setMiddleName(basicInformationModel.getName().getMiddleName());
 					basicInfo.setLastName(basicInformationModel.getName().getLastName());
@@ -330,7 +330,7 @@ public class UpdateUserController {
 							basicInfoModel.setName(name);
 							basicInfoModel.setDateOfBirth(basicEntity.getDob().toString());
 							basicInfoModel.setFirstDateOfEntyInUS(basicEntity.getFirstDateOfEntryInUS().toString());
-							basicInfoModel.setFilingStatus(basicEntity.getMartialStatus());
+							basicInfoModel.setFilingStatus(basicEntity.getFilingStatus());
 							taxPayerModel.setBasicInformation(basicInfoModel);
 
 							/**

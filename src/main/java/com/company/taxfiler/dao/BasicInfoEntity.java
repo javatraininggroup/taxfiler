@@ -20,7 +20,7 @@ public class BasicInfoEntity {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
-	//@JsonManagedReference
+	// @JsonManagedReference
 	@JsonBackReference
 	private TaxFiledYearEntity taxFileYear;
 
@@ -28,8 +28,8 @@ public class BasicInfoEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "martial_status")
-	private String martialStatus;
+	@Column(name = "filing_status")
+	private String filingStatus;
 	@Column(name = "last_name")
 	private String lastName;
 	@Column(name = "middle_name")
@@ -55,24 +55,12 @@ public class BasicInfoEntity {
 		this.taxFileYear = taxFileYear;
 	}
 
-	public String getMartialStatus() {
-		return martialStatus;
-	}
-
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String isMartialStatus() {
-		return martialStatus;
-	}
-
-	public void setMartialStatus(String martialStatus) {
-		this.martialStatus = martialStatus;
 	}
 
 	public String getSsn() {
@@ -153,6 +141,14 @@ public class BasicInfoEntity {
 
 	public void setCitizenship(String citizenship) {
 		this.citizenship = citizenship;
+	}
+
+	public String getFilingStatus() {
+		return filingStatus;
+	}
+
+	public void setFilingStatus(String filingStatus) {
+		this.filingStatus = filingStatus;
 	}
 
 }

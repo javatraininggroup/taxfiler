@@ -295,7 +295,7 @@ public class ClientDetailsController {
 								basicInformation.setDateOfBirth(convertDateToString(basicInfoEntity.getDob()));
 								basicInformation.setDateOfMarriage(convertDateToString(basicInfoEntity.getDateOfMarriage()));
 								basicInformation.setFirstDateOfEntyInUS(convertDateToString(basicInfoEntity.getFirstDateOfEntryInUS()));
-								basicInformation.setFilingStatus(basicInfoEntity.getMartialStatus());
+								basicInformation.setFilingStatus(basicInfoEntity.getFilingStatus());
 								Name name=new Name();
 								name.setFirstName(basicInfoEntity.getFirstName());
 								name.setLastName(basicInfoEntity.getLastName());

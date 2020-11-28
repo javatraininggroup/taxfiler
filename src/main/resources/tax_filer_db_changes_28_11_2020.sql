@@ -23,3 +23,5 @@ ALTER TABLE `day_care` ADD PRIMARY KEY (`id`), ADD KEY `fk_day_care_dependent_in
 ALTER TABLE `day_care` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
   
 ALTER TABLE `day_care` ADD CONSTRAINT `fk_day_care_dependent_info1` FOREIGN KEY (`dependent_info_id`) REFERENCES `dependent_info` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE `basic_info` CHANGE `martial_status` `filing_status` varchar(45);
