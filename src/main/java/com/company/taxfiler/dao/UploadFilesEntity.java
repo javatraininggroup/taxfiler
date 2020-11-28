@@ -19,7 +19,6 @@ public class UploadFilesEntity {
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
-	//@JsonManagedReference
 	@JsonBackReference
 	private TaxFiledYearEntity taxFileYear;
 	@Id

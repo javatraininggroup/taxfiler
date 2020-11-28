@@ -84,7 +84,7 @@ public class TaxFiledYearEntity {
 	@JsonManagedReference
 	private OtherInformationEntity otherInformationEntity;
 
-	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(/*orphanRemoval = true,*/ mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	//@JsonBackReference
 	@JsonManagedReference
 	private Set<UploadFilesEntity> UploadFilesEntityList;

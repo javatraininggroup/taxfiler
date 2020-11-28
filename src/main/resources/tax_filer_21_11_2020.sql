@@ -616,6 +616,9 @@ ALTER TABLE `tax_file_year`
 --
 ALTER TABLE `upload_files`
   ADD CONSTRAINT `fk_upload_files_tax_file_year1` FOREIGN KEY (`tax_file_year_id`) REFERENCES `tax_file_year` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  
+ALTER TABLE `users`
+  MODIFY `confirm_details` boolean;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

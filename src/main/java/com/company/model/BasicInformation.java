@@ -7,7 +7,7 @@ public class BasicInformation {
 
 	private String filingStatus;
 	private Name name;
-	private int ssn;
+	private String ssn;
 	private String dateOfBirth;
 	private String occupation;
 	private String dateOfMarriage;
@@ -27,11 +27,11 @@ public class BasicInformation {
 		this.filingStatus = filingStatus;
 	}
 
-	public int getSsn() {
+	public String getSsn() {
 		return ssn;
 	}
 
-	public void setSsn(int ssn) {
+	public void setSsn(String ssn) {
 		this.ssn = ssn;
 	}
 

@@ -16,6 +16,7 @@ public class DependentInformation {
 	private boolean ifProvidedMoreThan50PERSupportDuringTheYearXX;
 	private List<ResidencyDetailsforStates> residencyDetailsforStates;
 	private boolean ifYouAndYourSpouseAreWorking;
+	private DayCareModel dayCareDetails;
 
 	public Name getName() {
 		return name;
@@ -112,6 +113,14 @@ public class DependentInformation {
 
 	public void setIfYouAndYourSpouseAreWorking(boolean ifYouAndYourSpouseAreWorking) {
 		this.ifYouAndYourSpouseAreWorking = ifYouAndYourSpouseAreWorking;
+	}
+
+	public DayCareModel getDayCareDetails() {
+		return dayCareDetails;
+	}
+
+	public void setDayCareDetails(DayCareModel dayCareDetails) {
+		this.dayCareDetails = dayCareDetails;
 	}
 
 }

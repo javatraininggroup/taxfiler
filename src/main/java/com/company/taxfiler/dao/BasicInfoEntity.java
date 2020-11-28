@@ -36,7 +36,7 @@ public class BasicInfoEntity {
 	private String middleName;
 	@Column(name = "first_name")
 	private String firstName;
-	private int ssn;
+	private String ssn;
 	private Date dob;
 	private String occupation;
 	@Column(name = "date_of_marriage")
@@ -75,11 +75,11 @@ public class BasicInfoEntity {
 		this.martialStatus = martialStatus;
 	}
 
-	public int getSsn() {
+	public String getSsn() {
 		return ssn;
 	}
 
-	public void setSsn(int ssn) {
+	public void setSsn(String ssn) {
 		this.ssn = ssn;
 	}
 

@@ -56,37 +56,49 @@ public class UploadDownloadDocsController {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof String)
 			return verifySessionIdResponse;
+		boolean isTaxYearAvailable = false;
 		if (!file.isEmpty()) {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {
 				UserEntity userEntity = optionalUserEntity.get();
 				Set<TaxFiledYearEntity> taxFiledYearEntityList = userEntity.getTaxFiledYearList();
+				Set<UploadFilesEntity> uploadFilesEntitySet = new HashSet<>();
+				TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
 				if (null != taxFiledYearEntityList && taxFiledYearEntityList.size() > 0) {
-					for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
-						if (taxFiledYearEntity.getYear() == taxYear) {
-							Set<UploadFilesEntity> uploadFilesEntitySet = taxFiledYearEntity.getUploadFilesEntityList();
+					for (TaxFiledYearEntity taxFiledYearEntityTemp : taxFiledYearEntityList) {
+						if (taxFiledYearEntityTemp.getYear() == taxYear) {
+							uploadFilesEntitySet = taxFiledYearEntity.getUploadFilesEntityList();
+							taxFiledYearEntity = taxFiledYearEntityTemp;
 							if (null == uploadFilesEntitySet) {
 								uploadFilesEntitySet = new HashSet<>();
-								taxFiledYearEntity.setUploadFilesEntityList(uploadFilesEntitySet);
+								//taxFiledYearEntity.setUploadFilesEntityList(uploadFilesEntitySet);
 							}
-							UploadFilesEntity uploadFilesEntity = new UploadFilesEntity();
-							uploadFilesEntity.setComments(comment);
-							byte[] bytes = file.getBytes();
-							uploadFilesEntity.setFileContent(bytes);
-							uploadFilesEntity.setFileName(fileName);
-							uploadFilesEntity.setFileType(file.getContentType());
-							uploadFilesEntity.setReqFileType(fileType);
-							uploadFilesEntity.setYear(taxYear);
-							uploadFilesEntity.setDate(new Date().toString());
-							uploadFilesEntity.setDownloadId(String.valueOf(System.nanoTime()));
-							uploadFilesEntity.setTaxFileYear(taxFiledYearEntity);
-							uploadFilesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
-							uploadFilesEntity.setSubStatus(DEFAULT_SUB_STATUS);
-							uploadFilesEntitySet.add(uploadFilesEntity);
-							return prepareFilesDetailsForDownload(uploadFilesEntitySet);
+							break;
 						}
 					}
+				}else {
+					taxFiledYearEntityList = new HashSet<>();
+					taxFiledYearEntityList.add(taxFiledYearEntity);
 				}
+				System.out.println("uploadFilesEntitySet: "+uploadFilesEntitySet);
+				UploadFilesEntity uploadFilesEntity = new UploadFilesEntity();
+				uploadFilesEntity.setComments(comment);
+				byte[] bytes = file.getBytes();
+				uploadFilesEntity.setFileContent(bytes);
+				uploadFilesEntity.setFileName(fileName);
+				uploadFilesEntity.setFileType(file.getContentType());
+				uploadFilesEntity.setReqFileType(fileType);
+				uploadFilesEntity.setYear(taxYear);
+				uploadFilesEntity.setDate(new Date().toString());
+				uploadFilesEntity.setDownloadId(String.valueOf(System.nanoTime()));
+				uploadFilesEntity.setTaxFileYear(taxFiledYearEntity);
+				uploadFilesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
+				uploadFilesEntity.setSubStatus(DEFAULT_SUB_STATUS);
+				uploadFilesEntitySet.add(uploadFilesEntity);
+				taxFiledYearEntity.setUploadFilesEntityList(uploadFilesEntitySet);
+				userEntity.setTaxFiledYearList(taxFiledYearEntityList);
+				userRepository.save(userEntity);
+				return prepareFilesDetailsForDownload(uploadFilesEntitySet);
 			} else {
 				return "user not found";
 			}
@@ -94,7 +106,6 @@ public class UploadDownloadDocsController {
 		} else {
 			return "You failed to upload " + fileName + " because the file was empty.";
 		}
-		return "success";
 	}
 
 	@GetMapping("/download/{user_id}/{tax_year}/{fileId}")
@@ -163,7 +174,7 @@ public class UploadDownloadDocsController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "success";
+		return new HashSet<>();
 
 	}
 

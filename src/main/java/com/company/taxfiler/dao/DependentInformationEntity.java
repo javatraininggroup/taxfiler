@@ -5,6 +5,7 @@ import java.sql.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "dependent_info")
@@ -20,7 +22,7 @@ public class DependentInformationEntity {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
-	//@JsonManagedReference
+	// @JsonManagedReference
 	@JsonBackReference
 	private TaxFiledYearEntity taxFileYear;
 
@@ -61,6 +63,10 @@ public class DependentInformationEntity {
 	private boolean providedMoreThan50PESupport;
 	@Column(name = "is_you_and_spouse_working")
 	private boolean isYouAndSpouseWorking;
+
+	@OneToOne(orphanRemoval = true, mappedBy = "dependentInfo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private DayCareEntity dayCareEntity;
 
 	public Date getDateOfBirth() {
 		return dateOfBirth;
@@ -172,6 +178,14 @@ public class DependentInformationEntity {
 
 	public void setTaxFileYear(TaxFiledYearEntity taxFileYear) {
 		this.taxFileYear = taxFileYear;
+	}
+
+	public DayCareEntity getDayCareEntity() {
+		return dayCareEntity;
+	}
+
+	public void setDayCareEntity(DayCareEntity dayCareEntity) {
+		this.dayCareEntity = dayCareEntity;
 	}
 
 }

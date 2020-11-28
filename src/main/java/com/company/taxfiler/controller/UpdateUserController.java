@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import com.company.model.AdditionalInfoModel;
 import com.company.model.BankDetails;
 import com.company.model.BasicInformation;
 import com.company.model.ContactDetails;
+import com.company.model.DayCareModel;
 import com.company.model.DependentInformation;
 import com.company.model.Fbar;
 import com.company.model.Name;
@@ -43,6 +45,7 @@ import com.company.taxfiler.dao.AdditionalInformationEntity;
 import com.company.taxfiler.dao.BankDetailsEntity;
 import com.company.taxfiler.dao.BasicInfoEntity;
 import com.company.taxfiler.dao.ContactDetailsEntity;
+import com.company.taxfiler.dao.DayCareEntity;
 import com.company.taxfiler.dao.DependentInformationEntity;
 import com.company.taxfiler.dao.FbarEntity;
 import com.company.taxfiler.dao.MessagesEntity;
@@ -148,10 +151,14 @@ public class UpdateUserController {
 					basicInfo.setSsn(basicInformationModel.getSsn());
 					basicInfo.setOccupation(basicInformationModel.getOccupation());
 
-					basicInfo.setDob(convertStringDateToSqlDate(basicInformationModel.getDateOfBirth()));
-					basicInfo.setDateOfMarriage(convertStringDateToSqlDate(basicInformationModel.getDateOfMarriage()));
-					basicInfo.setFirstDateOfEntryInUS(
-							convertStringDateToSqlDate(basicInformationModel.getFirstDateOfEntyInUS()));
+					if (StringUtils.isNotBlank(basicInformationModel.getDateOfBirth()))
+						basicInfo.setDob(convertStringDateToSqlDate(basicInformationModel.getDateOfBirth()));
+					if (StringUtils.isNotBlank(basicInformationModel.getDateOfMarriage()))
+						basicInfo.setDateOfMarriage(
+								convertStringDateToSqlDate(basicInformationModel.getDateOfMarriage()));
+					if (StringUtils.isNotBlank(basicInformationModel.getFirstDateOfEntyInUS()))
+						basicInfo.setFirstDateOfEntryInUS(
+								convertStringDateToSqlDate(basicInformationModel.getFirstDateOfEntyInUS()));
 
 					basicInfo.setTypeOfVisa(basicInformationModel.getTypeOfVisa());
 					basicInfo.setCitizenship(basicInformationModel.getCitizenship());
@@ -189,10 +196,12 @@ public class UpdateUserController {
 								residencyDetailsForStatesEntity.setTaxYear(residencyDetailsforStates.getTaxYear());
 								residencyDetailsForStatesEntity.setStatesResided(taxYearInfo.getStateResided());
 
-								residencyDetailsForStatesEntity
-										.setStartDate(convertStringDateToSqlDate(taxYearInfo.getStartDate()));
-								residencyDetailsForStatesEntity
-										.setEndDate(convertStringDateToSqlDate(taxYearInfo.getEndDate()));
+								if (StringUtils.isNotBlank(taxYearInfo.getStartDate()))
+									residencyDetailsForStatesEntity
+											.setStartDate(convertStringDateToSqlDate(taxYearInfo.getStartDate()));
+								if (StringUtils.isNotBlank(taxYearInfo.getEndDate()))
+									residencyDetailsForStatesEntity
+											.setEndDate(convertStringDateToSqlDate(taxYearInfo.getEndDate()));
 
 								residencyDetailsForStatesEntity.setTypeOfResidencyDetails("basic");
 								residencyDetailsForStatesEntity.setTaxFileYear(taxFiledYearEntity);
@@ -215,14 +224,16 @@ public class UpdateUserController {
 					spouseDetailsEntity.setLastName(spouseDetails.getName().getLastName());
 					spouseDetailsEntity.setSsnOrItin(spouseDetails.getSsnOrItin());
 
-					spouseDetailsEntity.setDateOfBirth(convertStringDateToSqlDate(spouseDetails.getDateOfBirth()));
+					if (StringUtils.isNotBlank(spouseDetails.getDateOfBirth()))
+						spouseDetailsEntity.setDateOfBirth(convertStringDateToSqlDate(spouseDetails.getDateOfBirth()));
 
 					spouseDetailsEntity.setCheckIfITINToBeApplied(spouseDetails.isCheckIfITINToBeApplied());
 					spouseDetailsEntity.setCheckIfITINToBeRenewed(spouseDetails.isCheckIfITINToBeRenewed());
 					spouseDetailsEntity.setITINRenewed(spouseDetails.isITINRenewed());
 
-					spouseDetailsEntity
-							.setEntryDateIntoUS(convertStringDateToSqlDate(spouseDetails.getEntryDateIntoUS()));
+					if (StringUtils.isNotBlank(spouseDetails.getEntryDateIntoUS()))
+						spouseDetailsEntity
+								.setEntryDateIntoUS(convertStringDateToSqlDate(spouseDetails.getEntryDateIntoUS()));
 					spouseDetailsEntity.setOccupation(spouseDetails.getOccupation());
 					spouseDetailsEntity.setLivingMoreThan6Months(spouseDetails.isLivingMoreThan6Months());
 					spouseDetailsEntity.setDidYourSpouseisWorkedinXX(spouseDetails.isDidYourSpouseisWorkedinXX());
@@ -250,10 +261,12 @@ public class UpdateUserController {
 								residencyDetailsForStatesEntity.setTaxYear(residencyDetailsforStates.getTaxYear());
 								residencyDetailsForStatesEntity.setStatesResided(taxYearInfo.getStateResided());
 
-								residencyDetailsForStatesEntity
-										.setStartDate(convertStringDateToSqlDate(taxYearInfo.getStartDate()));
-								residencyDetailsForStatesEntity
-										.setEndDate(convertStringDateToSqlDate(taxYearInfo.getEndDate()));
+								if (StringUtils.isNotBlank(taxYearInfo.getStartDate()))
+									residencyDetailsForStatesEntity
+											.setStartDate(convertStringDateToSqlDate(taxYearInfo.getStartDate()));
+								if (StringUtils.isNotBlank(taxYearInfo.getEndDate()))
+									residencyDetailsForStatesEntity
+											.setEndDate(convertStringDateToSqlDate(taxYearInfo.getEndDate()));
 
 								residencyDetailsForStatesEntity.setTypeOfResidencyDetails("spouse");
 								residencyDetailsForStatesEntity.setTaxFileYear(taxFiledYearEntity);
@@ -424,8 +437,9 @@ public class UpdateUserController {
 								dependentInformationEntity.setLastName(dependentInformation.getName().getLastName());
 								dependentInformationEntity.setSsnitin(dependentInformation.getSsnOrItin());
 
-								dependentInformationEntity.setDateOfBirth(
-										convertStringDateToSqlDate(dependentInformation.getDateOfBirth()));
+								if (StringUtils.isNotBlank(dependentInformation.getDateOfBirth()))
+									dependentInformationEntity.setDateOfBirth(
+											convertStringDateToSqlDate(dependentInformation.getDateOfBirth()));
 
 								dependentInformationEntity
 										.setCheckIfITINToBeApplied(dependentInformation.isCheckIfITINToBeApplied());
@@ -458,10 +472,12 @@ public class UpdateUserController {
 											residencyDetailsForStatesEntity
 													.setStatesResided(taxYearInfo.getStateResided());
 
-											residencyDetailsForStatesEntity.setStartDate(
-													convertStringDateToSqlDate(taxYearInfo.getStartDate()));
-											residencyDetailsForStatesEntity
-													.setEndDate(convertStringDateToSqlDate(taxYearInfo.getEndDate()));
+											if (StringUtils.isNotBlank(taxYearInfo.getStartDate()))
+												residencyDetailsForStatesEntity.setStartDate(
+														convertStringDateToSqlDate(taxYearInfo.getStartDate()));
+											if (StringUtils.isNotBlank(taxYearInfo.getEndDate()))
+												residencyDetailsForStatesEntity.setEndDate(
+														convertStringDateToSqlDate(taxYearInfo.getEndDate()));
 
 											residencyDetailsForStatesEntity.setTypeOfResidencyDetails("dependent");
 											residencyDetailsForStatesEntity.setTaxFileYear(taxFiledYearEntity);
@@ -470,9 +486,26 @@ public class UpdateUserController {
 										}
 									}
 								}
+								// setting daycare details
+								if (null != dependentInformation.getDayCareDetails()) {
+									DayCareModel dayCareModel = dependentInformation.getDayCareDetails();
+									DayCareEntity dayCareEntity = new DayCareEntity();
+									dayCareEntity.setAddress(dayCareModel.getAddress());
+									dayCareEntity.setInstName(dayCareModel.getInstName());
+									dayCareEntity.setInstTaxId(dayCareModel.getInstTaxId());
+									dayCareEntity.setDoorNo(dayCareModel.getDoorNo());
+									dayCareEntity.setCity(dayCareModel.getCity());
+									dayCareEntity.setState(dayCareModel.getState());
+									dayCareEntity.setZip(dayCareModel.getZip());
+									
+									dayCareEntity.setDependentInfo(dependentInformationEntity);
+									dependentInformationEntity.setDayCareEntity(dayCareEntity);
+								}
+
 								dependentInformationEntity.setTaxFileYear(taxFiledYearEntity);
 								userRepository.save(userEntity);
 								isUpdatedOrInserted = true;
+								break;
 							}
 						}
 					}
@@ -490,8 +523,9 @@ public class UpdateUserController {
 						dependentInformationEntity.setLastName(dependentInformation.getName().getLastName());
 						dependentInformationEntity.setSsnitin(dependentInformation.getSsnOrItin());
 
-						dependentInformationEntity
-								.setDateOfBirth(convertStringDateToSqlDate(dependentInformation.getDateOfBirth()));
+						if (StringUtils.isNotBlank(dependentInformation.getDateOfBirth()))
+							dependentInformationEntity
+									.setDateOfBirth(convertStringDateToSqlDate(dependentInformation.getDateOfBirth()));
 
 						dependentInformationEntity
 								.setCheckIfITINToBeApplied(dependentInformation.isCheckIfITINToBeApplied());
@@ -522,10 +556,12 @@ public class UpdateUserController {
 									residencyDetailsForStatesEntity.setTaxYear(residencyDetailsforStates.getTaxYear());
 									residencyDetailsForStatesEntity.setStatesResided(taxYearInfo.getStateResided());
 
-									residencyDetailsForStatesEntity
-											.setStartDate(convertStringDateToSqlDate(taxYearInfo.getStartDate()));
-									residencyDetailsForStatesEntity
-											.setEndDate(convertStringDateToSqlDate(taxYearInfo.getEndDate()));
+									if (StringUtils.isNotBlank(taxYearInfo.getStartDate()))
+										residencyDetailsForStatesEntity
+												.setStartDate(convertStringDateToSqlDate(taxYearInfo.getStartDate()));
+									if (StringUtils.isNotBlank(taxYearInfo.getEndDate()))
+										residencyDetailsForStatesEntity
+												.setEndDate(convertStringDateToSqlDate(taxYearInfo.getEndDate()));
 
 									residencyDetailsForStatesEntity.setTypeOfResidencyDetails("dependent");
 									residencyDetailsForStatesEntity.setTaxFileYear(taxFiledYearEntity);
@@ -627,6 +663,20 @@ public class UpdateUserController {
 								}
 								residencyDetailsforStatesList.add(residencyDetailsforStates);
 								dependentInformation.setResidencyDetailsforStates(residencyDetailsforStatesList);
+							}
+							//setting daycare details
+							if(null != dependentInformationEntity.getDayCareEntity()) {
+								DayCareEntity dayCareEntity = dependentInformationEntity.getDayCareEntity();
+								DayCareModel dayCareModel = new DayCareModel();
+								dayCareModel.setInstName(dayCareEntity.getInstName());
+								dayCareModel.setInstTaxId(dayCareEntity.getInstTaxId());
+								dayCareModel.setAddress(dayCareEntity.getAddress());
+								dayCareModel.setCity(dayCareEntity.getCity());
+								dayCareModel.setDoorNo(dayCareEntity.getDoorNo());
+								dayCareModel.setState(dayCareEntity.getState());
+								dayCareModel.setZip(dayCareEntity.getZip());
+								
+								dependentInformation.setDayCareDetails(dayCareModel);
 							}
 							return dependentInformation;
 						}
@@ -1319,7 +1369,44 @@ public class UpdateUserController {
 		return "success";
 	}
 
-	@GetMapping(value = "/{user_id}/{tax_year}/receivedMessages", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/updateuser/{user_id}/{tax_year}/message")
+	public Object getAllMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof String)
+			return verifySessionIdResponse;
+		try {
+			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
+			if (optionalUserEntity.isPresent()) {
+				UserEntity userEntity = optionalUserEntity.get();
+				Set<TaxFiledYearEntity> taxFiledYearEntityList = userEntity.getTaxFiledYearList();
+				if (null != taxFiledYearEntityList && taxFiledYearEntityList.size() > 0) {
+					for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
+						if (taxFiledYearEntity.getYear() == taxYear) {
+							Set<MessagesEntity> messagesEntitySet = taxFiledYearEntity.getMessagesEntityList();
+							if (null == messagesEntitySet) {
+								return "no messages";
+							} else {
+								Set<MessagesEntity> messagesEntitySetResponse = new HashSet<>();
+								for (MessagesEntity entity : messagesEntitySet) {
+									messagesEntitySetResponse.add(entity);
+								}
+								return messagesEntitySetResponse;
+							}
+
+						}
+					}
+				}
+			} else {
+				return "invalid userid";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "an error has occured";
+		}
+		return "success";
+	}
+
+	@GetMapping(value = "/updateuser/{user_id}/{tax_year}/receivedMessages")
 	public Object getReceivedMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof String)
@@ -1358,7 +1445,7 @@ public class UpdateUserController {
 		return "success";
 	}
 
-	@GetMapping(value = "/{user_id}/{tax_year}/sentMessages", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/updateuser/{user_id}/{tax_year}/sentMessages")
 	public Object getSentMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof String)

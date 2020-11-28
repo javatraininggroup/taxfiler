@@ -72,7 +72,9 @@ public class RegistrationController {
 			userEntity.setPassword(registraionModel.getPassword());
 			userEntity.setSourceOfKnowingSite(registraionModel.getSourceOfKnowingSite());
 			userEntity.setTimezone(registraionModel.getPreferredTimezone());
+			userEntity.setRole(registraionModel.getRole());
 			userRepository.save(userEntity);
+			return "user created successfully";
 			}else {
 				response.setStatus(HttpStatus.BAD_REQUEST.value(), "email is already registered");
 				return "email is already registered";

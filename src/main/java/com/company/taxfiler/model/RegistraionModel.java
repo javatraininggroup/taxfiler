@@ -17,6 +17,7 @@ public class RegistraionModel implements Serializable {
 	private String alternatePhone;
 	private String sourceOfKnowingSite;
 	private String preferredTimezone;
+	private String role;
 
 	public String getEmail() {
 		return email;
@@ -88,6 +89,14 @@ public class RegistraionModel implements Serializable {
 
 	public void setPreferredTimezone(String preferredTimezone) {
 		this.preferredTimezone = preferredTimezone;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 }
