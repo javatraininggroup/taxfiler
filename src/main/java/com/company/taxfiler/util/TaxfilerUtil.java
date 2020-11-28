@@ -38,8 +38,6 @@ public class TaxfilerUtil {
 
 	private static final TtlHashMap ttlHashMap = new TtlHashMap(TimeUnit.MINUTES, 60, 60*12);
 
-	// PassiveExpiringMap passiveExpiringMap = new PassiveExpiringMap();
-
 	@Autowired
 	private HttpServletResponse httpServletResponse;
 

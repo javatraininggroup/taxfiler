@@ -113,6 +113,7 @@ public class ClientDetailsController {
 					clientDetails.setRegPhone(userEntity.getPhone());
 					//clientDetails.setStatus(userEntity.get);
 					clientDetails.setFileId(Integer.toString(userEntity.getId()));
+					clientDetails.setId(userEntity.getId());
 
 				}
 				if (null != taxFiledYearEntityList && taxFiledYearEntityList.size() > 0) {

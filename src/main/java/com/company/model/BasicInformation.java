@@ -1,6 +1,5 @@
 package com.company.model;
 
-import java.util.Date;
 import java.util.List;
 
 public class BasicInformation {
@@ -14,10 +13,9 @@ public class BasicInformation {
 	private String firstDateOfEntyInUS;
 	private String typeOfVisa;
 	private String citizenship;
-	
+
 	private ContactDetails contactDetails;
 	private List<ResidencyDetailsforStates> residencyDetailsforStates;
-	
 
 	public String isFilingStatus() {
 		return filingStatus;
@@ -34,7 +32,6 @@ public class BasicInformation {
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
 	}
-
 
 	public String getDateOfBirth() {
 		return dateOfBirth;
@@ -92,7 +89,23 @@ public class BasicInformation {
 		this.citizenship = citizenship;
 	}
 
-	public String getMartialStatus() {
+	public ContactDetails getContactDetails() {
+		return contactDetails;
+	}
+
+	public void setContactDetails(ContactDetails contactDetails) {
+		this.contactDetails = contactDetails;
+	}
+
+	public List<ResidencyDetailsforStates> getResidencyDetailsforStates() {
+		return residencyDetailsforStates;
+	}
+
+	public void setResidencyDetailsforStates(List<ResidencyDetailsforStates> residencyDetailsforStates) {
+		this.residencyDetailsforStates = residencyDetailsforStates;
+	}
+
+	public String getFilingStatus() {
 		return filingStatus;
 	}
 

@@ -3,9 +3,6 @@ package com.company.model;
 import java.io.Serializable;
 import java.util.List;
 
-import com.company.taxfiler.dao.MessagesEntity;
-import com.company.taxfiler.dao.UploadFilesEntity;
-
 public class EmployeePortalInformationModel implements Serializable {
 
 	/**
@@ -14,11 +11,13 @@ public class EmployeePortalInformationModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String username;
 	private String email;
+	private int id;
+	private String timezone;
 
 	private List<MessageResponseModel> messagesList;
 
 	private List<DocsResponseModel> uploadedFilesList;
-	//private List<UploadFilesEntity> uploadedFilesList;
+	// private List<UploadFilesEntity> uploadedFilesList;
 
 	public String getUsername() {
 		return username;
@@ -52,13 +51,27 @@ public class EmployeePortalInformationModel implements Serializable {
 		this.uploadedFilesList = uploadedFilesList;
 	}
 
-/*	public List<UploadFilesEntity> getUploadedFilesList() {
-		return uploadedFilesList;
+	/*
+	 * public List<UploadFilesEntity> getUploadedFilesList() { return
+	 * uploadedFilesList; }
+	 * 
+	 * public void setUploadedFilesList(List<UploadFilesEntity> uploadedFilesList) {
+	 * this.uploadedFilesList = uploadedFilesList; }
+	 */
+	public int getId() {
+		return id;
 	}
 
-	public void setUploadedFilesList(List<UploadFilesEntity> uploadedFilesList) {
-		this.uploadedFilesList = uploadedFilesList;
+	public void setId(int id) {
+		this.id = id;
 	}
-	*/
+
+	public String getTimezone() {
+		return timezone;
+	}
+
+	public void setTimezone(String timezone) {
+		this.timezone = timezone;
+	}
 
 }

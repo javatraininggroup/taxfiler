@@ -144,7 +144,7 @@ public class UpdateUserController {
 				}
 				if (null != basicInformationModel) {
 					LOGGER.info("settin up basic info");
-					basicInfo.setFilingStatus(basicInformationModel.getMartialStatus());
+					basicInfo.setFilingStatus(basicInformationModel.getFilingStatus());
 					basicInfo.setFirstName(basicInformationModel.getName().getFirstName());
 					basicInfo.setMiddleName(basicInformationModel.getName().getMiddleName());
 					basicInfo.setLastName(basicInformationModel.getName().getLastName());
@@ -328,9 +328,10 @@ public class UpdateUserController {
 							name.setMiddleName(basicEntity.getMiddleName());
 							name.setLastName(basicEntity.getLastName());
 							basicInfoModel.setName(name);
-							basicInfoModel.setDateOfBirth(basicEntity.getDob().toString());
-							basicInfoModel.setFirstDateOfEntyInUS(basicEntity.getFirstDateOfEntryInUS().toString());
+							basicInfoModel.setDateOfBirth(convertDateToString(basicEntity.getDob()));
+							basicInfoModel.setFirstDateOfEntyInUS(convertDateToString(basicEntity.getFirstDateOfEntryInUS()));
 							basicInfoModel.setFilingStatus(basicEntity.getFilingStatus());
+							basicInfoModel.setDateOfMarriage(convertDateToString(basicEntity.getDateOfMarriage()));
 							taxPayerModel.setBasicInformation(basicInfoModel);
 
 							/**
@@ -350,8 +351,8 @@ public class UpdateUserController {
 							for (ResidencyDetailsForStatesEntity entity : residencyStatesEntitySet) {
 								model.setTaxYear((int) entity.getTaxYear());
 								TaxYearInfo info = new TaxYearInfo();
-								info.setStartDate(entity.getStartDate().toString());
-								info.setEndDate(entity.getEndDate().toString());
+								info.setStartDate(convertDateToString(entity.getStartDate()));
+								info.setEndDate(convertDateToString(entity.getEndDate()));
 								info.setStateResided(entity.getStatesResided());
 								taxYearInfoList.add(info);
 								model.setTaxYearInfoList(taxYearInfoList);
@@ -621,7 +622,7 @@ public class UpdateUserController {
 							dependentInformation.setName(name);
 							dependentInformation.setSsnOrItin(dependentInformationEntity.getSsnitin());
 
-							dependentInformation.setDateOfBirth(dependentInformationEntity.getDateOfBirth().toString());
+							dependentInformation.setDateOfBirth(convertDateToString(dependentInformationEntity.getDateOfBirth()));
 
 							dependentInformation
 									.setCheckIfITINToBeApplied(dependentInformationEntity.isCheckIfITINToBeApplied());
@@ -652,9 +653,9 @@ public class UpdateUserController {
 										residencyDetailsforStates.setTaxYear(taxYear);
 
 										TaxYearInfo taxYearInfo = new TaxYearInfo();
-										taxYearInfo.setEndDate(residencyDetailsForStatesEntity.getEndDate().toString());
+										taxYearInfo.setEndDate(convertDateToString(residencyDetailsForStatesEntity.getEndDate()));
 										taxYearInfo.setStartDate(
-												residencyDetailsForStatesEntity.getStartDate().toString());
+												convertDateToString(residencyDetailsForStatesEntity.getStartDate()));
 										taxYearInfo.setStateResided(residencyDetailsForStatesEntity.getStatesResided());
 										taxYearInfoList.add(taxYearInfo);
 
