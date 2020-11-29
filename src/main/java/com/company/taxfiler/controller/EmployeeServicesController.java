@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +30,8 @@ import com.company.taxfiler.util.TaxfilerUtil;
 @RequestMapping("/api")
 @Transactional
 public class EmployeeServicesController {
+
+	private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private UserRepository userRepository;
@@ -52,9 +56,10 @@ public class EmployeeServicesController {
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {
-				List<UserEntity> allCustomersData = userRepository.findAll();
+				List<UserEntity> allCustomersData = null;
+				LOGGER.info("mainStatus={}, subStatus={}", mainStatus, subStatus);
+				allCustomersData = userRepository.findAll();
 				if (!allCustomersData.isEmpty()) {
-					// System.out.println("data: " + gson.toJson(allCustomersData));
 					for (UserEntity entity : allCustomersData) {
 						EmployeePortalInformationModel employeePortalModel = new EmployeePortalInformationModel();
 						employeePortalModel.setEmail(entity.getEmail());
@@ -67,10 +72,20 @@ public class EmployeeServicesController {
 								if (taxFiledYearEntity.getYear() == taxYear) {
 									List<MessageResponseModel> messagesList = new ArrayList<>();
 									List<DocsResponseModel> uploadedFilesList = new ArrayList<>();
-									// List<UploadFilesEntity> uploadedFilesList = new ArrayList<>();
 									Set<MessagesEntity> messagesSet = taxFiledYearEntity.getMessagesEntityList();
 									for (MessagesEntity messagesEntity : messagesSet) {
-										if (messagesEntity.getMainStatus().equalsIgnoreCase(mainStatus)) {
+										boolean isCheckSuccess = false;
+										if (subStatus.equalsIgnoreCase("ALL")) {
+											if (messagesEntity.getMainStatus().equalsIgnoreCase(mainStatus)) {
+												isCheckSuccess = true;
+											}
+										} else {
+											if (messagesEntity.getMainStatus().equalsIgnoreCase(mainStatus)
+													&& messagesEntity.getSubStatus().equalsIgnoreCase(subStatus)) {
+												isCheckSuccess = true;
+											}
+										}
+										if (isCheckSuccess) {
 											String messageEntityStr = taxfilerUtil
 													.convertObjectTOString(messagesEntity);
 											MessageResponseModel messageResponseModelObj = (MessageResponseModel) taxfilerUtil
@@ -84,22 +99,24 @@ public class EmployeeServicesController {
 									Set<UploadFilesEntity> uploadedFilesSet = taxFiledYearEntity
 											.getUploadFilesEntityList();
 									for (UploadFilesEntity uploadedFilesEntity : uploadedFilesSet) {
-										if (uploadedFilesEntity.getMainStatus().equalsIgnoreCase(mainStatus)) {
+										boolean isCheckSuccess = false;
+										if (subStatus.equalsIgnoreCase("ALL")) {
+											if (uploadedFilesEntity.getMainStatus().equalsIgnoreCase(mainStatus)) {
+												isCheckSuccess = true;
+											}
+										} else {
+											if (uploadedFilesEntity.getMainStatus().equalsIgnoreCase(mainStatus)
+													&& uploadedFilesEntity.getSubStatus().equalsIgnoreCase(subStatus)) {
+												isCheckSuccess = true;
+											}
+										}
+										if (isCheckSuccess) {
 											String uploadedFilesEntityStr = taxfilerUtil
 													.convertObjectTOString(uploadedFilesEntity);
 											DocsResponseModel docsResponseModelObj = (DocsResponseModel) taxfilerUtil
 													.convertStringToObject(uploadedFilesEntityStr,
 															DocsResponseModel.class);
-											/*
-											 * DocsResponseModel docsResponseModelObj = new DocsResponseModel();
-											 * docsResponseModelObj.setComment(uploadedFilesEntity.getComments());
-											 * docsResponseModelObj.setDate(uploadedFilesEntity.getDate());
-											 * docsResponseModelObj.setDownloadLink(uploadedFilesEntity.getDownloadId())
-											 * ; docsResponseModelObj.setFileName(uploadedFilesEntity.getFileName());
-											 * docsResponseModelObj.setFileType(uploadedFilesEntity.getFileType());
-											 */
 											uploadedFilesList.add(docsResponseModelObj);
-											// uploadedFilesList.add(uploadedFilesEntity);
 										}
 									}
 									employeePortalModel.setUploadedFilesList(uploadedFilesList);
@@ -108,8 +125,6 @@ public class EmployeeServicesController {
 						}
 						employeePortalInfoModelList.add(employeePortalModel);
 					}
-					// System.out.println("employeePortalInfoModelList: " +
-					// employeePortalInfoModelList);
 					return employeePortalInfoModelList;
 				} else {
 					return "no customers data available";
