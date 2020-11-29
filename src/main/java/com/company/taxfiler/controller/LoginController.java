@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.company.taxfiler.dao.UserEntity;
 import com.company.taxfiler.model.RegistraionModel;
 import com.company.taxfiler.repository.UserRepository;
+import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 
 @RestController
@@ -39,16 +40,18 @@ public class LoginController {
 		 * 1. validate (username and password) 2. If username and password is correct go
 		 * through the BUSINESS LOGIC 3. Else show the error message
 		 */
-		
+
 		try {
 			UserEntity userEntity = userRepository.findByEmail(loginModel.getEmail());
 			if (null != userEntity) {
-				//String generatedSecuredPasswordHash = BCrypt.hashpw(loginModel.getPassword(), BCrypt.gensalt(12));
-		        //System.out.println(generatedSecuredPasswordHash);
-		         
-		        //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-				//if (!passwordEncoder.matches(loginModel.getPassword(),userEntity.getPassword())) {
+				// String generatedSecuredPasswordHash = BCrypt.hashpw(loginModel.getPassword(),
+				// BCrypt.gensalt(12));
+				// System.out.println(generatedSecuredPasswordHash);
 
+				// BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+				// if
+				// (!passwordEncoder.matches(loginModel.getPassword(),userEntity.getPassword()))
+				// {
 
 				if (userEntity.getPassword().equals(loginModel.getPassword())) {
 					jsonResponse.put("username", userEntity.getName());
@@ -62,30 +65,26 @@ public class LoginController {
 					 */
 					String sessionId = taxfilerUtil.createHMAC256TokenWithEmptyPayload();
 					TaxfilerUtil.getTtlhashmap().put(sessionId, userEntity.getEmail());
-					if(userEntity.getRole().equalsIgnoreCase("EMPLOYEE") || userEntity.getRole().equalsIgnoreCase("SUPER_ADMIN"))
+					if (userEntity.getRole().equalsIgnoreCase("EMPLOYEE")
+							|| userEntity.getRole().equalsIgnoreCase("SUPER_ADMIN"))
 						TaxfilerUtil.getTtlhashmap().getOtherSessionIds().add(sessionId);
 
 					jsonResponse.put("sessionId", sessionId);
 
 					return jsonResponse.toString();
 				} else {
-					response.setStatus(HttpStatus.BAD_REQUEST.value());
-					jsonResponse.put("error", "username/password dont match");
-					LOGGER.error(jsonResponse.toString());
-					return jsonResponse.toString();
+					return taxfilerUtil.getErrorResponse(MessageCode.EMAIL_OR_PASSWORD_NOT_MATCHED);
 				}
-				
+
 			} else {
-				response.setStatus(HttpStatus.BAD_REQUEST.value());
-				jsonResponse.put("error", "user not registered");
-				LOGGER.error(jsonResponse.toString());
-				return jsonResponse.toString();
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return e.getMessage();
 		}
-		//return "an error has occured";
+		// return "an error has occured";
 	}
 
 }
