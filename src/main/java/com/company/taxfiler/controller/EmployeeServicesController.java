@@ -24,7 +24,9 @@ import com.company.taxfiler.dao.MessagesEntity;
 import com.company.taxfiler.dao.TaxFiledYearEntity;
 import com.company.taxfiler.dao.UploadFilesEntity;
 import com.company.taxfiler.dao.UserEntity;
+import com.company.taxfiler.model.ResponseModel;
 import com.company.taxfiler.repository.UserRepository;
+import com.company.taxfiler.util.Constants;
 import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 
@@ -42,9 +44,9 @@ public class EmployeeServicesController {
 	@Autowired
 	private HttpServletRequest httpServletRequest;
 
-	@GetMapping("/users/{user_id}/taxYear/{tax_year}/mainStatus/{mainStatus}/subStatus/{subStatus}/customersInfo")
-	public Object getUsersMessagesAndDocs(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear,
-			@PathVariable("mainStatus") String mainStatus, @PathVariable("subStatus") String subStatus) throws IOException {
+	@GetMapping(Constants.GET_USERS_MESSAGES_AND_DOCS_ENDPOINT)
+	public Object getUsersMessagesAndDocs(@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear,
+			@PathVariable(Constants.MAIN_STATUS) String mainStatus, @PathVariable(Constants.SUB_STATUS) String subStatus) throws IOException {
 
 		/**
 		 * get 1. list of messages 2. list of files are in mainStatus & subStatus
@@ -52,7 +54,7 @@ public class EmployeeServicesController {
 
 		List<EmployeePortalInformationModel> employeePortalInfoModelList = new ArrayList<>();
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
-		if (verifySessionIdResponse instanceof String)
+		if (verifySessionIdResponse instanceof ResponseModel)
 			return verifySessionIdResponse;
 
 		try {
@@ -132,13 +134,11 @@ public class EmployeeServicesController {
 					return "no customers data available";
 				}
 			} else {
-//				return "userId not found";
 				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-//			return "an error has occured";
-			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
+			 return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
 	}
 }

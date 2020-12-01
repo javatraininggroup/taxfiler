@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.company.taxfiler.dao.UserEntity;
 import com.company.taxfiler.model.RegistraionModel;
 import com.company.taxfiler.repository.UserRepository;
+import com.company.taxfiler.util.Constants;
 import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 
@@ -31,7 +32,7 @@ public class LoginController {
 	@Autowired
 	private TaxfilerUtil taxfilerUtil;
 
-	@PostMapping("/login")
+	@PostMapping(Constants.POST_LOGIN_USER_ENDPOINT)
 	public Object loginUser(@RequestBody RegistraionModel loginModel) {
 
 		JSONObject jsonResponse = new JSONObject();
@@ -84,7 +85,7 @@ public class LoginController {
 			e.printStackTrace();
 			return e.getMessage();
 		}
-		// return "an error has occured";
+//		 return "an error has occured";
 	}
 
 }

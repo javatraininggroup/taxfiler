@@ -1,5 +1,6 @@
 package com.company.taxfiler.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -29,7 +30,9 @@ import com.company.model.DownloadModel;
 import com.company.taxfiler.dao.TaxFiledYearEntity;
 import com.company.taxfiler.dao.UploadFilesEntity;
 import com.company.taxfiler.dao.UserEntity;
+import com.company.taxfiler.model.ResponseModel;
 import com.company.taxfiler.repository.UserRepository;
+import com.company.taxfiler.util.Constants;
 import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 
@@ -49,12 +52,12 @@ public class UploadDownloadDocsController {
 	private final static String DEFAULT_MAIN_STATUS = "SCHEDULING";
 	private final static String DEFAULT_SUB_STATUS = "PENDING";
 
-	@PostMapping("/upload/{user_id}/{tax_year}")
-	public Object uploadDocs(@RequestParam("fileName") String fileName, @RequestParam("fileType") String fileType,
-			@RequestParam("comment") String comment, @PathVariable("user_id") int userId,
-			@PathVariable("tax_year") int taxYear, @RequestParam("file") MultipartFile file) throws Exception {
+	@PostMapping(Constants.POST_UPLOAD_DOCS_ENDPOINT)
+	public Object uploadDocs(@RequestParam(Constants.FILE_NAME) String fileName, @RequestParam(Constants.FILE_TYPE) String fileType,
+			@RequestParam(Constants.COMMENT) String comment, @PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear, @RequestParam(Constants.FILE) MultipartFile file) throws Exception {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
-		if (verifySessionIdResponse instanceof String)
+		if (verifySessionIdResponse instanceof ResponseModel)
 			return verifySessionIdResponse;
 		boolean isTaxYearAvailable = false;
 		if (!file.isEmpty()) {
@@ -124,21 +127,20 @@ public class UploadDownloadDocsController {
 				}
 
 			} else {
-//				return "user not found";
 				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 
 		} else {
-			return "failed to upload " + fileName + " because the file was empty.";
+			return taxfilerUtil.getErrorResponse(MessageCode.FAILED_TO_UPLOAD_BECAUSE_FILE_WAS_EMPTY);
 		}
-		return "success";
+		return taxfilerUtil.getSuccessResponse("success");
 	}
 
-	@GetMapping("/download/{user_id}/{tax_year}/{fileId}")
-	public Object downloadFile(@PathVariable("fileId") String fileId, @PathVariable("user_id") int userId,
-			@PathVariable("tax_year") int taxYear) throws Exception {
+	@GetMapping(Constants.GET_DOWNLOAD_FILE_ENDPOINT)
+	public Object downloadFile(@PathVariable(Constants.FILE_ID) String fileId, @PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear) throws Exception {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
-		if (verifySessionIdResponse instanceof String)
+		if (verifySessionIdResponse instanceof ResponseModel)
 			return verifySessionIdResponse;
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
@@ -161,22 +163,22 @@ public class UploadDownloadDocsController {
 
 						}
 					}
-				} else {
-					throw new Exception("please select tax year to proceed");
 				}
 			} else {
-				throw new Exception("user not found");
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return "file not available";
+		return taxfilerUtil.getErrorResponse(MessageCode.FILE_NOT_AVAILABLE_TO_DOWNLOAD);
 	}
 
-	@GetMapping("/docs/{user_id}/{tax_year}")
-	public Object getAllUploadDocs(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+	@GetMapping(Constants.GET_ALL_UPLOAD_DOCS_ENDPOINT)
+	public Object getAllUploadDocs(@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
+			throws IOException {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
-		if (verifySessionIdResponse instanceof String)
+		if (verifySessionIdResponse instanceof ResponseModel)
 			return verifySessionIdResponse;
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
@@ -191,14 +193,13 @@ public class UploadDownloadDocsController {
 
 						}
 					}
-				} else {
-					throw new Exception("please select tax year to proceed");
 				}
 			} else {
-				throw new Exception("user not found");
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
 		return new HashSet<>();
 
@@ -218,7 +219,6 @@ public class UploadDownloadDocsController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new Exception("an error has occured");
 		}
 		return downloadFileModelList;
 	}

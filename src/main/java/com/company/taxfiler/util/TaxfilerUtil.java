@@ -89,7 +89,25 @@ public class TaxfilerUtil {
 		httpServletResponse.setStatus(HttpStatus.BAD_REQUEST.value());
 		return errorResponse;
 	}
-
+	
+	public ResponseModel getErrorResponse(MessageCode parameter, String message) throws IOException {
+		ResponseModel errorResponse = new ResponseModel();
+		errorResponse.setCode(String.valueOf(parameter.getKey()));
+		errorResponse.setStatus(parameter.getKey());
+		errorResponse.setMessage(message);
+		httpServletResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+		return errorResponse;
+	}
+	
+	public ResponseModel getSuccessResponse(String message) throws IOException {
+		ResponseModel errorResponse = new ResponseModel();
+		errorResponse.setCode("0");
+		errorResponse.setStatus(0);
+		errorResponse.setMessage(message);
+		httpServletResponse.setStatus(HttpStatus.OK.value());
+		return errorResponse;
+	}
+	
 	/**
 	 * This is used to create HMAC256 Token using HMACSHA256 algorithm
 	 * 
@@ -125,14 +143,14 @@ public class TaxfilerUtil {
 	public static TtlHashMap getTtlhashmap() {
 		return ttlHashMap;
 	}
-	public Object verifySessionId(HttpServletRequest request){
+	public Object verifySessionId(HttpServletRequest request) throws IOException{
 		if (StringUtils.isNotBlank(request.getHeader("sessionId"))){
 			if(null == getTtlhashmap().get(request.getHeader("sessionId"))){
-				return "invalid sessioId";
+				return getErrorResponse(MessageCode.INVALID_SESSION_ID);
 			}
 			return true;
 		}else{
-			return "invalid sessioId";
+			return getErrorResponse(MessageCode.INVALID_SESSION_ID);
 		}
 	}
 	public String convertObjectTOString(Object object) throws IOException {

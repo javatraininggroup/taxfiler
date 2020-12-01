@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.company.model.SettingsModel;
 import com.company.taxfiler.dao.UserEntity;
 import com.company.taxfiler.model.RegistraionModel;
+import com.company.taxfiler.model.ResponseModel;
 import com.company.taxfiler.repository.UserRepository;
+import com.company.taxfiler.util.Constants;
 import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 import com.google.gson.Gson;
@@ -40,7 +41,7 @@ public class RegistrationController {
 	@Autowired
 	private HttpServletRequest httpServletRequest;
 
-	@PostMapping("/register")
+	@PostMapping(Constants.POST_REGISTER_USER_ENDPOINT)
 	public Object registerUser(@RequestBody RegistraionModel registraionModel) throws IOException {
 		/**
 		 * 1. do validations 2. insert into database
@@ -75,10 +76,8 @@ public class RegistrationController {
 				userEntity.setTimezone(registraionModel.getPreferredTimezone());
 				userEntity.setRole(registraionModel.getRole());
 				userRepository.save(userEntity);
-				return "user created successfully";
+				return taxfilerUtil.getSuccessResponse("user created successfully");
 			} else {
-				/*response.sendError(HttpStatus.BAD_REQUEST.value(), "email is already registered");
-				return "email is already registered";*/
 				return taxfilerUtil.getErrorResponse(MessageCode.EMAIL_IS_ALREADY_REGISTERED);
 			}
 		} catch (Exception e) {
@@ -88,13 +87,13 @@ public class RegistrationController {
 		return null;
 	}
 
-	@PostMapping("/settings/editProfile")
+	@PostMapping(Constants.POST_EDIT_PROFILE_ENDPOINT)
 	public Object editProfile(@RequestBody SettingsModel settingsModel) throws IOException {
 		LOGGER.info("Entering into editProfile details");
 		JSONObject jsonResponse = new JSONObject();
 
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
-		if (verifySessionIdResponse instanceof String)
+		if (verifySessionIdResponse instanceof ResponseModel)
 			return verifySessionIdResponse;
 		// Insert into database
 		Gson gson = new Gson();
@@ -111,20 +110,12 @@ public class RegistrationController {
 					userEntity.setName(settingsModel.getName());
 
 					userRepository.save(userEntity);
-					return "Profile successfully updated";
+					return taxfilerUtil.getSuccessResponse("Profile successfully updated");
 				} else {
-					/*response.setStatus(HttpStatus.BAD_REQUEST.value());
-					jsonResponse.put("error", "user not registered");
-					LOGGER.error(jsonResponse.toString());
-					return jsonResponse.toString();*/
 					return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 				}
 
 			} else {
-				/*response.setStatus(HttpStatus.BAD_REQUEST.value());
-				jsonResponse.put("error", "Mail Id should not be null");
-				LOGGER.error(jsonResponse.toString());
-				return jsonResponse.toString();*/
 				return taxfilerUtil.getErrorResponse(MessageCode.EMAIL_NULL_OR_EMPTY);
 			}
 		} catch (Exception e) {
@@ -134,13 +125,13 @@ public class RegistrationController {
 		return null;
 	}
 
-	@PostMapping("/settings/changePassword")
+	@PostMapping(Constants.POST_CHANGE_PASSWORD_ENDPOINT)
 	public Object changePassword(@RequestBody SettingsModel settingsModel) throws IOException {
 		LOGGER.info("Entering into changePassword details");
 		JSONObject jsonResponse = new JSONObject();
 
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
-		if (verifySessionIdResponse instanceof String)
+		if (verifySessionIdResponse instanceof ResponseModel)
 			return verifySessionIdResponse;
 		// Insert into database
 		Gson gson = new Gson();
@@ -150,7 +141,7 @@ public class RegistrationController {
 
 			if (!settingsModel.getNewPassword().equals(settingsModel.getConfirmPassword())) {
 
-				return "New password not matched with confirm password";
+				return taxfilerUtil.getErrorResponse(MessageCode.NEW_PASSWORD_NOT_MATCHED_WITH_CONFIRM_PASSWORD);
 
 			}
 			if (settingsModel.getEmail() != null) {
@@ -164,7 +155,7 @@ public class RegistrationController {
 					// {
 					if (!settingsModel.getCurrentPassword().equals(userEntity.getPassword())) {
 
-						return "Current password is wrong.Please Try again with correct password";
+						return taxfilerUtil.getErrorResponse(MessageCode.CURRENT_PASSWORD_IS_INVALID_PLEASE_TRY_WITH_VALID_PASSWORD);
 					}
 
 					// String hashedPassword =
@@ -173,20 +164,12 @@ public class RegistrationController {
 					userEntity.setPassword(settingsModel.getNewPassword());
 
 					userRepository.save(userEntity);
-					return "Change password succeeded";
+					return taxfilerUtil.getSuccessResponse("Change password succeeded");
 				} else {
-					/*response.setStatus(HttpStatus.BAD_REQUEST.value());
-					jsonResponse.put("error", "user not registered");
-					LOGGER.error(jsonResponse.toString());
-					return jsonResponse.toString();*/
 					return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 				}
 
 			} else {
-				/*response.setStatus(HttpStatus.BAD_REQUEST.value());
-				jsonResponse.put("error", "Mail Id should not be null");
-				LOGGER.error(jsonResponse.toString());
-				return jsonResponse.toString();*/
 				return taxfilerUtil.getErrorResponse(MessageCode.EMAIL_NULL_OR_EMPTY);
 			}
 		} catch (Exception e) {
