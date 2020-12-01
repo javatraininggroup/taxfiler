@@ -37,7 +37,7 @@ import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(Constants.API)
 @Transactional
 public class UploadDownloadDocsController {
 
@@ -53,9 +53,10 @@ public class UploadDownloadDocsController {
 	private final static String DEFAULT_SUB_STATUS = "PENDING";
 
 	@PostMapping(Constants.POST_UPLOAD_DOCS_ENDPOINT)
-	public Object uploadDocs(@RequestParam(Constants.FILE_NAME) String fileName, @RequestParam(Constants.FILE_TYPE) String fileType,
-			@RequestParam(Constants.COMMENT) String comment, @PathVariable(Constants.USER_ID) int userId,
-			@PathVariable(Constants.TAX_YEAR) int taxYear, @RequestParam(Constants.FILE) MultipartFile file) throws Exception {
+	public Object uploadDocs(@RequestParam(Constants.FILE_NAME) String fileName,
+			@RequestParam(Constants.FILE_TYPE) String fileType, @RequestParam(Constants.COMMENT) String comment,
+			@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear,
+			@RequestParam(Constants.FILE) MultipartFile file) throws Exception {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof ResponseModel)
 			return verifySessionIdResponse;
@@ -137,8 +138,9 @@ public class UploadDownloadDocsController {
 	}
 
 	@GetMapping(Constants.GET_DOWNLOAD_FILE_ENDPOINT)
-	public Object downloadFile(@PathVariable(Constants.FILE_ID) String fileId, @PathVariable(Constants.USER_ID) int userId,
-			@PathVariable(Constants.TAX_YEAR) int taxYear) throws Exception {
+	public Object downloadFile(@PathVariable(Constants.FILE_ID) String fileId,
+			@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
+			throws Exception {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof ResponseModel)
 			return verifySessionIdResponse;
@@ -175,8 +177,8 @@ public class UploadDownloadDocsController {
 	}
 
 	@GetMapping(Constants.GET_ALL_UPLOAD_DOCS_ENDPOINT)
-	public Object getAllUploadDocs(@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
-			throws IOException {
+	public Object getAllUploadDocs(@PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof ResponseModel)
 			return verifySessionIdResponse;

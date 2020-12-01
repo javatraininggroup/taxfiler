@@ -14,8 +14,7 @@ public class TaxSummaryController {
 	@PostMapping("/taxsummary")
 	public Object taxSummary(@RequestBody RegistraionModel registraionModel) {
 		/**
-		 * 1. do validations
-		 * 2. insert into database
+		 * 1. do validations 2. insert into database
 		 */
 		return null;
 	}

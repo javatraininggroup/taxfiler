@@ -65,7 +65,7 @@ import com.company.taxfiler.util.TaxfilerUtil;
 import com.google.gson.Gson;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(Constants.API)
 @Transactional
 public class UpdateUserController {
 
@@ -137,9 +137,11 @@ public class UpdateUserController {
 					basicInfo = taxFiledYearEntity.getBasicInfo() != null ? taxFiledYearEntity.getBasicInfo()
 							: new BasicInfoEntity();
 					contactDetailsEntity = taxFiledYearEntity.getContactDetails() != null
-							? taxFiledYearEntity.getContactDetails() : new ContactDetailsEntity();
+							? taxFiledYearEntity.getContactDetails()
+							: new ContactDetailsEntity();
 					spouseDetailsEntity = taxFiledYearEntity.getSpouseDetails() != null
-							? taxFiledYearEntity.getSpouseDetails() : new SpouseDetailsEntity();
+							? taxFiledYearEntity.getSpouseDetails()
+							: new SpouseDetailsEntity();
 					residencyDetailsForStatesEntityList = taxFiledYearEntity.getResidencyDetailsforStatesList() != null
 							? taxFiledYearEntity.getResidencyDetailsforStatesList()
 							: new HashSet<ResidencyDetailsForStatesEntity>();
@@ -298,8 +300,8 @@ public class UpdateUserController {
 	}
 
 	@GetMapping(Constants.GET_USER_BASIC_INFO_ENDPOINT)
-	public Object getUserBasicInfo(@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
-			throws IOException {
+	public Object getUserBasicInfo(@PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof ResponseModel)
 			return verifySessionIdResponse;
@@ -402,11 +404,12 @@ public class UpdateUserController {
 	}
 
 	@PutMapping(Constants.PUT_UPDATE_USER_DEPENDENT_INFO_ENDPOINT)
-	public Object updateUserDependentInfo(@RequestBody TaxPayer taxPayerModel, @PathVariable(Constants.USER_ID) int userId,
-			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
+	public Object updateUserDependentInfo(@RequestBody TaxPayer taxPayerModel,
+			@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
+			throws IOException {
 		/**
-		 * 1. updateUser information if that parameter is exist 2. Modify the
-		 * latest data in the database .
+		 * 1. updateUser information if that parameter is exist 2. Modify the latest
+		 * data in the database .
 		 */
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
@@ -597,8 +600,8 @@ public class UpdateUserController {
 	}
 
 	@GetMapping(Constants.GET_USER_DEPENDENT_INFO_ENDPOINT)
-	public Object getUserDependentInfo(@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
-			throws IOException {
+	public Object getUserDependentInfo(@PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
 		DependentInformation dependentInformation = new DependentInformation();
 
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
@@ -728,8 +731,8 @@ public class UpdateUserController {
 	public Object updateUserBankInfo(@RequestBody TaxPayer taxPayerModel, @PathVariable(Constants.USER_ID) int userId,
 			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
 		/**
-		 * 1. updateUser information if that parameter is exist 2. Modify the
-		 * latest data in the database .
+		 * 1. updateUser information if that parameter is exist 2. Modify the latest
+		 * data in the database .
 		 */
 
 		Gson gson = new Gson();
@@ -809,8 +812,8 @@ public class UpdateUserController {
 	}
 
 	@GetMapping(Constants.GET_USER_BANK_INFO_ENDPOINT)
-	public Object getUserBankInfo(@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
-			throws IOException {
+	public Object getUserBankInfo(@PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
 		BankDetails bankDetails = new BankDetails();
 
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
@@ -856,8 +859,9 @@ public class UpdateUserController {
 	}
 
 	@PutMapping(Constants.PUT_OTHER_INCOME_INFORMATION_ENDPOINT)
-	public Object otherIncomeInformation(@RequestBody TaxPayer taxPayerModel, @PathVariable(Constants.USER_ID) int userId,
-			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
+	public Object otherIncomeInformation(@RequestBody TaxPayer taxPayerModel,
+			@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
+			throws IOException {
 
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
@@ -929,8 +933,8 @@ public class UpdateUserController {
 	}
 
 	@GetMapping(Constants.GET_OTHER_INCOME_INFORMATION_ENDPOINT)
-	public Object getOtherIncomeInformation(@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
-			throws IOException {
+	public Object getOtherIncomeInformation(@PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
 		OtherIncomeInfoModel otherIncomeInfoModel = new OtherIncomeInfoModel();
 		Set<OtherIncomeInfoData> otherIncomeInfoDataList = new HashSet<>();
 
@@ -968,8 +972,9 @@ public class UpdateUserController {
 	}
 
 	@PutMapping(Constants.PUT_ADDITIONAL_INFORMATION_ENDPOINT)
-	public Object additionalInformation(@RequestBody TaxPayer taxPayerModel, @PathVariable(Constants.USER_ID) int userId,
-			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
+	public Object additionalInformation(@RequestBody TaxPayer taxPayerModel,
+			@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
+			throws IOException {
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
@@ -1040,8 +1045,8 @@ public class UpdateUserController {
 	}
 
 	@GetMapping(Constants.GET_ADDITIONAL_INFORMATION_ENDPOINT)
-	public Object getAdditionalInformation(@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
-			throws IOException {
+	public Object getAdditionalInformation(@PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
 		AdditionalInfoModel additionalInfoModel = new AdditionalInfoModel();
 		Set<OtherIncomeInfoData> additionalInfoDataList = new HashSet<>();
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
@@ -1138,8 +1143,8 @@ public class UpdateUserController {
 	}
 
 	@GetMapping(Constants.GET_OTHER_INFORMATION_ENDPOINT)
-	public Object getOtherInformation(@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
-			throws IOException {
+	public Object getOtherInformation(@PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof ResponseModel)
 			return verifySessionIdResponse;
@@ -1383,8 +1388,8 @@ public class UpdateUserController {
 	}
 
 	@GetMapping(value = Constants.GET_ALL_MESSAGES_ENDPOINT)
-	public Object getAllMessages(@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
-			throws IOException {
+	public Object getAllMessages(@PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof ResponseModel)
 			return verifySessionIdResponse;
@@ -1421,8 +1426,8 @@ public class UpdateUserController {
 	}
 
 	@GetMapping(value = Constants.GET_RECEIVED_MESSAGES_ENDPOINT)
-	public Object getReceivedMessages(@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
-			throws IOException {
+	public Object getReceivedMessages(@PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof ResponseModel)
 			return verifySessionIdResponse;
@@ -1504,23 +1509,21 @@ public class UpdateUserController {
 	 * @GetMapping("/updateuser/{user_id}/{tax_year}/basicInfo") public Object
 	 * getUserBasicInfo(@PathVariable(Constants.USER_ID) int
 	 * userId, @PathVariable(Constants.TAX_YEAR) int taxYear) { BasicInformation
-	 * basicInformation = new BasicInformation(); Object verifySessionIdResponse
-	 * = taxfilerUtil.verifySessionId(httpServletRequest); if
-	 * (verifySessionIdResponse instanceof String) return
-	 * verifySessionIdResponse; try {
+	 * basicInformation = new BasicInformation(); Object verifySessionIdResponse =
+	 * taxfilerUtil.verifySessionId(httpServletRequest); if (verifySessionIdResponse
+	 * instanceof String) return verifySessionIdResponse; try {
 	 * 
 	 * 
-	 * Optional<UserEntity> optionalUserEntity =
-	 * userRepository.findById(userId); if (optionalUserEntity.isPresent()) {
-	 * UserEntity userEntity = optionalUserEntity.get(); Set<TaxFiledYearEntity>
-	 * taxFiledYearEntityList = userEntity.getTaxFiledYearList(); boolean
-	 * taxYearStatus=false;
+	 * Optional<UserEntity> optionalUserEntity = userRepository.findById(userId); if
+	 * (optionalUserEntity.isPresent()) { UserEntity userEntity =
+	 * optionalUserEntity.get(); Set<TaxFiledYearEntity> taxFiledYearEntityList =
+	 * userEntity.getTaxFiledYearList(); boolean taxYearStatus=false;
 	 * 
-	 * if (null != taxFiledYearEntityList && taxFiledYearEntityList.size() > 0)
-	 * { for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
-	 * if (taxFiledYearEntity.getYear() == taxYear) {
-	 * LOGGER.info("get the Basic info details"); BasicInfoEntity
-	 * basicInfoEntity = taxFiledYearEntity.getBasicInfo(); taxYearStatus=true;
+	 * if (null != taxFiledYearEntityList && taxFiledYearEntityList.size() > 0) {
+	 * for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) { if
+	 * (taxFiledYearEntity.getYear() == taxYear) {
+	 * LOGGER.info("get the Basic info details"); BasicInfoEntity basicInfoEntity =
+	 * taxFiledYearEntity.getBasicInfo(); taxYearStatus=true;
 	 * 
 	 * if (null != basicInfoEntity) {
 	 * 
@@ -1530,10 +1533,10 @@ public class UpdateUserController {
 	 * getDob()) );
 	 * basicInformation.setDateOfMarriage(convertDateToString(basicInfoEntity.
 	 * getDateOfMarriage()));
-	 * basicInformation.setFirstDateOfEntyInUS(convertDateToString(
-	 * basicInfoEntity. getFirstDateOfEntryInUS()));
-	 * basicInformation.setMartialStatus(basicInfoEntity.getMartialStatus());
-	 * Name name=new Name(); name.setFirstName(basicInfoEntity.getFirstName());
+	 * basicInformation.setFirstDateOfEntyInUS(convertDateToString( basicInfoEntity.
+	 * getFirstDateOfEntryInUS()));
+	 * basicInformation.setMartialStatus(basicInfoEntity.getMartialStatus()); Name
+	 * name=new Name(); name.setFirstName(basicInfoEntity.getFirstName());
 	 * name.setLastName(basicInfoEntity.getLastName());
 	 * name.setMiddleName(basicInfoEntity.getMiddleName());
 	 * basicInformation.setName(name);
@@ -1552,8 +1555,7 @@ public class UpdateUserController {
 	 * } else { return "user not found"; }
 	 * 
 	 * 
-	 * } catch (Exception e) { e.printStackTrace(); return
-	 * "an error has occured"; }
+	 * } catch (Exception e) { e.printStackTrace(); return "an error has occured"; }
 	 * 
 	 * return ""; }
 	 */

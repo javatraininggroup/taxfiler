@@ -20,7 +20,7 @@ import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(Constants.API)
 public class LoginController {
 
 	private Logger LOGGER = LoggerFactory.getLogger(getClass());

@@ -12,12 +12,11 @@ public class Constants {
 	public static final String COMMENT = "comment";
 	public static final String FILE = "file";
 	public static final String FILE_ID = "fileId";
-	
-	
-	
+
+	public static final String API = "/api";
 	public static final String GET_SENT_MESSAGES_ENDPOINT = "/updateuser/{user_id}/{tax_year}/sentMessages";
 	public static final String GET_CLIENT_DETAILS_ENDPOINT = "/clientDetails/{user_id}/{tax_year}/allDetails";
-	public static final String GET_USERS_MESSAGES_AND_DOCS_ENDPOINT= "/users/{user_id}/taxYear/{tax_year}/mainStatus/{mainStatus}/subStatus/{subStatus}/customersInfo";
+	public static final String GET_USERS_MESSAGES_AND_DOCS_ENDPOINT = "/users/{user_id}/taxYear/{tax_year}/mainStatus/{mainStatus}/subStatus/{subStatus}/customersInfo";
 	public static final String POST_LOGIN_USER_ENDPOINT = "/login";
 	public static final String POST_REGISTER_USER_ENDPOINT = "/register";
 	public static final String POST_EDIT_PROFILE_ENDPOINT = "/settings/editProfile";
@@ -42,6 +41,5 @@ public class Constants {
 	public static final String POST_UPLOAD_DOCS_ENDPOINT = "/upload/{user_id}/{tax_year}";
 	public static final String GET_DOWNLOAD_FILE_ENDPOINT = "/download/{user_id}/{tax_year}/{fileId}";
 	public static final String GET_ALL_UPLOAD_DOCS_ENDPOINT = "/docs/{user_id}/{tax_year}";
-	
-	
+
 }

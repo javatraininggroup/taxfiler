@@ -25,7 +25,7 @@ import com.company.taxfiler.util.TaxfilerUtil;
 import com.google.gson.Gson;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(Constants.API)
 public class RegistrationController {
 
 	private Logger LOGGER = LoggerFactory.getLogger(getClass());
@@ -149,13 +149,14 @@ public class RegistrationController {
 				UserEntity userEntity = userRepository.findByEmail(settingsModel.getEmail());
 				if (null != userEntity) {
 					LOGGER.info(" DB Data data: " + userEntity.getEmail());
-					//BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+					// BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 					// if
 					// (!passwordEncoder.matches(settingsModel.getCurrentPassword(),userEntity.getPassword()))
 					// {
 					if (!settingsModel.getCurrentPassword().equals(userEntity.getPassword())) {
 
-						return taxfilerUtil.getErrorResponse(MessageCode.CURRENT_PASSWORD_IS_INVALID_PLEASE_TRY_WITH_VALID_PASSWORD);
+						return taxfilerUtil.getErrorResponse(
+								MessageCode.CURRENT_PASSWORD_IS_INVALID_PLEASE_TRY_WITH_VALID_PASSWORD);
 					}
 
 					// String hashedPassword =

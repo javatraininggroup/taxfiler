@@ -56,7 +56,7 @@ import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(Constants.API)
 public class ClientDetailsController {
 
 	private Logger LOGGER = LoggerFactory.getLogger(getClass());
@@ -92,9 +92,8 @@ public class ClientDetailsController {
 		Set<OtherIncomeInfoData> additionalInfoDataList = new HashSet<>();
 
 		/**
-		 * 1. validate sessionId 2. Get the all person details through the
-		 * BUSINESS LOGIC 3.Get details related to file/messageId 4. Else show
-		 * the error message
+		 * 1. validate sessionId 2. Get the all person details through the BUSINESS
+		 * LOGIC 3.Get details related to file/messageId 4. Else show the error message
 		 */
 
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);

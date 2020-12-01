@@ -12,12 +12,11 @@ public class TaxFillingController {
 	@PostMapping("/taxFilling")
 	public Object taxFilling(@RequestBody TaxPayer taxpayer) {
 		/**
-		 * 1. do validations
-		 * 2. insert into database
+		 * 1. do validations 2. insert into database
 		 */
 		return null;
 	}
-	
+
 //	@GetMapping("/taxsummary")
 //	public Object taxSummary(@RequestParam("nameAsPerSSN") String name) {
 //		/**

@@ -31,7 +31,7 @@ import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(Constants.API)
 @Transactional
 public class EmployeeServicesController {
 
