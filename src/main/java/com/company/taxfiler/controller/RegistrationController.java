@@ -19,6 +19,7 @@ import com.company.model.SettingsModel;
 import com.company.taxfiler.dao.UserEntity;
 import com.company.taxfiler.model.RegistraionModel;
 import com.company.taxfiler.repository.UserRepository;
+import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 import com.google.gson.Gson;
 
@@ -76,8 +77,9 @@ public class RegistrationController {
 				userRepository.save(userEntity);
 				return "user created successfully";
 			} else {
-				response.sendError(HttpStatus.BAD_REQUEST.value(), "email is already registered");
-				return "email is already registered";
+				/*response.sendError(HttpStatus.BAD_REQUEST.value(), "email is already registered");
+				return "email is already registered";*/
+				return taxfilerUtil.getErrorResponse(MessageCode.EMAIL_IS_ALREADY_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,17 +113,19 @@ public class RegistrationController {
 					userRepository.save(userEntity);
 					return "Profile successfully updated";
 				} else {
-					response.setStatus(HttpStatus.BAD_REQUEST.value());
+					/*response.setStatus(HttpStatus.BAD_REQUEST.value());
 					jsonResponse.put("error", "user not registered");
 					LOGGER.error(jsonResponse.toString());
-					return jsonResponse.toString();
+					return jsonResponse.toString();*/
+					return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 				}
 
 			} else {
-				response.setStatus(HttpStatus.BAD_REQUEST.value());
+				/*response.setStatus(HttpStatus.BAD_REQUEST.value());
 				jsonResponse.put("error", "Mail Id should not be null");
 				LOGGER.error(jsonResponse.toString());
-				return jsonResponse.toString();
+				return jsonResponse.toString();*/
+				return taxfilerUtil.getErrorResponse(MessageCode.EMAIL_NULL_OR_EMPTY);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -171,17 +175,19 @@ public class RegistrationController {
 					userRepository.save(userEntity);
 					return "Change password succeeded";
 				} else {
-					response.setStatus(HttpStatus.BAD_REQUEST.value());
+					/*response.setStatus(HttpStatus.BAD_REQUEST.value());
 					jsonResponse.put("error", "user not registered");
 					LOGGER.error(jsonResponse.toString());
-					return jsonResponse.toString();
+					return jsonResponse.toString();*/
+					return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 				}
 
 			} else {
-				response.setStatus(HttpStatus.BAD_REQUEST.value());
+				/*response.setStatus(HttpStatus.BAD_REQUEST.value());
 				jsonResponse.put("error", "Mail Id should not be null");
 				LOGGER.error(jsonResponse.toString());
-				return jsonResponse.toString();
+				return jsonResponse.toString();*/
+				return taxfilerUtil.getErrorResponse(MessageCode.EMAIL_NULL_OR_EMPTY);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

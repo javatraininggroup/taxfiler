@@ -30,6 +30,7 @@ import com.company.taxfiler.dao.TaxFiledYearEntity;
 import com.company.taxfiler.dao.UploadFilesEntity;
 import com.company.taxfiler.dao.UserEntity;
 import com.company.taxfiler.repository.UserRepository;
+import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 
 @RestController
@@ -123,7 +124,8 @@ public class UploadDownloadDocsController {
 				}
 
 			} else {
-				return "user not found";
+//				return "user not found";
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 
 		} else {

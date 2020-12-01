@@ -1,5 +1,6 @@
 package com.company.taxfiler.controller;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,6 +58,7 @@ import com.company.taxfiler.dao.TaxFiledYearEntity;
 import com.company.taxfiler.dao.UserEntity;
 import com.company.taxfiler.model.MessageModel;
 import com.company.taxfiler.repository.UserRepository;
+import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 import com.google.gson.Gson;
 
@@ -79,7 +81,7 @@ public class UpdateUserController {
 
 	@PutMapping("/updateuser/{user_id}/{tax_year}/basicInfo")
 	public Object updateUserBasicInfo(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
-			@PathVariable("tax_year") int taxYear) {
+			@PathVariable("tax_year") int taxYear) throws IOException {
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
 
@@ -287,17 +289,19 @@ public class UpdateUserController {
 				userRepository.save(userEntity);
 				return "successfully updated info";
 			} else {
-				return "userId not found";
+//				return "userId not found";
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "an error has occured";
+//		return "an error has occured";
+		return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 	}
 
 	@GetMapping("/{user_id}/{tax_year}/basicInfo")
-	public Object getUserBasicInfo(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+	public Object getUserBasicInfo(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) throws IOException {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof String)
 			return verifySessionIdResponse;
@@ -387,19 +391,21 @@ public class UpdateUserController {
 					}
 				}
 			} else {
-				return "userId not found";
+//				return "userId not found";
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return e.getMessage();
 		}
-		return "details not available";
+//		return "details not available";
+		return taxfilerUtil.getErrorResponse(MessageCode.DETAILS_NOT_AVAILABLE);
 	}
 
 	@PutMapping("/updateuser/{user_id}/{tax_year}/dependentInfo")
 	public Object updateUserDependentInfo(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
-			@PathVariable("tax_year") int taxYear) {
+			@PathVariable("tax_year") int taxYear) throws IOException {
 		/**
 		 * 1. updateUser information if that parameter is exist 2. Modify the latest
 		 * data in the database .
@@ -577,22 +583,25 @@ public class UpdateUserController {
 					}
 
 				} else {
-					return "user not found";
+//					return "user not found";
+					return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 				}
 			} else {
-				return "dependent info should not be null/empty";
+//				return "dependent info should not be null/empty";
+				return taxfilerUtil.getErrorResponse(MessageCode.DEPENDENT_INFO_NULL_OR_EMPTY);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 
 		return "success";
 	}
 
 	@GetMapping("/updateuser/{user_id}/{tax_year}/dependentInfo")
-	public Object getUserDependentInfo(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+	public Object getUserDependentInfo(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) throws IOException {
 		DependentInformation dependentInformation = new DependentInformation();
 
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
@@ -612,7 +621,8 @@ public class UpdateUserController {
 							DependentInformationEntity dependentInformationEntity = taxFiledYearEntity
 									.getDependentInformation();
 							if (null == dependentInformationEntity) {
-								return "no dependent info";
+//								return "no dependent info";
+								return taxfilerUtil.getErrorResponse(MessageCode.DEPENDENT_INFO_NULL_OR_EMPTY);
 							}
 
 							Name name = new Name();
@@ -685,11 +695,13 @@ public class UpdateUserController {
 				}
 
 			} else {
-				return "user not found";
+//				return "user not found";
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 
 		return "";
@@ -718,7 +730,7 @@ public class UpdateUserController {
 
 	@PutMapping("/updateuser/{user_id}/{tax_year}/bankInfo")
 	public Object updateUserBankInfo(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
-			@PathVariable("tax_year") int taxYear) {
+			@PathVariable("tax_year") int taxYear) throws IOException {
 		/**
 		 * 1. updateUser information if that parameter is exist 2. Modify the latest
 		 * data in the database .
@@ -788,20 +800,22 @@ public class UpdateUserController {
 					}
 
 				} else {
-					return "user not found";
+//					return "user not found";
+					return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 				}
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 
 		return "success";
 	}
 
 	@GetMapping("/updateuser/{user_id}/{tax_year}/bankInfo")
-	public Object getUserBankInfo(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+	public Object getUserBankInfo(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) throws IOException {
 		BankDetails bankDetails = new BankDetails();
 
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
@@ -834,13 +848,15 @@ public class UpdateUserController {
 					}
 
 				} else {
-					return "user not found";
+//					return "user not found";
+					return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 				}
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 
 		return "";
@@ -848,7 +864,7 @@ public class UpdateUserController {
 
 	@PutMapping("/updateuser/{user_id}/{tax_year}/otherIncomeInfo")
 	public Object otherIncomeInformation(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
-			@PathVariable("tax_year") int taxYear) {
+			@PathVariable("tax_year") int taxYear) throws IOException {
 
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
@@ -914,14 +930,15 @@ public class UpdateUserController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 		return "success";
 	}
 
 	@GetMapping("/updateuser/{user_id}/{tax_year}/otherIncomeInfo")
 	public Object getOtherIncomeInformation(@PathVariable("user_id") int userId,
-			@PathVariable("tax_year") int taxYear) {
+			@PathVariable("tax_year") int taxYear) throws IOException {
 		OtherIncomeInfoModel otherIncomeInfoModel = new OtherIncomeInfoModel();
 		Set<OtherIncomeInfoData> otherIncomeInfoDataList = new HashSet<>();
 
@@ -953,14 +970,15 @@ public class UpdateUserController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 		return "success";
 	}
 
 	@PutMapping("/updateuser/{user_id}/{tax_year}/additionalInfo")
 	public Object additionalInformation(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
-			@PathVariable("tax_year") int taxYear) {
+			@PathVariable("tax_year") int taxYear) throws IOException {
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
@@ -1025,13 +1043,14 @@ public class UpdateUserController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 		return "success";
 	}
 
 	@GetMapping("/updateuser/{user_id}/{tax_year}/additionalInfo")
-	public Object getAdditionalInformation(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+	public Object getAdditionalInformation(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) throws IOException {
 		AdditionalInfoModel additionalInfoModel = new AdditionalInfoModel();
 		Set<OtherIncomeInfoData> additionalInfoDataList = new HashSet<>();
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
@@ -1062,14 +1081,15 @@ public class UpdateUserController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 		return "success";
 	}
 
 	@PutMapping("/updateuser/{user_id}/{tax_year}/otherInfo")
 	public Object otherInformation(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
-			@PathVariable("tax_year") int taxYear) {
+			@PathVariable("tax_year") int taxYear) throws IOException {
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
@@ -1118,17 +1138,19 @@ public class UpdateUserController {
 				}
 
 			} else {
-				return "body cannot be null or empty";
+//				return "body cannot be null or empty";
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 		return "success";
 	}
 
 	@GetMapping("/updateuser/{user_id}/{tax_year}/otherInfo")
-	public Object getOtherInformation(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+	public Object getOtherInformation(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) throws IOException {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof String)
 			return verifySessionIdResponse;
@@ -1155,14 +1177,15 @@ public class UpdateUserController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 		return "no content";
 	}
 
 	@PutMapping("/updateuser/{user_id}/{tax_year}/fbar")
 	public Object fbar(@RequestBody TaxPayer taxPayerModel, @PathVariable("user_id") int userId,
-			@PathVariable("tax_year") int taxYear) {
+			@PathVariable("tax_year") int taxYear) throws IOException {
 		Gson gson = new Gson();
 		LOGGER.info("postman request data: " + gson.toJson(taxPayerModel));
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
@@ -1245,17 +1268,19 @@ public class UpdateUserController {
 				}
 
 			} else {
-				return "request body cannot be null or empty";
+//				return "request body cannot be null or empty";
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 		return "success";
 	}
 
 	@GetMapping("/updateuser/{user_id}/{tax_year}/fbar")
-	public Object getFbar(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+	public Object getFbar(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) throws IOException {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof String)
 			return verifySessionIdResponse;
@@ -1298,14 +1323,15 @@ public class UpdateUserController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 		return "no content";
 	}
 
 	@PostMapping(value = "/updateuser/{user_id}/{tax_year}/message", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Object postMessage(@RequestBody MessageModel messageModel, @PathVariable("user_id") int userId,
-			@PathVariable("tax_year") int taxYear) {
+			@PathVariable("tax_year") int taxYear) throws IOException {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof String)
 			return verifySessionIdResponse;
@@ -1361,17 +1387,19 @@ public class UpdateUserController {
 					isUpdatedOrInserted = true;
 				}
 			} else {
-				return "invalid userid";
+//				return "invalid userid";
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 		return "success";
 	}
 
 	@GetMapping(value = "/updateuser/{user_id}/{tax_year}/message")
-	public Object getAllMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+	public Object getAllMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) throws IOException {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof String)
 			return verifySessionIdResponse;
@@ -1398,17 +1426,19 @@ public class UpdateUserController {
 					}
 				}
 			} else {
-				return "invalid userid";
+//				return "invalid userid";
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 		return "success";
 	}
 
 	@GetMapping(value = "/updateuser/{user_id}/{tax_year}/receivedMessages")
-	public Object getReceivedMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+	public Object getReceivedMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) throws IOException {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof String)
 			return verifySessionIdResponse;
@@ -1437,17 +1467,19 @@ public class UpdateUserController {
 					}
 				}
 			} else {
-				return "invalid userid";
+//				return "invalid userid";
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 		return "success";
 	}
 
 	@GetMapping(value = "/updateuser/{user_id}/{tax_year}/sentMessages")
-	public Object getSentMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) {
+	public Object getSentMessages(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear) throws IOException {
 		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
 		if (verifySessionIdResponse instanceof String)
 			return verifySessionIdResponse;
@@ -1476,11 +1508,13 @@ public class UpdateUserController {
 					}
 				}
 			} else {
-				return "invalid userid";
+//				return "invalid userid";
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 		return "success";
 	}

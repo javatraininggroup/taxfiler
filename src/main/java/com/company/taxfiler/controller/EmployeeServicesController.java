@@ -1,5 +1,6 @@
 package com.company.taxfiler.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ import com.company.taxfiler.dao.TaxFiledYearEntity;
 import com.company.taxfiler.dao.UploadFilesEntity;
 import com.company.taxfiler.dao.UserEntity;
 import com.company.taxfiler.repository.UserRepository;
+import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 
 @RestController
@@ -42,7 +44,7 @@ public class EmployeeServicesController {
 
 	@GetMapping("/users/{user_id}/taxYear/{tax_year}/mainStatus/{mainStatus}/subStatus/{subStatus}/customersInfo")
 	public Object getUsersMessagesAndDocs(@PathVariable("user_id") int userId, @PathVariable("tax_year") int taxYear,
-			@PathVariable("mainStatus") String mainStatus, @PathVariable("subStatus") String subStatus) {
+			@PathVariable("mainStatus") String mainStatus, @PathVariable("subStatus") String subStatus) throws IOException {
 
 		/**
 		 * get 1. list of messages 2. list of files are in mainStatus & subStatus
@@ -130,11 +132,13 @@ public class EmployeeServicesController {
 					return "no customers data available";
 				}
 			} else {
-				return "userId not found";
+//				return "userId not found";
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "an error has occured";
+//			return "an error has occured";
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
 	}
 }

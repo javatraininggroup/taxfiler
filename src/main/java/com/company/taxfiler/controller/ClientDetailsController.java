@@ -1,5 +1,6 @@
 package com.company.taxfiler.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +47,7 @@ import com.company.taxfiler.dao.TaxFiledYearEntity;
 import com.company.taxfiler.dao.UploadFilesEntity;
 import com.company.taxfiler.dao.UserEntity;
 import com.company.taxfiler.repository.UserRepository;
+import com.company.taxfiler.util.MessageCode;
 import com.company.taxfiler.util.TaxfilerUtil;
 
 @RestController
@@ -67,7 +69,7 @@ public class ClientDetailsController {
 	private SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 
 	@GetMapping("/clientDetails/{user_id}/{tax_year}/allDetails")
-	public Object clientDetails(@PathVariable("tax_year") int year,@PathVariable("user_id") int userId) {
+	public Object clientDetails(@PathVariable("tax_year") int year,@PathVariable("user_id") int userId) throws IOException {
 		LOGGER.info("Entering into Client details");
 
 		DependentInformation dependentInformation = new DependentInformation();
@@ -418,13 +420,15 @@ public class ClientDetailsController {
 				}
 
 			}else {
-				return "userId not found";
+//				return "userId not found";
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "an error has occured";
+//		return "an error has occured";
+		return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 	}
 	public List<DownloadModel> prepareFilesDetailsForDownload(Set<UploadFilesEntity> uploadFilesEntitySet)
 			throws Exception {
