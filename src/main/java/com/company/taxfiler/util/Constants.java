@@ -19,8 +19,8 @@ public class Constants {
 	public static final String GET_USERS_MESSAGES_AND_DOCS_ENDPOINT = "/users/{user_id}/taxYear/{tax_year}/mainStatus/{mainStatus}/subStatus/{subStatus}/customersInfo";
 	public static final String POST_LOGIN_USER_ENDPOINT = "/login";
 	public static final String POST_REGISTER_USER_ENDPOINT = "/register";
-	public static final String POST_EDIT_PROFILE_ENDPOINT = "/settings/editProfile";
-	public static final String POST_CHANGE_PASSWORD_ENDPOINT = "/settings/changePassword";
+	public static final String POST_EDIT_PROFILE_ENDPOINT = "/updateuser/{user_id}/settings/editProfile";
+	public static final String POST_CHANGE_PASSWORD_ENDPOINT = "/updateuser/{user_id}/settings/changePassword";
 	public static final String PUT_UPDATE_USER_BASIC_INFO_ENDPOINT = "/updateuser/{user_id}/{tax_year}/basicInfo";
 	public static final String GET_USER_BASIC_INFO_ENDPOINT = "/{user_id}/{tax_year}/basicInfo";
 	public static final String PUT_UPDATE_USER_DEPENDENT_INFO_ENDPOINT = "/updateuser/{user_id}/{tax_year}/dependentInfo";
@@ -41,5 +41,7 @@ public class Constants {
 	public static final String POST_UPLOAD_DOCS_ENDPOINT = "/upload/{user_id}/{tax_year}";
 	public static final String GET_DOWNLOAD_FILE_ENDPOINT = "/download/{user_id}/{tax_year}/{fileId}";
 	public static final String GET_ALL_UPLOAD_DOCS_ENDPOINT = "/docs/{user_id}/{tax_year}";
+	public static final String UPDATE_USER_INFO_STATUS_BY_EMPLOYEE_ENDPOINT = "/employee/updateuser/{user_id}/{tax_year}/status";
+	public static final String RENTAL_INCOME_DETAIL_ENDPOINT = "/updateuser/{user_id}/{tax_year}/rentalIncome";
 
 }

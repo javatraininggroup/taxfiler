@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.company.taxfiler.dao.UserEntity;
+import com.company.taxfiler.model.LoginResponseModel;
 import com.company.taxfiler.model.RegistraionModel;
 import com.company.taxfiler.model.ResponseModel;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -36,7 +38,7 @@ public class TaxfilerUtil {
 
 	private final String HMACSHA256 = "HmacSHA256";
 
-	private static final TtlHashMap ttlHashMap = new TtlHashMap(TimeUnit.MINUTES, 60, 60*12);
+	private static final TtlHashMap ttlHashMap = new TtlHashMap(TimeUnit.MINUTES, 60, 60 * 12);
 
 	@Autowired
 	private HttpServletResponse httpServletResponse;
@@ -89,7 +91,7 @@ public class TaxfilerUtil {
 		httpServletResponse.setStatus(HttpStatus.BAD_REQUEST.value());
 		return errorResponse;
 	}
-	
+
 	public ResponseModel getErrorResponse(MessageCode parameter, String message) throws IOException {
 		ResponseModel errorResponse = new ResponseModel();
 		errorResponse.setCode(String.valueOf(parameter.getKey()));
@@ -98,16 +100,33 @@ public class TaxfilerUtil {
 		httpServletResponse.setStatus(HttpStatus.BAD_REQUEST.value());
 		return errorResponse;
 	}
-	
+
 	public ResponseModel getSuccessResponse(String message) throws IOException {
-		ResponseModel errorResponse = new ResponseModel();
-		errorResponse.setCode("0");
-		errorResponse.setStatus(0);
-		errorResponse.setMessage(message);
+		ResponseModel successResponse = new ResponseModel();
+		successResponse.setCode("0");
+		successResponse.setStatus(0);
+		successResponse.setMessage(message);
 		httpServletResponse.setStatus(HttpStatus.OK.value());
-		return errorResponse;
+		return successResponse;
 	}
-	
+
+	public LoginResponseModel setLoginResponse(UserEntity userEntity)
+			throws IllegalArgumentException, NoSuchAlgorithmException {
+		/**
+		 * generating a unique sessionId for each user
+		 */
+		String sessionId = createHMAC256TokenWithEmptyPayload();
+		LoginResponseModel response = new LoginResponseModel();
+		response.setEmail(userEntity.getEmail());
+		response.setId(userEntity.getId());
+		response.setPhone(userEntity.getPhone());
+		response.setRole(userEntity.getRole());
+		response.setSessionId(sessionId);
+		response.setUsername(userEntity.getName());
+		return response;
+
+	}
+
 	/**
 	 * This is used to create HMAC256 Token using HMACSHA256 algorithm
 	 * 
@@ -143,16 +162,18 @@ public class TaxfilerUtil {
 	public static TtlHashMap getTtlhashmap() {
 		return ttlHashMap;
 	}
-	public Object verifySessionId(HttpServletRequest request) throws IOException{
-		if (StringUtils.isNotBlank(request.getHeader("sessionId"))){
-			if(null == getTtlhashmap().get(request.getHeader("sessionId"))){
+
+	public Object verifySessionId(HttpServletRequest request) throws IOException {
+		if (StringUtils.isNotBlank(request.getHeader("sessionId"))) {
+			if (null == getTtlhashmap().get(request.getHeader("sessionId"))) {
 				return getErrorResponse(MessageCode.INVALID_SESSION_ID);
 			}
 			return true;
-		}else{
+		} else {
 			return getErrorResponse(MessageCode.INVALID_SESSION_ID);
 		}
 	}
+
 	public String convertObjectTOString(Object object) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

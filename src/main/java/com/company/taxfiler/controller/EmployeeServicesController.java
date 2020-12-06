@@ -45,8 +45,9 @@ public class EmployeeServicesController {
 	private HttpServletRequest httpServletRequest;
 
 	@GetMapping(Constants.GET_USERS_MESSAGES_AND_DOCS_ENDPOINT)
-	public Object getUsersMessagesAndDocs(@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear,
-			@PathVariable(Constants.MAIN_STATUS) String mainStatus, @PathVariable(Constants.SUB_STATUS) String subStatus) throws IOException {
+	public Object getUsersMessagesAndDocs(@PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear, @PathVariable(Constants.MAIN_STATUS) String mainStatus,
+			@PathVariable(Constants.SUB_STATUS) String subStatus) throws IOException {
 
 		/**
 		 * get 1. list of messages 2. list of files are in mainStatus & subStatus
@@ -73,55 +74,29 @@ public class EmployeeServicesController {
 						Set<TaxFiledYearEntity> taxFiledYearEntityList = entity.getTaxFiledYearList();
 						if (null != taxFiledYearEntityList && taxFiledYearEntityList.size() > 0) {
 							for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
-								if (taxFiledYearEntity.getYear() == taxYear) {
+								if (taxFiledYearEntity.getYear() == taxYear
+										&& taxFiledYearEntity.getMainStatus().equalsIgnoreCase(mainStatus)
+										&& (taxFiledYearEntity.getSubStatus().equalsIgnoreCase(subStatus)
+												|| "ALL".equalsIgnoreCase(subStatus))) {
 									List<MessageResponseModel> messagesList = new ArrayList<>();
 									List<DocsResponseModel> uploadedFilesList = new ArrayList<>();
 									Set<MessagesEntity> messagesSet = taxFiledYearEntity.getMessagesEntityList();
 									for (MessagesEntity messagesEntity : messagesSet) {
-										boolean isCheckSuccess = false;
-										if (subStatus.equalsIgnoreCase("ALL")) {
-											if (messagesEntity.getMainStatus().equalsIgnoreCase(mainStatus)) {
-												isCheckSuccess = true;
-											}
-										} else {
-											if (messagesEntity.getMainStatus().equalsIgnoreCase(mainStatus)
-													&& messagesEntity.getSubStatus().equalsIgnoreCase(subStatus)) {
-												isCheckSuccess = true;
-											}
-										}
-										if (isCheckSuccess) {
-											String messageEntityStr = taxfilerUtil
-													.convertObjectTOString(messagesEntity);
-											MessageResponseModel messageResponseModelObj = (MessageResponseModel) taxfilerUtil
-													.convertStringToObject(messageEntityStr,
-															MessageResponseModel.class);
-											messagesList.add(messageResponseModelObj);
-										}
+										String messageEntityStr = taxfilerUtil.convertObjectTOString(messagesEntity);
+										MessageResponseModel messageResponseModelObj = (MessageResponseModel) taxfilerUtil
+												.convertStringToObject(messageEntityStr, MessageResponseModel.class);
+										messagesList.add(messageResponseModelObj);
 									}
 									employeePortalModel.setMessagesList(messagesList);
 
 									Set<UploadFilesEntity> uploadedFilesSet = taxFiledYearEntity
 											.getUploadFilesEntityList();
 									for (UploadFilesEntity uploadedFilesEntity : uploadedFilesSet) {
-										boolean isCheckSuccess = false;
-										if (subStatus.equalsIgnoreCase("ALL")) {
-											if (uploadedFilesEntity.getMainStatus().equalsIgnoreCase(mainStatus)) {
-												isCheckSuccess = true;
-											}
-										} else {
-											if (uploadedFilesEntity.getMainStatus().equalsIgnoreCase(mainStatus)
-													&& uploadedFilesEntity.getSubStatus().equalsIgnoreCase(subStatus)) {
-												isCheckSuccess = true;
-											}
-										}
-										if (isCheckSuccess) {
-											String uploadedFilesEntityStr = taxfilerUtil
-													.convertObjectTOString(uploadedFilesEntity);
-											DocsResponseModel docsResponseModelObj = (DocsResponseModel) taxfilerUtil
-													.convertStringToObject(uploadedFilesEntityStr,
-															DocsResponseModel.class);
-											uploadedFilesList.add(docsResponseModelObj);
-										}
+										String uploadedFilesEntityStr = taxfilerUtil
+												.convertObjectTOString(uploadedFilesEntity);
+										DocsResponseModel docsResponseModelObj = (DocsResponseModel) taxfilerUtil
+												.convertStringToObject(uploadedFilesEntityStr, DocsResponseModel.class);
+										uploadedFilesList.add(docsResponseModelObj);
 									}
 									employeePortalModel.setUploadedFilesList(uploadedFilesList);
 								}
@@ -131,14 +106,14 @@ public class EmployeeServicesController {
 					}
 					return employeePortalInfoModelList;
 				} else {
-					return "no customers data available";
+					return taxfilerUtil.getSuccessResponse("details not available");
 				}
 			} else {
 				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			 return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
 	}
 }

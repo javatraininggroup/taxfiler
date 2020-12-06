@@ -11,11 +11,14 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,6 +47,7 @@ import com.company.taxfiler.dao.FbarEntity;
 import com.company.taxfiler.dao.MessagesEntity;
 import com.company.taxfiler.dao.OtherIncomeInformatonEntity;
 import com.company.taxfiler.dao.OtherInformationEntity;
+import com.company.taxfiler.dao.RentalIncomeEntity;
 import com.company.taxfiler.dao.ResidencyDetailsForStatesEntity;
 import com.company.taxfiler.dao.SpouseDetailsEntity;
 import com.company.taxfiler.dao.TaxFiledYearEntity;
@@ -89,6 +93,7 @@ public class ClientDetailsController {
 		BasicInformation basicInformation = new BasicInformation();
 		ContactDetails contactDetails = new ContactDetails();
 		SpouseDetails spouseDetails = new SpouseDetails();
+		RentalIncomeEntity rentalIncomeModel = new RentalIncomeEntity();
 		Set<OtherIncomeInfoData> additionalInfoDataList = new HashSet<>();
 
 		/**
@@ -434,13 +439,19 @@ public class ClientDetailsController {
 								}
 								clientModel.setSpouseDetails(spouseDetails);
 							} // End of SpouseDetails
+								// setting rental income details
+							clientModel.setRentalIncomeModel(taxFiledYearEntity.getRentalIncome());
+
+							// setting main&sub status
+							clientDetails.setMainStatus(taxFiledYearEntity.getMainStatus());
+							clientDetails.setSubStatus(taxFiledYearEntity.getSubStatus());
 						} // End of TaxFilerEntity
 
 					} // End of for loop of taxFiledYearEntityList
 
 					return clientModel;
 				} else {
-					return " Tax not filed for this year";
+					return taxfilerUtil.getErrorResponse(MessageCode.TAX_NOT_FILED_THIS_YEAR);
 				}
 
 			} else {
@@ -448,8 +459,8 @@ public class ClientDetailsController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 		}
-		return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 	}
 
 	public List<DownloadModel> prepareFilesDetailsForDownload(Set<UploadFilesEntity> uploadFilesEntitySet)
@@ -475,5 +486,49 @@ public class ClientDetailsController {
 		String strDate = format.format(date);
 
 		return strDate;
+	}
+
+	@PutMapping(Constants.UPDATE_USER_INFO_STATUS_BY_EMPLOYEE_ENDPOINT)
+	public Object updateClientStatusByEmployee(@RequestBody ClientDetails clientDetails,
+			@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
+			throws IOException {
+
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof ResponseModel)
+			return verifySessionIdResponse;
+
+		if (!StringUtils.isNotBlank(clientDetails.getMainStatus())
+				|| !StringUtils.isNotBlank(clientDetails.getSubStatus())) {
+			return taxfilerUtil.getErrorResponse(MessageCode.MAINSTATUS_OR_SUBSTATUS_NULL_OR_EMPTY);
+		}
+
+		Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
+		if (optionalUserEntity.isPresent()) {
+			UserEntity userEntity = optionalUserEntity.get();
+			Set<TaxFiledYearEntity> taxFiledYearEntityList = userEntity.getTaxFiledYearList();
+			if (null != taxFiledYearEntityList && !taxFiledYearEntityList.isEmpty()) {
+				for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
+					if (taxFiledYearEntity.getYear() == taxYear) {
+						LOGGER.info("updating existing userEntity details");
+						userEntity.setName(clientDetails.getName());
+						userEntity.setAlternatePhone(clientDetails.getAltPhone());
+						// userEntity.setEmail(clientDetails.getEmail());
+						userEntity.setPhone(clientDetails.getRegPhone());
+						userEntity.setTaxFiledYearList(taxFiledYearEntityList);
+
+						taxFiledYearEntity.setMainStatus(clientDetails.getMainStatus());
+						taxFiledYearEntity.setSubStatus(clientDetails.getSubStatus());
+
+						taxFiledYearEntity.setUserEntity(userEntity);
+
+						userRepository.save(userEntity);
+						return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
+					}
+				}
+			}
+		} else {
+			return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
+		}
+		return taxfilerUtil.getSuccessResponse("no records were updated");
 	}
 }

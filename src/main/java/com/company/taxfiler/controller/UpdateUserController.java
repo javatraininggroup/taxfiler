@@ -38,6 +38,7 @@ import com.company.model.Name;
 import com.company.model.OtherIncomeInfoData;
 import com.company.model.OtherIncomeInfoModel;
 import com.company.model.OtherInformation;
+import com.company.model.RentalIncomeModel;
 import com.company.model.ResidencyDetailsforStates;
 import com.company.model.SpouseDetails;
 import com.company.model.TaxPayer;
@@ -52,6 +53,7 @@ import com.company.taxfiler.dao.FbarEntity;
 import com.company.taxfiler.dao.MessagesEntity;
 import com.company.taxfiler.dao.OtherIncomeInformatonEntity;
 import com.company.taxfiler.dao.OtherInformationEntity;
+import com.company.taxfiler.dao.RentalIncomeEntity;
 import com.company.taxfiler.dao.ResidencyDetailsForStatesEntity;
 import com.company.taxfiler.dao.SpouseDetailsEntity;
 import com.company.taxfiler.dao.TaxFiledYearEntity;
@@ -61,6 +63,7 @@ import com.company.taxfiler.model.ResponseModel;
 import com.company.taxfiler.repository.UserRepository;
 import com.company.taxfiler.util.Constants;
 import com.company.taxfiler.util.MessageCode;
+import com.company.taxfiler.util.TaxfilerMessageLoader;
 import com.company.taxfiler.util.TaxfilerUtil;
 import com.google.gson.Gson;
 
@@ -78,8 +81,8 @@ public class UpdateUserController {
 	@Autowired
 	private HttpServletRequest httpServletRequest;
 	private SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-	private final static String DEFAULT_MAIN_STATUS = "SCHEDULING";
-	private final static String DEFAULT_SUB_STATUS = "PENDING";
+	// private final static String DEFAULT_MAIN_STATUS = "SCHEDULING";
+	// private final static String DEFAULT_SUB_STATUS = "PENDING";
 
 	@PutMapping(Constants.PUT_UPDATE_USER_BASIC_INFO_ENDPOINT)
 	public Object updateUserBasicInfo(@RequestBody TaxPayer taxPayerModel, @PathVariable(Constants.USER_ID) int userId,
@@ -289,14 +292,14 @@ public class UpdateUserController {
 				// taxFiledYearEntity.setResidencyDetailsforStatesList(residencyDetailsForStatesEntityList);
 				// taxFiledYearEntity.getResidencyDetailsforStatesList().
 				userRepository.save(userEntity);
-				return taxfilerUtil.getSuccessResponse("successfully updated  basic info");
+				return taxfilerUtil.getSuccessResponse("successfully updated basic info");
 			} else {
 				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED);
 	}
 
 	@GetMapping(Constants.GET_USER_BASIC_INFO_ENDPOINT)
@@ -315,7 +318,7 @@ public class UpdateUserController {
 
 				Set<TaxFiledYearEntity> taxFiledYearEntityList = userEntity.getTaxFiledYearList();
 				if (null == taxFiledYearEntityList || taxFiledYearEntityList.size() == 0) {
-					return "details not available";
+					return taxfilerUtil.getSuccessResponse("details not available");
 				} else {
 					for (TaxFiledYearEntity taxFiledYearEntityTemp : taxFiledYearEntityList) {
 						if (taxFiledYearEntityTemp.getYear() == taxYear) {
@@ -324,53 +327,52 @@ public class UpdateUserController {
 							 * get basic info details
 							 */
 							BasicInfoEntity basicEntity = taxFiledYearEntityTemp.getBasicInfo();
-							String basicEntityStr = taxfilerUtil.convertObjectTOString(basicEntity);
-							BasicInformation basicInfoModel = (BasicInformation) taxfilerUtil
-									.convertStringToObject(basicEntityStr, BasicInformation.class);
-							Name name = new Name();
-							name.setFirstName(basicEntity.getFirstName());
-							name.setMiddleName(basicEntity.getMiddleName());
-							name.setLastName(basicEntity.getLastName());
-							basicInfoModel.setName(name);
-							basicInfoModel.setDateOfBirth(convertDateToString(basicEntity.getDob()));
-							basicInfoModel
-									.setFirstDateOfEntyInUS(convertDateToString(basicEntity.getFirstDateOfEntryInUS()));
-							basicInfoModel.setFilingStatus(basicEntity.getFilingStatus());
-							basicInfoModel.setDateOfMarriage(convertDateToString(basicEntity.getDateOfMarriage()));
+							BasicInformation basicInfoModel = null;
+							if (null != basicEntity) {
+								String basicEntityStr = taxfilerUtil.convertObjectTOString(basicEntity);
+								basicInfoModel = (BasicInformation) taxfilerUtil.convertStringToObject(basicEntityStr,
+										BasicInformation.class);
+								Name name = new Name();
+								name.setFirstName(basicEntity.getFirstName());
+								name.setMiddleName(basicEntity.getMiddleName());
+								name.setLastName(basicEntity.getLastName());
+								basicInfoModel.setName(name);
+								basicInfoModel.setDateOfBirth(convertDateToString(basicEntity.getDob()));
+								basicInfoModel.setFirstDateOfEntyInUS(
+										convertDateToString(basicEntity.getFirstDateOfEntryInUS()));
+								basicInfoModel.setFilingStatus(basicEntity.getFilingStatus());
+								basicInfoModel.setDateOfMarriage(convertDateToString(basicEntity.getDateOfMarriage()));
+							}
 							taxPayerModel.setBasicInformation(basicInfoModel);
 
 							/**
 							 * get contact details
 							 */
 							ContactDetailsEntity contactEntity = taxFiledYearEntityTemp.getContactDetails();
-							String contactEntityStr = taxfilerUtil.convertObjectTOString(contactEntity);
-							ContactDetails contactDetailsModel = (ContactDetails) taxfilerUtil
-									.convertStringToObject(contactEntityStr, ContactDetails.class);
-
-							Set<ResidencyDetailsForStatesEntity> residencyStatesEntitySet = taxFiledYearEntityTemp
-									.getResidencyDetailsforStatesList();
+							ContactDetails contactDetailsModel = null;
 							Set<ResidencyDetailsforStates> residencyDetailsforStatesSetModel = new HashSet<>();
-							Set<TaxYearInfo> taxYearInfoList = new HashSet<>();
-							LOGGER.info("residencyStatesEntitySet size {}", residencyStatesEntitySet.size());
-							ResidencyDetailsforStates model = new ResidencyDetailsforStates();
-							for (ResidencyDetailsForStatesEntity entity : residencyStatesEntitySet) {
-								model.setTaxYear((int) entity.getTaxYear());
-								TaxYearInfo info = new TaxYearInfo();
-								info.setStartDate(convertDateToString(entity.getStartDate()));
-								info.setEndDate(convertDateToString(entity.getEndDate()));
-								info.setStateResided(entity.getStatesResided());
-								taxYearInfoList.add(info);
-								model.setTaxYearInfoList(taxYearInfoList);
-								residencyDetailsforStatesSetModel.add(model);
+							if (null != contactEntity) {
+								String contactEntityStr = taxfilerUtil.convertObjectTOString(contactEntity);
+								contactDetailsModel = (ContactDetails) taxfilerUtil
+										.convertStringToObject(contactEntityStr, ContactDetails.class);
 
+								Set<ResidencyDetailsForStatesEntity> residencyStatesEntitySet = taxFiledYearEntityTemp
+										.getResidencyDetailsforStatesList();
+								Set<TaxYearInfo> taxYearInfoList = new HashSet<>();
+								LOGGER.info("residencyStatesEntitySet size {}", residencyStatesEntitySet.size());
+								ResidencyDetailsforStates model = new ResidencyDetailsforStates();
+								for (ResidencyDetailsForStatesEntity entity : residencyStatesEntitySet) {
+									model.setTaxYear((int) entity.getTaxYear());
+									TaxYearInfo info = new TaxYearInfo();
+									info.setStartDate(convertDateToString(entity.getStartDate()));
+									info.setEndDate(convertDateToString(entity.getEndDate()));
+									info.setStateResided(entity.getStatesResided());
+									taxYearInfoList.add(info);
+									model.setTaxYearInfoList(taxYearInfoList);
+									residencyDetailsforStatesSetModel.add(model);
+
+								}
 							}
-
-							// String residencyDetailsStr =
-							// taxfilerUtil.convertObjectTOString(taxFiledYearEntityTemp.getResidencyDetailsforStatesList());
-							// Set<ResidencyDetailsforStates>
-							// residencyDetailsforStatesSetModel =
-							// (Set<ResidencyDetailsforStates>)taxfilerUtil.convertStringToObject(residencyDetailsStr,
-							// Set.class);
 							contactDetailsModel.setAddressOfLivingInTaxYear(residencyDetailsforStatesSetModel);
 							taxPayerModel.setContactDetails(contactDetailsModel);
 
@@ -378,15 +380,18 @@ public class UpdateUserController {
 							 * get spouse details
 							 */
 							SpouseDetailsEntity spouseDetailsEntity = taxFiledYearEntityTemp.getSpouseDetails();
-							String spouseEntityStr = taxfilerUtil.convertObjectTOString(spouseDetailsEntity);
-							SpouseDetails spouseDetailsModel = (SpouseDetails) taxfilerUtil
-									.convertStringToObject(spouseEntityStr, SpouseDetails.class);
-							Name spouseName = new Name();
-							spouseName.setFirstName(spouseDetailsEntity.getFirstName());
-							spouseName.setMiddleName(spouseDetailsEntity.getMiddleName());
-							spouseName.setLastName(spouseDetailsEntity.getLastName());
-							spouseDetailsModel.setName(spouseName);
-							spouseDetailsModel.setAddressOfLivingInTaxYear(residencyDetailsforStatesSetModel);
+							SpouseDetails spouseDetailsModel = null;
+							if (null != spouseDetailsEntity) {
+								String spouseEntityStr = taxfilerUtil.convertObjectTOString(spouseDetailsEntity);
+								spouseDetailsModel = (SpouseDetails) taxfilerUtil.convertStringToObject(spouseEntityStr,
+										SpouseDetails.class);
+								Name spouseName = new Name();
+								spouseName.setFirstName(spouseDetailsEntity.getFirstName());
+								spouseName.setMiddleName(spouseDetailsEntity.getMiddleName());
+								spouseName.setLastName(spouseDetailsEntity.getLastName());
+								spouseDetailsModel.setName(spouseName);
+								spouseDetailsModel.setAddressOfLivingInTaxYear(residencyDetailsforStatesSetModel);
+							}
 							taxPayerModel.setSpouseDetails(spouseDetailsModel);
 							return taxPayerModel;
 						}
@@ -395,12 +400,11 @@ public class UpdateUserController {
 			} else {
 				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getErrorResponse(MessageCode.BASIC_INFO_DETAILS_NOT_AVAILABLE);
+		return taxfilerUtil.getSuccessResponse("details not available");
 	}
 
 	@PutMapping(Constants.PUT_UPDATE_USER_DEPENDENT_INFO_ENDPOINT)
@@ -590,13 +594,12 @@ public class UpdateUserController {
 			} else {
 				return taxfilerUtil.getErrorResponse(MessageCode.USER_DEPENDENT_INFO_NULL_OR_EMPTY);
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
 
-		return taxfilerUtil.getSuccessResponse("success");
+		return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
 	}
 
 	@GetMapping(Constants.GET_USER_DEPENDENT_INFO_ENDPOINT)
@@ -702,8 +705,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-
-		return taxfilerUtil.getSuccessResponse("");
+		return taxfilerUtil.getSuccessResponse("details not available");
 	}
 
 	public void clearResidencyStatesDetails(Set<ResidencyDetailsForStatesEntity> residencyDetailsForStatesEntity,
@@ -808,7 +810,7 @@ public class UpdateUserController {
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
 
-		return taxfilerUtil.getSuccessResponse("success");
+		return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
 	}
 
 	@GetMapping(Constants.GET_USER_BANK_INFO_ENDPOINT)
@@ -831,7 +833,7 @@ public class UpdateUserController {
 								LOGGER.info("updating existing bank details");
 								BankDetailsEntity bankDetailsEntity = taxFiledYearEntity.getBankDetails();
 								if (null == bankDetailsEntity) {
-									return "";
+									return taxfilerUtil.getSuccessResponse("details not available");
 								}
 								bankDetails.setUSBankAccountNumber(bankDetailsEntity.getBankAccountNumber());
 								bankDetails.setTypeOfAccount(bankDetailsEntity.getBankAccountTpe());
@@ -842,7 +844,7 @@ public class UpdateUserController {
 							}
 						}
 					} else {
-						return taxfilerUtil.getSuccessResponse("");
+						return taxfilerUtil.getSuccessResponse("details not available");
 					}
 
 				} else {
@@ -854,8 +856,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-
-		return taxfilerUtil.getSuccessResponse("");
+		return taxfilerUtil.getSuccessResponse("details not available");
 	}
 
 	@PutMapping(Constants.PUT_OTHER_INCOME_INFORMATION_ENDPOINT)
@@ -929,7 +930,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getSuccessResponse("success");
+		return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
 	}
 
 	@GetMapping(Constants.GET_OTHER_INCOME_INFORMATION_ENDPOINT)
@@ -968,7 +969,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getSuccessResponse("success");
+		return taxfilerUtil.getSuccessResponse("details not available");
 	}
 
 	@PutMapping(Constants.PUT_ADDITIONAL_INFORMATION_ENDPOINT)
@@ -1041,7 +1042,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getSuccessResponse("success");
+		return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
 	}
 
 	@GetMapping(Constants.GET_ADDITIONAL_INFORMATION_ENDPOINT)
@@ -1079,7 +1080,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getSuccessResponse("success");
+		return taxfilerUtil.getSuccessResponse("details not available");
 	}
 
 	@PutMapping(Constants.PUT_OTHER_INFORMATION_ENDPOINT)
@@ -1139,7 +1140,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getSuccessResponse("success");
+		return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
 	}
 
 	@GetMapping(Constants.GET_OTHER_INFORMATION_ENDPOINT)
@@ -1173,7 +1174,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getSuccessResponse("");
+		return taxfilerUtil.getSuccessResponse("details not available");
 	}
 
 	@PutMapping(Constants.PUT_FBAR_ENDPOINT)
@@ -1267,7 +1268,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getSuccessResponse("success");
+		return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
 	}
 
 	@GetMapping(Constants.GET_FBAR_ENDPOINT)
@@ -1287,7 +1288,7 @@ public class UpdateUserController {
 						if (taxFiledYearEntity.getYear() == taxYear) {
 							FbarEntity fbarEntity = taxFiledYearEntity.getFbarEntity();
 							if (null == fbarEntity) {
-								break;
+								return taxfilerUtil.getSuccessResponse("details not available");
 							} else {
 								fbar.setAccBelongsTo(fbarEntity.getAccBelongsTo());
 								fbar.setAccNo(fbarEntity.getAccNo());
@@ -1317,7 +1318,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getSuccessResponse("");
+		return taxfilerUtil.getSuccessResponse("details not available");
 	}
 
 	@PostMapping(value = Constants.POST_MESSAGE_ENDPOINT, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -1347,8 +1348,8 @@ public class UpdateUserController {
 							messagesEntity.setMessage(messageModel.getMessage());
 							messagesEntity.setSentMessage(messageModel.isSentMessage());
 							messagesEntity.setReceivedMessage(messageModel.isReceivedMessage());
-							messagesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
-							messagesEntity.setSubStatus(DEFAULT_SUB_STATUS);
+							// messagesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
+							// messagesEntity.setSubStatus(DEFAULT_SUB_STATUS);
 							messagesEntity.setTaxFileYear(taxFiledYearEntity);
 							messagesEntitySet.add(messagesEntity);
 							isUpdatedOrInserted = true;
@@ -1368,8 +1369,8 @@ public class UpdateUserController {
 					messagesEntity.setMessage(messageModel.getMessage());
 					messagesEntity.setSentMessage(messageModel.isSentMessage());
 					messagesEntity.setReceivedMessage(messageModel.isReceivedMessage());
-					messagesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
-					messagesEntity.setSubStatus(DEFAULT_SUB_STATUS);
+					// messagesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
+					// messagesEntity.setSubStatus(DEFAULT_SUB_STATUS);
 					messagesEntity.setTaxFileYear(taxFiledYearEntity);
 					messagesEntitySet.add(messagesEntity);
 					taxFiledYearEntity.setMessagesEntityList(messagesEntitySet);
@@ -1384,7 +1385,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getSuccessResponse("success");
+		return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
 	}
 
 	@GetMapping(value = Constants.GET_ALL_MESSAGES_ENDPOINT)
@@ -1403,7 +1404,7 @@ public class UpdateUserController {
 						if (taxFiledYearEntity.getYear() == taxYear) {
 							Set<MessagesEntity> messagesEntitySet = taxFiledYearEntity.getMessagesEntityList();
 							if (null == messagesEntitySet) {
-								return new HashSet<>();
+								return taxfilerUtil.getSuccessResponse("details not available");
 							} else {
 								Set<MessagesEntity> messagesEntitySetResponse = new HashSet<>();
 								for (MessagesEntity entity : messagesEntitySet) {
@@ -1422,7 +1423,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getSuccessResponse("success");
+		return taxfilerUtil.getSuccessResponse("details not available");
 	}
 
 	@GetMapping(value = Constants.GET_RECEIVED_MESSAGES_ENDPOINT)
@@ -1441,7 +1442,7 @@ public class UpdateUserController {
 						if (taxFiledYearEntity.getYear() == taxYear) {
 							Set<MessagesEntity> messagesEntitySet = taxFiledYearEntity.getMessagesEntityList();
 							if (null == messagesEntitySet) {
-								return "no messages";
+								return taxfilerUtil.getSuccessResponse("details not available");
 							} else {
 								Set<MessagesEntity> messagesEntitySetResponse = new HashSet<>();
 								for (MessagesEntity entity : messagesEntitySet) {
@@ -1451,7 +1452,6 @@ public class UpdateUserController {
 								}
 								return messagesEntitySetResponse;
 							}
-
 						}
 					}
 				}
@@ -1462,7 +1462,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
+		return taxfilerUtil.getSuccessResponse("details not available");
 	}
 
 	@GetMapping(value = Constants.GET_SENT_MESSAGES_ENDPOINT)
@@ -1481,7 +1481,7 @@ public class UpdateUserController {
 						if (taxFiledYearEntity.getYear() == taxYear) {
 							Set<MessagesEntity> messagesEntitySet = taxFiledYearEntity.getMessagesEntityList();
 							if (null == messagesEntitySet) {
-								return "no messages";
+								return taxfilerUtil.getSuccessResponse("details not available");
 							} else {
 								Set<MessagesEntity> messagesEntitySetResponse = new HashSet<>();
 								for (MessagesEntity entity : messagesEntitySet) {
@@ -1502,7 +1502,7 @@ public class UpdateUserController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return taxfilerUtil.getSuccessResponse("success");
+		return taxfilerUtil.getSuccessResponse("details not available");
 	}
 
 	/*
@@ -1568,5 +1568,116 @@ public class UpdateUserController {
 		String strDate = format.format(date);
 
 		return strDate;
+	}
+
+	@PutMapping(Constants.RENTAL_INCOME_DETAIL_ENDPOINT)
+	public Object addORUpdateRentalIncomeDetails(@RequestBody RentalIncomeModel rentalIncomeModel,
+			@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear)
+			throws IOException {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof ResponseModel)
+			return verifySessionIdResponse;
+		try {
+			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
+			if (optionalUserEntity.isPresent()) {
+				UserEntity userEntity = optionalUserEntity.get();
+				Set<TaxFiledYearEntity> taxFiledYearEntityList = userEntity.getTaxFiledYearList();
+				boolean isUpdatedOrInserted = false;
+				if (null != taxFiledYearEntityList && !taxFiledYearEntityList.isEmpty()) {
+					for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
+						if (taxFiledYearEntity.getYear() == taxYear) {
+							RentalIncomeEntity rentalIncomeEntity = taxFiledYearEntity.getRentalIncome();
+							if (null == rentalIncomeEntity) {
+								rentalIncomeEntity = new RentalIncomeEntity();
+								taxFiledYearEntity.setRentalIncome(rentalIncomeEntity);
+							}
+							setRentalIncomeEntity(rentalIncomeEntity, rentalIncomeModel);
+							rentalIncomeEntity.setTaxFileYear(taxFiledYearEntity);
+							isUpdatedOrInserted = true;
+							return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
+						}
+					}
+				}
+				if (!isUpdatedOrInserted) {
+					if (null == taxFiledYearEntityList) {
+						taxFiledYearEntityList = new HashSet<>();
+					}
+					TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
+					taxFiledYearEntity.setYear(taxYear);
+					RentalIncomeEntity rentalIncomeEntity = new RentalIncomeEntity();
+					setRentalIncomeEntity(rentalIncomeEntity, rentalIncomeModel);
+					rentalIncomeEntity.setTaxFileYear(taxFiledYearEntity);
+					taxFiledYearEntity.setRentalIncome(rentalIncomeEntity);
+					taxFiledYearEntity.setUserEntity(userEntity);
+					taxFiledYearEntityList.add(taxFiledYearEntity);
+					userEntity.setTaxFiledYearList(taxFiledYearEntityList);
+					userRepository.save(userEntity);
+					return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
+				}
+			} else {
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
+		}
+		return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
+	}
+
+	@GetMapping(Constants.RENTAL_INCOME_DETAIL_ENDPOINT)
+	public Object getRentalIncomeDetails(@PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof ResponseModel)
+			return verifySessionIdResponse;
+		try {
+			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
+			if (optionalUserEntity.isPresent()) {
+				UserEntity userEntity = optionalUserEntity.get();
+				Set<TaxFiledYearEntity> taxFiledYearEntityList = userEntity.getTaxFiledYearList();
+				if (null != taxFiledYearEntityList && !taxFiledYearEntityList.isEmpty()) {
+					for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
+						if (taxFiledYearEntity.getYear() == taxYear) {
+							return taxFiledYearEntity.getRentalIncome();
+						}
+					}
+				}
+			} else {
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
+		}
+		return taxfilerUtil.getSuccessResponse("details not available");
+	}
+
+	private void setRentalIncomeEntity(RentalIncomeEntity rentalIncomeEntity, RentalIncomeModel rentalIncomeModel)
+			throws ParseException {
+		rentalIncomeEntity.setBuildingValue(rentalIncomeModel.getBuildingValue());
+		rentalIncomeEntity.setLandValue(rentalIncomeModel.getBuildingValue());
+		rentalIncomeEntity.setAddressOfProperty(rentalIncomeModel.getAddressOfProperty());
+		rentalIncomeEntity.setDateOfPropertyPurchased(
+				convertStringDateToSqlDate(rentalIncomeModel.getDateOfPropertyPurchased().toString()));
+		rentalIncomeEntity.setPropertyHolder(rentalIncomeModel.getPropertyHolder());
+		rentalIncomeEntity.setIncome(rentalIncomeModel.getIncome());
+		rentalIncomeEntity.setRentsReceived(rentalIncomeModel.getRentsReceived());
+		rentalIncomeEntity.setRoyaltiesReceived(rentalIncomeModel.getRoyaltiesReceived());
+		rentalIncomeEntity.setExpenses(rentalIncomeModel.getExpenses());
+		rentalIncomeEntity.setMortgageInterest(rentalIncomeModel.getMortgageInterest());
+		rentalIncomeEntity.setOtherInterest(rentalIncomeModel.getOtherInterest());
+		rentalIncomeEntity.setInsurance(rentalIncomeModel.getInsurance());
+		rentalIncomeEntity.setRepairs(rentalIncomeModel.getRepairs());
+		rentalIncomeEntity.setAutoAndTravel(rentalIncomeModel.getAutoAndTravel());
+		rentalIncomeEntity.setAdvertising(rentalIncomeModel.getAdvertising());
+		rentalIncomeEntity.setTaxes(rentalIncomeModel.getTaxes());
+		rentalIncomeEntity.setLegalAndOtherProfessionalTaxes(rentalIncomeModel.getLegalAndOtherProfessionalTaxes());
+		rentalIncomeEntity.setCleaningAndMaintenance(rentalIncomeModel.getCleaningAndMaintenance());
+		rentalIncomeEntity.setCommissions(rentalIncomeModel.getCommissions());
+		rentalIncomeEntity.setUtilities(rentalIncomeModel.getUtilities());
+		rentalIncomeEntity.setManagementFees(rentalIncomeModel.getManagementFees());
+		rentalIncomeEntity.setSupplies(rentalIncomeModel.getSupplies());
+		rentalIncomeEntity.setOtherExpenses(rentalIncomeModel.getOtherExpenses());
+		rentalIncomeEntity.setNoOfDaysRentedDuringTheYear(rentalIncomeModel.getNoOfDaysRentedDuringTheYear());
 	}
 }

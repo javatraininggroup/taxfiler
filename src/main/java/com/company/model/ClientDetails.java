@@ -15,6 +15,8 @@ public class ClientDetails {
 	private String name;
 	private String fileId;
 	private int id;
+	private String mainStatus;
+	private String subStatus;
 
 	public String getEmail() {
 		return email;
@@ -110,6 +112,22 @@ public class ClientDetails {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getMainStatus() {
+		return mainStatus;
+	}
+
+	public void setMainStatus(String mainStatus) {
+		this.mainStatus = mainStatus;
+	}
+
+	public String getSubStatus() {
+		return subStatus;
+	}
+
+	public void setSubStatus(String subStatus) {
+		this.subStatus = subStatus;
 	}
 
 }

@@ -15,7 +15,10 @@ public enum MessageCode {
 	FAILED_TO_UPLOAD_BECAUSE_FILE_WAS_EMPTY(Constants.TAXFILER_MESSAGE_BASE+11, "taxfiler.failed_to_upload_because_file_was_empty"),
 	FILE_NOT_AVAILABLE_TO_DOWNLOAD(Constants.TAXFILER_MESSAGE_BASE+12, "taxfiler.file_not_availble_to_download"),
 	INVALID_SESSION_ID(Constants.TAXFILER_MESSAGE_BASE+13, 	"taxfiler.invalid_session_id"),
-	PASSWORD_NULL_OR_EMPTY(Constants.TAXFILER_MESSAGE_BASE+14, "taxfiler.password_null_or_empty");
+	PASSWORD_NULL_OR_EMPTY(Constants.TAXFILER_MESSAGE_BASE+14, "taxfiler.password_null_or_empty"),
+	MAINSTATUS_OR_SUBSTATUS_NULL_OR_EMPTY(Constants.TAXFILER_MESSAGE_BASE+15, "taxfiler.mainstatus_or_substatus_null_or_empty"),
+	SETTINGS_NULL_OR_EMPTY(Constants.TAXFILER_MESSAGE_BASE+16, "taxfiler.settingstype_null_or_empty"),
+	TAX_NOT_FILED_THIS_YEAR(Constants.TAXFILER_MESSAGE_BASE+17, "taxfiler.tax_not_filed_for_this_year");
 	private int key;
 	private String value;
 	

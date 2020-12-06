@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -28,71 +29,82 @@ public class TaxFiledYearEntity {
 
 	private int year;
 
+	@Column(name = "main_status")
+	private String mainStatus;
+
+	@Column(name = "sub_status")
+	private String subStatus;
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "users_id", referencedColumnName = "id")
-	//@JsonManagedReference
+	// @JsonManagedReference
 	@JsonBackReference
 	private UserEntity userEntity;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	//@JsonBackReference
+	// @JsonBackReference
 	@JsonManagedReference
 	private BasicInfoEntity basicInfo;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	//@JsonBackReference
+	// @JsonBackReference
 	@JsonManagedReference
 	private ContactDetailsEntity contactDetails;
 
 	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	//@JsonBackReference
+	// @JsonBackReference
 	@JsonManagedReference
 	private Set<ResidencyDetailsForStatesEntity> residencyDetailsforStatesList;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	//@JsonBackReference
+	// @JsonBackReference
 	@JsonManagedReference
 	private SpouseDetailsEntity spouseDetails;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	//@JsonBackReference
+	// @JsonBackReference
 	@JsonManagedReference
 	private DependentInformationEntity dependentInformation;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	//@JsonBackReference
+	// @JsonBackReference
 	@JsonManagedReference
 	private BankDetailsEntity bankDetails;
 
 	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	//@JsonBackReference
+	// @JsonBackReference
 	@JsonManagedReference
 	private Set<OtherIncomeInformatonEntity> otherIncomeInformatonEntityList;
 
 	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	//@JsonBackReference
+	// @JsonBackReference
 	@JsonManagedReference
 	private Set<AdditionalInformationEntity> additionalInformationEntityList;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	//@JsonBackReference
+	// @JsonBackReference
 	@JsonManagedReference
 	private FbarEntity fbarEntity;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	//@JsonBackReference
+	// @JsonBackReference
 	@JsonManagedReference
 	private OtherInformationEntity otherInformationEntity;
 
-	@OneToMany(/*orphanRemoval = true,*/ mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	//@JsonBackReference
+	@OneToMany(/* orphanRemoval = true, */ mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	// @JsonBackReference
 	@JsonManagedReference
 	private Set<UploadFilesEntity> UploadFilesEntityList;
 
 	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	//@JsonBackReference
+	// @JsonBackReference
 	@JsonManagedReference
 	private Set<MessagesEntity> messagesEntityList;
+
+	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	// @JsonBackReference
+	@JsonManagedReference
+	private RentalIncomeEntity rentalIncome;
 
 	public int getId() {
 		return id;
@@ -135,7 +147,7 @@ public class TaxFiledYearEntity {
 	}
 
 	public Set<ResidencyDetailsForStatesEntity> getResidencyDetailsforStatesList() {
-		if(null == residencyDetailsforStatesList) {
+		if (null == residencyDetailsforStatesList) {
 			residencyDetailsforStatesList = new HashSet<>();
 		}
 		return residencyDetailsforStatesList;
@@ -215,6 +227,30 @@ public class TaxFiledYearEntity {
 
 	public void setMessagesEntityList(Set<MessagesEntity> messagesEntityList) {
 		this.messagesEntityList = messagesEntityList;
+	}
+
+	public String getMainStatus() {
+		return mainStatus;
+	}
+
+	public void setMainStatus(String mainStatus) {
+		this.mainStatus = mainStatus;
+	}
+
+	public String getSubStatus() {
+		return subStatus;
+	}
+
+	public void setSubStatus(String subStatus) {
+		this.subStatus = subStatus;
+	}
+
+	public RentalIncomeEntity getRentalIncome() {
+		return rentalIncome;
+	}
+
+	public void setRentalIncome(RentalIncomeEntity rentalIncome) {
+		this.rentalIncome = rentalIncome;
 	}
 
 }

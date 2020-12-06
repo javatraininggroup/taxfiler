@@ -1,7 +1,9 @@
 package com.company.model;
 
+import com.company.taxfiler.dao.RentalIncomeEntity;
+
 public class ClientModel {
-	
+
 	private ClientDetails clientDetails;
 	private BasicInformation basicInformation;
 	private ContactDetails contactDetails;
@@ -12,8 +14,7 @@ public class ClientModel {
 	private AdditionalInfoModel additionalInfoModel;
 	private Fbar fbar;
 	private OtherInformation otherInformation;
-	
-	
+	private RentalIncomeEntity rentalIncomeModel;
 
 	public ClientDetails getClientDetails() {
 		return clientDetails;
@@ -93,6 +94,14 @@ public class ClientModel {
 
 	public void setOtherInformation(OtherInformation otherInformation) {
 		this.otherInformation = otherInformation;
+	}
+
+	public RentalIncomeEntity getRentalIncomeModel() {
+		return rentalIncomeModel;
+	}
+
+	public void setRentalIncomeModel(RentalIncomeEntity rentalIncomeModel) {
+		this.rentalIncomeModel = rentalIncomeModel;
 	}
 
 }

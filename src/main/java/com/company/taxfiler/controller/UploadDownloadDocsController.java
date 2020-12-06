@@ -49,8 +49,8 @@ public class UploadDownloadDocsController {
 	private TaxfilerUtil taxfilerUtil;
 	@Autowired
 	private HttpServletRequest httpServletRequest;
-	private final static String DEFAULT_MAIN_STATUS = "SCHEDULING";
-	private final static String DEFAULT_SUB_STATUS = "PENDING";
+	// private final static String DEFAULT_MAIN_STATUS = "SCHEDULING";
+	// private final static String DEFAULT_SUB_STATUS = "PENDING";
 
 	@PostMapping(Constants.POST_UPLOAD_DOCS_ENDPOINT)
 	public Object uploadDocs(@RequestParam(Constants.FILE_NAME) String fileName,
@@ -85,8 +85,8 @@ public class UploadDownloadDocsController {
 							uploadFilesEntity.setDate(new Date().toString());
 							uploadFilesEntity.setDownloadId(String.valueOf(System.nanoTime()));
 							uploadFilesEntity.setTaxFileYear(taxFiledYearEntity);
-							uploadFilesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
-							uploadFilesEntity.setSubStatus(DEFAULT_SUB_STATUS);
+							// uploadFilesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
+							// uploadFilesEntity.setSubStatus(DEFAULT_SUB_STATUS);
 							uploadFilesEntitySet.add(uploadFilesEntity);
 							isTaxYearAvailable = true;
 							return prepareFilesDetailsForDownload(uploadFilesEntitySet);
@@ -116,8 +116,8 @@ public class UploadDownloadDocsController {
 					uploadFilesEntity.setDate(new Date().toString());
 					uploadFilesEntity.setDownloadId(String.valueOf(System.nanoTime()));
 					uploadFilesEntity.setTaxFileYear(taxFiledYearEntity);
-					uploadFilesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
-					uploadFilesEntity.setSubStatus(DEFAULT_SUB_STATUS);
+					// uploadFilesEntity.setMainStatus(DEFAULT_MAIN_STATUS);
+					// uploadFilesEntity.setSubStatus(DEFAULT_SUB_STATUS);
 					uploadFilesEntitySet.add(uploadFilesEntity);
 					taxFiledYearEntityList.add(taxFiledYearEntity);
 					taxFiledYearEntity.getUploadFilesEntityList().addAll(uploadFilesEntitySet);
@@ -134,7 +134,7 @@ public class UploadDownloadDocsController {
 		} else {
 			return taxfilerUtil.getErrorResponse(MessageCode.FAILED_TO_UPLOAD_BECAUSE_FILE_WAS_EMPTY);
 		}
-		return taxfilerUtil.getSuccessResponse("success");
+		return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
 	}
 
 	@GetMapping(Constants.GET_DOWNLOAD_FILE_ENDPOINT)
@@ -203,7 +203,7 @@ public class UploadDownloadDocsController {
 			e.printStackTrace();
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
-		return new HashSet<>();
+		return taxfilerUtil.getSuccessResponse("details not available");
 
 	}
 
