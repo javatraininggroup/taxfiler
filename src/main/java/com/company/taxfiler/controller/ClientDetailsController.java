@@ -173,6 +173,7 @@ public class ClientDetailsController {
 								dependentInformation.setName(name);
 								dependentInformation.setSsnOrItin(dependentInformationEntity.getSsnitin());
 
+								if(null != dependentInformationEntity.getDateOfBirth())
 								dependentInformation
 										.setDateOfBirth(dependentInformationEntity.getDateOfBirth().toString());
 
@@ -202,8 +203,10 @@ public class ClientDetailsController {
 											residencyDetailsforStates.setTaxYear(year);
 
 											TaxYearInfo taxYearInfo = new TaxYearInfo();
+											if(null != residencyDetailsForStatesEntity.getEndDate())
 											taxYearInfo.setEndDate(
 													residencyDetailsForStatesEntity.getEndDate().toString());
+											if(null != residencyDetailsForStatesEntity.getStartDate())
 											taxYearInfo.setStartDate(
 													residencyDetailsForStatesEntity.getStartDate().toString());
 											taxYearInfo.setStateResided(
@@ -315,9 +318,12 @@ public class ClientDetailsController {
 
 								LOGGER.info("getting existing basicInfoEntity details");
 								basicInformation.setCitizenship(basicInfoEntity.getCitizenship());
+								if(null != basicInfoEntity.getDob())
 								basicInformation.setDateOfBirth(convertDateToString(basicInfoEntity.getDob()));
+								if(null != basicInfoEntity.getDateOfMarriage())
 								basicInformation
 										.setDateOfMarriage(convertDateToString(basicInfoEntity.getDateOfMarriage()));
+								if(null != basicInfoEntity.getFirstDateOfEntryInUS())
 								basicInformation.setFirstDateOfEntyInUS(
 										convertDateToString(basicInfoEntity.getFirstDateOfEntryInUS()));
 								basicInformation.setFilingStatus(basicInfoEntity.getFilingStatus());
@@ -363,8 +369,10 @@ public class ClientDetailsController {
 											residencyDetailsforStates.setTaxYear(year);
 
 											TaxYearInfo taxYearInfo = new TaxYearInfo();
+											if(null != residencyDetailsForStatesEntity.getEndDate())
 											taxYearInfo.setEndDate(
 													residencyDetailsForStatesEntity.getEndDate().toString());
+											if(null != residencyDetailsForStatesEntity.getStartDate())
 											taxYearInfo.setStartDate(
 													residencyDetailsForStatesEntity.getStartDate().toString());
 											taxYearInfo.setStateResided(
@@ -398,12 +406,14 @@ public class ClientDetailsController {
 
 								spouseDetails.setSsnOrItin(spouseDetailsEntity.getSsnOrItin());
 
+								if(null != spouseDetailsEntity.getDateOfBirth())
 								spouseDetails.setDateOfBirth(convertDateToString(spouseDetailsEntity.getDateOfBirth()));
 
 								spouseDetails.setCheckIfITINToBeApplied(spouseDetailsEntity.isCheckIfITINToBeApplied());
 								spouseDetails.setCheckIfITINToBeRenewed(spouseDetailsEntity.isCheckIfITINToBeRenewed());
 								spouseDetails.setITINRenewed(spouseDetailsEntity.isITINRenewed());
 
+								if(null != spouseDetailsEntity.getEntryDateIntoUS())
 								spouseDetails.setEntryDateIntoUS(
 										convertDateToString(spouseDetailsEntity.getEntryDateIntoUS()));
 								spouseDetails.setOccupation(spouseDetailsEntity.getOccupation());
@@ -422,8 +432,10 @@ public class ClientDetailsController {
 											residencyDetailsforStates.setTaxYear(year);
 
 											TaxYearInfo taxYearInfo = new TaxYearInfo();
+											if(null != residencyDetailsForStatesEntity.getEndDate())
 											taxYearInfo.setEndDate(
 													residencyDetailsForStatesEntity.getEndDate().toString());
+											if(null != residencyDetailsForStatesEntity.getStartDate())
 											taxYearInfo.setStartDate(
 													residencyDetailsForStatesEntity.getStartDate().toString());
 											taxYearInfo.setStateResided(

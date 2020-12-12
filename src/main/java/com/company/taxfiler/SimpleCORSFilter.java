@@ -27,11 +27,18 @@ public class SimpleCORSFilter implements Filter {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
 		response.setHeader("Access-Control-Max-Age", "3600");
+		
 		String access = request.getHeader("Access-Control-Request-Headers");
 		if (access == null) {
 			access = "default";
 		}
 		response.setHeader("Access-Control-Allow-Headers", access);
+		
+		//added below recently
+		response.setHeader("Accept", "*/*");
+		response.setHeader("Content-Type", "*/*");
+		response.setHeader("X-Requested-With", request.getHeader("X-Requested-With"));
+		response.setHeader("Access-Control-Expose-Headers", "*");
 
 		if (request.getMethod().equals("OPTIONS")) {
 			response.setStatus(HttpServletResponse.SC_ACCEPTED);

@@ -65,12 +65,10 @@ public class EmployeeServicesController {
 				LOGGER.info("mainStatus={}, subStatus={}", mainStatus, subStatus);
 				allCustomersData = userRepository.findAll();
 				if (!allCustomersData.isEmpty()) {
+					LOGGER.info("no of customers {}",allCustomersData.size());
 					for (UserEntity entity : allCustomersData) {
+						LOGGER.info("emailid {}", entity.getEmail());
 						EmployeePortalInformationModel employeePortalModel = new EmployeePortalInformationModel();
-						employeePortalModel.setEmail(entity.getEmail());
-						employeePortalModel.setUsername(entity.getName());
-						employeePortalModel.setId(entity.getId());
-						employeePortalModel.setTimezone(entity.getTimezone());
 						Set<TaxFiledYearEntity> taxFiledYearEntityList = entity.getTaxFiledYearList();
 						if (null != taxFiledYearEntityList && taxFiledYearEntityList.size() > 0) {
 							for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
@@ -78,6 +76,12 @@ public class EmployeeServicesController {
 										&& taxFiledYearEntity.getMainStatus().equalsIgnoreCase(mainStatus)
 										&& (taxFiledYearEntity.getSubStatus().equalsIgnoreCase(subStatus)
 												|| "ALL".equalsIgnoreCase(subStatus))) {
+									
+									employeePortalModel.setEmail(entity.getEmail());
+									employeePortalModel.setUsername(entity.getName());
+									employeePortalModel.setId(entity.getId());
+									employeePortalModel.setTimezone(entity.getTimezone());
+									
 									List<MessageResponseModel> messagesList = new ArrayList<>();
 									List<DocsResponseModel> uploadedFilesList = new ArrayList<>();
 									Set<MessagesEntity> messagesSet = taxFiledYearEntity.getMessagesEntityList();
@@ -99,12 +103,17 @@ public class EmployeeServicesController {
 										uploadedFilesList.add(docsResponseModelObj);
 									}
 									employeePortalModel.setUploadedFilesList(uploadedFilesList);
+									employeePortalInfoModelList.add(employeePortalModel);
 								}
 							}
 						}
-						employeePortalInfoModelList.add(employeePortalModel);
+						//employeePortalInfoModelList.add(employeePortalModel);
 					}
-					return employeePortalInfoModelList;
+					if (employeePortalInfoModelList.isEmpty()) {
+						return taxfilerUtil.getSuccessResponse("details not available");
+					} else {
+						return employeePortalInfoModelList;
+					}
 				} else {
 					return taxfilerUtil.getSuccessResponse("details not available");
 				}

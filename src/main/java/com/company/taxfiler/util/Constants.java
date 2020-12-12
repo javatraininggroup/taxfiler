@@ -43,5 +43,8 @@ public class Constants {
 	public static final String GET_ALL_UPLOAD_DOCS_ENDPOINT = "/docs/{user_id}/{tax_year}";
 	public static final String UPDATE_USER_INFO_STATUS_BY_EMPLOYEE_ENDPOINT = "/employee/updateuser/{user_id}/{tax_year}/status";
 	public static final String RENTAL_INCOME_DETAIL_ENDPOINT = "/updateuser/{user_id}/{tax_year}/rentalIncome";
+	
+	public static final String PUT_EXPENSES_CONTRIBUTION_INFORMATION_ENDPOINT = "/updateuser/{user_id}/{tax_year}/expensesAndContribution";
+	public static final String GET_EXPENSES_CONTRIBUTION_INFORMATION_ENDPOINT = "/updateuser/{user_id}/{tax_year}/expensesAndContribution";
 
 }

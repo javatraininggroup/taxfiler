@@ -40,14 +40,6 @@ public class BankDetails {
 		this.typeOfAccount = typeOfAccount;
 	}
 
-	public Long getUsBankAccountNumber() {
-		return usBankAccountNumber;
-	}
-
-	public void setUsBankAccountNumber(Long usBankAccountNumber) {
-		this.usBankAccountNumber = usBankAccountNumber;
-	}
-
 	public String getNameOfTheAccount() {
 		return nameOfTheAccount;
 	}

@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -30,10 +32,32 @@ public class TaxFiledYearEntity {
 	private int year;
 
 	@Column(name = "main_status")
+	//@ColumnDefault("SCHEDULING")
 	private String mainStatus;
 
 	@Column(name = "sub_status")
+	//@ColumnDefault("NEW_REGISTER")
 	private String subStatus;
+	
+	@PrePersist
+	protected void onCreate() {
+		if (mainStatus == null) {
+			mainStatus = "SCHEDULING";
+		}
+		if (subStatus == null) {
+			subStatus = "NEW_REGISTER";
+		}
+	}
+	
+	@PreUpdate
+	protected void onUpdate() {
+		if (mainStatus == null) {
+			mainStatus = "SCHEDULING";
+		}
+		if (subStatus == null) {
+			subStatus = "NEW_REGISTER";
+		}
+	}
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "users_id", referencedColumnName = "id")
@@ -105,6 +129,16 @@ public class TaxFiledYearEntity {
 	// @JsonBackReference
 	@JsonManagedReference
 	private RentalIncomeEntity rentalIncome;
+
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	// @JsonBackReference
+	@JsonManagedReference
+	private Set<ExpensesEntity> expensesEntityList;
+
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	// @JsonBackReference
+	@JsonManagedReference
+	private Set<ContributionEntity> contributionEntityList;
 
 	public int getId() {
 		return id;
@@ -251,6 +285,22 @@ public class TaxFiledYearEntity {
 
 	public void setRentalIncome(RentalIncomeEntity rentalIncome) {
 		this.rentalIncome = rentalIncome;
+	}
+
+	public Set<ExpensesEntity> getExpensesEntityList() {
+		return expensesEntityList;
+	}
+
+	public void setExpensesEntityList(Set<ExpensesEntity> expensesEntityList) {
+		this.expensesEntityList = expensesEntityList;
+	}
+
+	public Set<ContributionEntity> getContributionEntityList() {
+		return contributionEntityList;
+	}
+
+	public void setContributionEntityList(Set<ContributionEntity> contributionEntityList) {
+		this.contributionEntityList = contributionEntityList;
 	}
 
 }
