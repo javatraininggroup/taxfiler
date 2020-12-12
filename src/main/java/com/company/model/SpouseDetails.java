@@ -19,6 +19,7 @@ public class SpouseDetails {
 	private String spouseWorkStatusComments;
 	private boolean didYouWorkMoreThanOneEmployerInXX;
 	private String moreThanOneEmployerWorkStatusComments;
+	private String typeOfVisa;
 
 	public Name getName() {
 		return name;
@@ -146,6 +147,14 @@ public class SpouseDetails {
 
 	public void setMoreThanOneEmployerWorkStatusComments(String moreThanOneEmployerWorkStatusComments) {
 		this.moreThanOneEmployerWorkStatusComments = moreThanOneEmployerWorkStatusComments;
+	}
+
+	public String getTypeOfVisa() {
+		return typeOfVisa;
+	}
+
+	public void setTypeOfVisa(String typeOfVisa) {
+		this.typeOfVisa = typeOfVisa;
 	}
 
 }

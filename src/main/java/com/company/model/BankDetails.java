@@ -24,11 +24,11 @@ public class BankDetails {
 		this.bankRoutingNumber = bankRoutingNumber;
 	}
 
-	public Long getUSBankAccountNumber() {
+	public Long getUsBankAccountNumber() {
 		return usBankAccountNumber;
 	}
 
-	public void setUSBankAccountNumber(Long usBankAccountNumber) {
+	public void setUsBankAccountNumber(Long usBankAccountNumber) {
 		this.usBankAccountNumber = usBankAccountNumber;
 	}
 

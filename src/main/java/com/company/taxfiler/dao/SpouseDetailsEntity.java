@@ -20,7 +20,7 @@ public class SpouseDetailsEntity {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
-	//@JsonManagedReference
+	// @JsonManagedReference
 	@JsonBackReference
 	private TaxFiledYearEntity taxFileYear;
 
@@ -62,12 +62,14 @@ public class SpouseDetailsEntity {
 	private boolean didYourSpouseisWorkedinXX;
 	@Column(name = "is_living_more_than_6months")
 	private boolean isLivingMoreThan6Months;
-	@Column(name="spouse_work_status_comments")
+	@Column(name = "spouse_work_status_comments")
 	private String spouseWorkStatusComments;
-	@Column(name="did_you_work_more_than_one_employer_in_XX")
+	@Column(name = "did_you_work_more_than_one_employer_in_XX")
 	private boolean didYouWorkMoreThanOneEmployerInXX;
-	@Column(name="more_than_one_employer_work_status_comments")
+	@Column(name = "more_than_one_employer_work_status_comments")
 	private String moreThanOneEmployerWorkStatusComments;
+	@Column(name = "type_of_visa")
+	private String typeOfVisa;
 
 	public String getLastName() {
 		return lastName;
@@ -214,7 +216,13 @@ public class SpouseDetailsEntity {
 	public void setMoreThanOneEmployerWorkStatusComments(String moreThanOneEmployerWorkStatusComments) {
 		this.moreThanOneEmployerWorkStatusComments = moreThanOneEmployerWorkStatusComments;
 	}
-	
-	
+
+	public String getTypeOfVisa() {
+		return typeOfVisa;
+	}
+
+	public void setTypeOfVisa(String typeOfVisa) {
+		this.typeOfVisa = typeOfVisa;
+	}
 
 }

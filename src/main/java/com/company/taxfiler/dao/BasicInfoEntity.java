@@ -46,6 +46,10 @@ public class BasicInfoEntity {
 	@Column(name = "type_of_visa")
 	private String typeOfVisa;
 	private String citizenship;
+	@Column(name="did_you_work_more_than_one_employer_in_XX")
+	private boolean didYouWorkMoreThanOneEmployerInXX;
+	@Column(name="more_than_one_employer_work_status_comments")
+	private String moreThanOneEmployerWorkStatusComments;
 
 	public TaxFiledYearEntity getTaxFileYear() {
 		return taxFileYear;
@@ -150,5 +154,23 @@ public class BasicInfoEntity {
 	public void setFilingStatus(String filingStatus) {
 		this.filingStatus = filingStatus;
 	}
+
+	public boolean isDidYouWorkMoreThanOneEmployerInXX() {
+		return didYouWorkMoreThanOneEmployerInXX;
+	}
+
+	public void setDidYouWorkMoreThanOneEmployerInXX(boolean didYouWorkMoreThanOneEmployerInXX) {
+		this.didYouWorkMoreThanOneEmployerInXX = didYouWorkMoreThanOneEmployerInXX;
+	}
+
+	public String getMoreThanOneEmployerWorkStatusComments() {
+		return moreThanOneEmployerWorkStatusComments;
+	}
+
+	public void setMoreThanOneEmployerWorkStatusComments(String moreThanOneEmployerWorkStatusComments) {
+		this.moreThanOneEmployerWorkStatusComments = moreThanOneEmployerWorkStatusComments;
+	}
+	
+	
 
 }

@@ -13,6 +13,8 @@ public class BasicInformation {
 	private String firstDateOfEntyInUS;
 	private String typeOfVisa;
 	private String citizenship;
+	private boolean didYouWorkMoreThanOneEmployerInXX;
+	private String moreThanOneEmployerWorkStatusComments;
 
 	private ContactDetails contactDetails;
 	private List<ResidencyDetailsforStates> residencyDetailsforStates;
@@ -107,6 +109,22 @@ public class BasicInformation {
 
 	public String getFilingStatus() {
 		return filingStatus;
+	}
+
+	public boolean isDidYouWorkMoreThanOneEmployerInXX() {
+		return didYouWorkMoreThanOneEmployerInXX;
+	}
+
+	public void setDidYouWorkMoreThanOneEmployerInXX(boolean didYouWorkMoreThanOneEmployerInXX) {
+		this.didYouWorkMoreThanOneEmployerInXX = didYouWorkMoreThanOneEmployerInXX;
+	}
+
+	public String getMoreThanOneEmployerWorkStatusComments() {
+		return moreThanOneEmployerWorkStatusComments;
+	}
+
+	public void setMoreThanOneEmployerWorkStatusComments(String moreThanOneEmployerWorkStatusComments) {
+		this.moreThanOneEmployerWorkStatusComments = moreThanOneEmployerWorkStatusComments;
 	}
 
 }
