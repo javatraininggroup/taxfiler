@@ -123,6 +123,7 @@ public class TaxfilerUtil {
 		response.setRole(userEntity.getRole());
 		response.setSessionId(sessionId);
 		response.setUsername(userEntity.getName());
+		response.setAuthCode(userEntity.getAuthCode());
 		return response;
 
 	}
@@ -162,10 +163,54 @@ public class TaxfilerUtil {
 	public static TtlHashMap getTtlhashmap() {
 		return ttlHashMap;
 	}
-
+	
+	//this is for employee sessionid check when updating client details
 	public Object verifySessionId(HttpServletRequest request) throws IOException {
 		if (StringUtils.isNotBlank(request.getHeader("sessionId"))) {
 			if (null == getTtlhashmap().get(request.getHeader("sessionId"))) {
+				return getErrorResponse(MessageCode.INVALID_SESSION_ID);
+			}
+			return true;
+		} else {
+			return getErrorResponse(MessageCode.INVALID_SESSION_ID);
+		}
+	}
+
+	public Object verifySessionId(HttpServletRequest request, int userId) throws IOException {
+		if (StringUtils.isNotBlank(request.getHeader("sessionId"))) {
+			if (null == getTtlhashmap().get(request.getHeader("sessionId"))) {
+				return getErrorResponse(MessageCode.INVALID_SESSION_ID);
+			}else {
+				int cachedUserId = (int)getTtlhashmap().get(request.getHeader("sessionId"));
+				if(cachedUserId != userId) {
+					return getErrorResponse(MessageCode.INVALID_SESSION_ID);
+				}
+			}
+			return true;
+		} else {
+			return getErrorResponse(MessageCode.INVALID_SESSION_ID);
+		}
+	}
+	
+	public Object verifySessionId(String sessionId, int userId) throws IOException {
+		if (StringUtils.isNotBlank(sessionId)) {
+			if (null == getTtlhashmap().get(sessionId)) {
+				return getErrorResponse(MessageCode.INVALID_SESSION_ID);
+			}else {
+				int cachedUserId = (int)getTtlhashmap().get(sessionId);
+				if(cachedUserId != userId) {
+					return getErrorResponse(MessageCode.INVALID_SESSION_ID);
+				}
+			}
+			return true;
+		} else {
+			return getErrorResponse(MessageCode.INVALID_SESSION_ID);
+		}
+	}
+	
+	public Object verifySessionId(String sessionId) throws IOException {
+		if (StringUtils.isNotBlank(sessionId)) {
+			if (null == getTtlhashmap().get(sessionId)) {
 				return getErrorResponse(MessageCode.INVALID_SESSION_ID);
 			}
 			return true;

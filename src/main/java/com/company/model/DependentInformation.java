@@ -17,6 +17,8 @@ public class DependentInformation {
 	private List<ResidencyDetailsforStates> residencyDetailsforStates;
 	private boolean ifYouAndYourSpouseAreWorking;
 	private DayCareModel dayCareDetails;
+	private int noOfDaysStayedInUS;
+	private int id;
 
 	public Name getName() {
 		return name;
@@ -121,6 +123,22 @@ public class DependentInformation {
 
 	public void setDayCareDetails(DayCareModel dayCareDetails) {
 		this.dayCareDetails = dayCareDetails;
+	}
+
+	public int getNoOfDaysStayedInUS() {
+		return noOfDaysStayedInUS;
+	}
+
+	public void setNoOfDaysStayedInUS(int noOfDaysStayedInUS) {
+		this.noOfDaysStayedInUS = noOfDaysStayedInUS;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

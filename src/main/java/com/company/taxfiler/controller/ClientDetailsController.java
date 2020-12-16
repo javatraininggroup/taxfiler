@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -28,13 +30,16 @@ import com.company.model.BasicInformation;
 import com.company.model.ClientDetails;
 import com.company.model.ClientModel;
 import com.company.model.ContactDetails;
+import com.company.model.DayCareModel;
 import com.company.model.DependentInformation;
 import com.company.model.DownloadModel;
+import com.company.model.ExpensesAndConntributionResponseModel;
 import com.company.model.Fbar;
 import com.company.model.Name;
 import com.company.model.OtherIncomeInfoData;
 import com.company.model.OtherIncomeInfoModel;
 import com.company.model.OtherInformation;
+import com.company.model.RentalIncomeModel;
 import com.company.model.ResidencyDetailsforStates;
 import com.company.model.SpouseDetails;
 import com.company.model.TaxYearInfo;
@@ -42,6 +47,7 @@ import com.company.taxfiler.dao.AdditionalInformationEntity;
 import com.company.taxfiler.dao.BankDetailsEntity;
 import com.company.taxfiler.dao.BasicInfoEntity;
 import com.company.taxfiler.dao.ContactDetailsEntity;
+import com.company.taxfiler.dao.DayCareEntity;
 import com.company.taxfiler.dao.DependentInformationEntity;
 import com.company.taxfiler.dao.FbarEntity;
 import com.company.taxfiler.dao.MessagesEntity;
@@ -81,7 +87,7 @@ public class ClientDetailsController {
 			throws IOException {
 		LOGGER.info("Entering into Client details");
 
-		DependentInformation dependentInformation = new DependentInformation();
+		Set<DependentInformation> dependentInformationList = new HashSet<>();
 		ClientModel clientModel = new ClientModel();
 		OtherIncomeInfoModel otherIncomeInfoModel = new OtherIncomeInfoModel();
 		Set<OtherIncomeInfoData> otherIncomeInfoDataList = new HashSet<>();
@@ -157,70 +163,145 @@ public class ClientDetailsController {
 
 							}
 							clientModel.setClientDetails(clientDetails);
+							
+							
+							Map<Long, ResidencyDetailsforStates> residencyDetailsforStatesSetModel = new HashMap<>();
+							Map<Long, ResidencyDetailsforStates> spouseResidencyDetailsforStatesSetModel = new HashMap<>();
+							Map<Long, ResidencyDetailsforStates> dependentResidencyDetailsforStatesSetModel = new HashMap<>();
+							
+							
+							//List<ResidencyDetailsforStates> dependentResidencyDetailsforStatesSetModel = new ArrayList<>();
+							Set<TaxYearInfo> taxYearInfoList = null;
+							Set<TaxYearInfo> spouseTaxYearInfoList = null;
+							Set<TaxYearInfo> dependentTaxYearInfoList = null;
+							
+							//get residency states details
+							if (null != residencyDetailsForStatesEntitySet
+									&& residencyDetailsForStatesEntitySet.size() > 0) {
+																								
+								ResidencyDetailsforStates basicModel = null;
+								ResidencyDetailsforStates spouseModel = null;
+								ResidencyDetailsforStates dependentModel = null;
+								for (ResidencyDetailsForStatesEntity entity : residencyDetailsForStatesEntitySet) {
+									if (entity.getTypeOfResidencyDetails().equalsIgnoreCase("basic")) {
+										if(null != residencyDetailsforStatesSetModel.get(entity.getTaxYear())){
+											basicModel = residencyDetailsforStatesSetModel.get(entity.getTaxYear());
+											taxYearInfoList = basicModel.getTaxYearInfoList();
+										}else {
+											basicModel = new ResidencyDetailsforStates();
+											taxYearInfoList = new HashSet<>();
+											basicModel.setTaxYear((int) entity.getTaxYear());
+										}
+										TaxYearInfo info = new TaxYearInfo();
+										if (null != entity.getStartDate())
+											info.setStartDate(convertDateToString(entity.getStartDate()));
+										if (null != entity.getEndDate())
+											info.setEndDate(convertDateToString(entity.getEndDate()));
+										info.setStateResided(entity.getStatesResided());
+										taxYearInfoList.add(info);
+										basicModel.setTaxYearInfoList(taxYearInfoList);
+										residencyDetailsforStatesSetModel.put(entity.getTaxYear(),basicModel);
+									} else if (entity.getTypeOfResidencyDetails().equalsIgnoreCase("spouse")) {
+										
+										if(null != spouseResidencyDetailsforStatesSetModel.get(entity.getTaxYear())){
+											spouseModel = spouseResidencyDetailsforStatesSetModel.get(entity.getTaxYear());
+											spouseTaxYearInfoList = spouseModel.getTaxYearInfoList();
+										}else {
+											spouseModel = new ResidencyDetailsforStates();
+											spouseTaxYearInfoList = new HashSet<>();
+											spouseModel.setTaxYear((int) entity.getTaxYear());
+										}
+										TaxYearInfo info = new TaxYearInfo();
+										if (null != entity.getStartDate())
+											info.setStartDate(convertDateToString(entity.getStartDate()));
+										if (null != entity.getEndDate())
+											info.setEndDate(convertDateToString(entity.getEndDate()));
+										info.setStateResided(entity.getStatesResided());
+										spouseTaxYearInfoList.add(info);
+										spouseModel.setTaxYearInfoList(spouseTaxYearInfoList);
+										spouseResidencyDetailsforStatesSetModel.put(entity.getTaxYear(),spouseModel);
+									}else if (entity.getTypeOfResidencyDetails().equalsIgnoreCase("dependent")) {
+										if(null != dependentResidencyDetailsforStatesSetModel.get(entity.getTaxYear())){
+											dependentModel = dependentResidencyDetailsforStatesSetModel.get(entity.getTaxYear());
+											dependentTaxYearInfoList = dependentModel.getTaxYearInfoList();
+										}else {
+											dependentModel = new ResidencyDetailsforStates();
+											dependentTaxYearInfoList = new HashSet<>();
+											dependentModel.setTaxYear((int) entity.getTaxYear());
+										}
+										TaxYearInfo info = new TaxYearInfo();
+										if (null != entity.getStartDate())
+											info.setStartDate(convertDateToString(entity.getStartDate()));
+										if (null != entity.getEndDate())
+											info.setEndDate(convertDateToString(entity.getEndDate()));
+										info.setStateResided(entity.getStatesResided());
+										dependentTaxYearInfoList.add(info);
+										dependentModel.setTaxYearInfoList(dependentTaxYearInfoList);
+										dependentResidencyDetailsforStatesSetModel.put(entity.getTaxYear(),dependentModel);
+									}
+								}							
+							}
+							
 							/***************
 							 * START DependentInformationEntity
 							 *************/
-							DependentInformationEntity dependentInformationEntity = taxFiledYearEntity
-									.getDependentInformation();
-							if (null != dependentInformationEntity) {
+							Set<DependentInformationEntity> dependentInformationEntityList = taxFiledYearEntity
+									.getDependentInformationList();
+							if (null != dependentInformationEntityList && !dependentInformationEntityList.isEmpty()) {
 
 								LOGGER.info("getting existing dependentInformation details");
+								
+								for (DependentInformationEntity dependentInformationEntity : dependentInformationEntityList) {
+									DependentInformation dependentInformation = new DependentInformation();
+									Name name = new Name();
+									name.setFirstName(dependentInformationEntity.getFirstName());
+									name.setMiddleName(dependentInformationEntity.getMiddleName());
+									name.setLastName(dependentInformationEntity.getLastName());
+									dependentInformation.setName(name);
+									dependentInformation.setSsnOrItin(dependentInformationEntity.getSsnitin());
+									dependentInformation.setId(dependentInformationEntity.getId());
 
-								Name name = new Name();
-								name.setFirstName(dependentInformationEntity.getFirstName());
-								name.setMiddleName(dependentInformationEntity.getMiddleName());
-								name.setLastName(dependentInformationEntity.getLastName());
-								dependentInformation.setName(name);
-								dependentInformation.setSsnOrItin(dependentInformationEntity.getSsnitin());
+									if (null != dependentInformationEntity.getDateOfBirth())
+										dependentInformation.setDateOfBirth(
+												convertDateToString(dependentInformationEntity.getDateOfBirth()));
 
-								if (null != dependentInformationEntity.getDateOfBirth())
-									dependentInformation.setDateOfBirth(
-											convertDateToString(dependentInformationEntity.getDateOfBirth()));
+									dependentInformation.setCheckIfITINToBeApplied(
+											dependentInformationEntity.isCheckIfITINToBeApplied());
+									dependentInformation.setCheckIfITINToBeRenewed(
+											dependentInformationEntity.isCheckIfITINToBeRenewed());
+									dependentInformation.setITINRenewed(dependentInformationEntity.isITINRenewed());
 
-								dependentInformation.setCheckIfITINToBeApplied(
-										dependentInformationEntity.isCheckIfITINToBeApplied());
-								dependentInformation.setCheckIfITINToBeRenewed(
-										dependentInformationEntity.isCheckIfITINToBeRenewed());
-								dependentInformation.setITINRenewed(dependentInformationEntity.isITINRenewed());
+									dependentInformation.setRelationship(dependentInformationEntity.getRelationship());
+									dependentInformation.setVisaStatus(dependentInformationEntity.getVisaStatus());
+									dependentInformation.setIfYouAndYourSpouseAreWorking(
+											dependentInformationEntity.isYouAndSpouseWorking());
+									dependentInformation.setLivingMoreThan6Months(
+											dependentInformationEntity.isLivedForMoreThan06Months());
+									dependentInformation.setIfProvidedMoreThan50PERSupportDuringTheYearXX(
+											dependentInformation.isIfProvidedMoreThan50PERSupportDuringTheYearXX());
+									dependentInformation
+											.setNoOfDaysStayedInUS(dependentInformationEntity.getNoOfDaysStayedInUS());
+									dependentInformation.setResidencyDetailsforStates(
+											new ArrayList<>(dependentResidencyDetailsforStatesSetModel.values()));
 
-								dependentInformation.setRelationship(dependentInformationEntity.getRelationship());
-								dependentInformation.setVisaStatus(dependentInformationEntity.getVisaStatus());
-								dependentInformation.setIfYouAndYourSpouseAreWorking(
-										dependentInformationEntity.isYouAndSpouseWorking());
-								dependentInformation.setLivingMoreThan6Months(
-										dependentInformationEntity.isLivedForMoreThan06Months());
-								dependentInformation.setIfProvidedMoreThan50PERSupportDuringTheYearXX(
-										dependentInformation.isIfProvidedMoreThan50PERSupportDuringTheYearXX());
-
-								if (null != residencyDetailsForStatesEntitySet
-										&& residencyDetailsForStatesEntitySet.size() > 0) {
-									List<ResidencyDetailsforStates> residencyDetailsforStatesList = new ArrayList<>();
-									Set<TaxYearInfo> taxYearInfoList = new HashSet<>();
-									ResidencyDetailsforStates residencyDetailsforStates = new ResidencyDetailsforStates();
-									for (ResidencyDetailsForStatesEntity residencyDetailsForStatesEntity : residencyDetailsForStatesEntitySet) {
-										if (residencyDetailsForStatesEntity.getTypeOfResidencyDetails()
-												.equals("dependent")) {
-											residencyDetailsforStates
-													.setTaxYear((int) residencyDetailsForStatesEntity.getTaxYear());
-
-											TaxYearInfo taxYearInfo = new TaxYearInfo();
-											if (null != residencyDetailsForStatesEntity.getEndDate())
-												taxYearInfo.setEndDate(convertDateToString(
-														residencyDetailsForStatesEntity.getEndDate()));
-											if (null != residencyDetailsForStatesEntity.getStartDate())
-												taxYearInfo.setStartDate(convertDateToString(
-														residencyDetailsForStatesEntity.getStartDate()));
-											taxYearInfo.setStateResided(
-													residencyDetailsForStatesEntity.getStatesResided());
-											taxYearInfoList.add(taxYearInfo);
-
-											residencyDetailsforStates.setTaxYearInfoList(taxYearInfoList);
-										}
+									// setting daycare details
+									DayCareEntity dayCareEntity = null;
+									DayCareModel dayCareModel = null;
+									if (null != dependentInformationEntity.getDayCareEntity()) {
+										dayCareModel = new DayCareModel();
+										dayCareEntity = dependentInformationEntity.getDayCareEntity();
+										dayCareModel.setAddress(dayCareEntity.getAddress());
+										dayCareModel.setInstName(dayCareEntity.getInstName());
+										dayCareModel.setInstTaxId(dayCareEntity.getInstTaxId());
+										dayCareModel.setDoorNo(dayCareEntity.getDoorNo());
+										dayCareModel.setCity(dayCareEntity.getCity());
+										dayCareModel.setState(dayCareEntity.getState());
+										dayCareModel.setZip(dayCareEntity.getZip());
 									}
-									residencyDetailsforStatesList.add(residencyDetailsforStates);
-									dependentInformation.setResidencyDetailsforStates(residencyDetailsforStatesList);
+									dependentInformation.setDayCareDetails(dayCareModel);
+									dependentInformationList.add(dependentInformation);
 								}
-								clientModel.setDependentInformation(dependentInformation);
+								clientModel.setDependentInformation(dependentInformationList);
 							} // End of dependencyInfo
 
 							/***************
@@ -294,6 +375,14 @@ public class ClientDetailsController {
 								fbar.setPincode(fbarEntity.getPinCode());
 								fbar.setTransferToForeignAccount(fbarEntity.getTransferToForeignAccount());
 								fbar.setTypeOfAccount(fbarEntity.getTypeOfAccount());
+								fbar.setOwnership(fbarEntity.getOwnership());
+								fbar.setStreetAddress(fbarEntity.getStreetAddress());
+								fbar.setAccountMaintenanceCurrency(fbarEntity.getAccountMaintenanceCurrency());
+								fbar.setJointOwnerName(fbarEntity.getJointOwnerName());
+								fbar.setAnyIncomeEarnedInXX(fbarEntity.isAnyIncomeEarnedInXX());
+								fbar.setIncomeEarnedInXXDetails(fbarEntity.getIncomeEarnedInXXDetails());
+								fbar.setMaxValue(fbarEntity.getMaxValue());
+								fbar.setValueOfAccount(fbarEntity.getValueOfAccount());
 								clientModel.setFbar(fbar);
 							} // End of Fbr
 
@@ -307,6 +396,7 @@ public class ClientDetailsController {
 								bankDetails.setTypeOfAccount(bankDetailsEntity.getBankAccountTpe());
 								bankDetails.setNameOfTheBank(bankDetailsEntity.getBankName());
 								bankDetails.setBankRoutingNumber(bankDetailsEntity.getRoutingNumber());
+								bankDetails.setNameOfTheAccount(bankDetailsEntity.getNameOfTheAccount());
 								clientModel.setBankDetails(bankDetails);
 							} // End of BankDetailsEntity
 
@@ -340,6 +430,7 @@ public class ClientDetailsController {
 										basicInfoEntity.isDidYouWorkMoreThanOneEmployerInXX());
 								basicInformation.setMoreThanOneEmployerWorkStatusComments(
 										basicInfoEntity.getMoreThanOneEmployerWorkStatusComments());
+								//basicInformation.setTimezone(basicInfoEntity.getTimezone());
 								clientModel.setBasicInformation(basicInformation);
 							} // End of BasicInfoEntity
 
@@ -362,36 +453,7 @@ public class ClientDetailsController {
 								contactDetails.setEmail(contactDetailsEntity.getEmail());
 								contactDetails.setTimezone(contactDetailsEntity.getTimezone());
 								contactDetails.setState(contactDetailsEntity.getState());
-
-								if (null != residencyDetailsForStatesEntitySet
-										&& residencyDetailsForStatesEntitySet.size() > 0) {
-									Set<ResidencyDetailsforStates> residencyDetailsforStatesList = new HashSet<>();
-									Set<TaxYearInfo> taxYearInfoList = new HashSet<>();
-									ResidencyDetailsforStates residencyDetailsforStates = new ResidencyDetailsforStates();
-									for (ResidencyDetailsForStatesEntity residencyDetailsForStatesEntity : residencyDetailsForStatesEntitySet) {
-										if (residencyDetailsForStatesEntity.getTypeOfResidencyDetails()
-												.equals("basic")) {
-											residencyDetailsforStates
-													.setTaxYear((int) residencyDetailsForStatesEntity.getTaxYear());
-
-											TaxYearInfo taxYearInfo = new TaxYearInfo();
-											if (null != residencyDetailsForStatesEntity.getEndDate())
-												taxYearInfo.setEndDate(convertDateToString(
-														residencyDetailsForStatesEntity.getEndDate()));
-											if (null != residencyDetailsForStatesEntity.getStartDate())
-												taxYearInfo.setStartDate(convertDateToString(
-														residencyDetailsForStatesEntity.getStartDate()));
-											taxYearInfo.setStateResided(
-													residencyDetailsForStatesEntity.getStatesResided());
-											taxYearInfoList.add(taxYearInfo);
-
-											residencyDetailsforStates.setTaxYearInfoList(taxYearInfoList);
-										}
-									}
-									residencyDetailsforStatesList.add(residencyDetailsforStates);
-									contactDetails.setAddressOfLivingInTaxYear(residencyDetailsforStatesList);
-
-								}
+								contactDetails.setAddressOfLivingInTaxYear(new HashSet<>(residencyDetailsforStatesSetModel.values()));
 
 								clientModel.setContactDetails(contactDetails);
 							} // End of ContactDetails
@@ -427,41 +489,43 @@ public class ClientDetailsController {
 								spouseDetails.setLivingMoreThan6Months(spouseDetailsEntity.isLivingMoreThan6Months());
 								spouseDetails.setDidYourSpouseisWorkedinXX(
 										spouseDetailsEntity.isDidYourSpouseisWorkedinXX());
-								spouseDetails.setTypeOfVisa(spouseDetailsEntity.getTypeOfVisa());
+								//spouseDetails.setTypeOfVisa(spouseDetailsEntity.getTypeOfVisa());
 
-								if (null != residencyDetailsForStatesEntitySet
-										&& residencyDetailsForStatesEntitySet.size() > 0) {
-									Set<ResidencyDetailsforStates> residencyDetailsforStatesList = new HashSet<>();
-									Set<TaxYearInfo> taxYearInfoList = new HashSet<>();
-									ResidencyDetailsforStates residencyDetailsforStates = new ResidencyDetailsforStates();
-									for (ResidencyDetailsForStatesEntity residencyDetailsForStatesEntity : residencyDetailsForStatesEntitySet) {
-										if (residencyDetailsForStatesEntity.getTypeOfResidencyDetails()
-												.equals("spouse")) {
-											residencyDetailsforStates
-													.setTaxYear((int) residencyDetailsForStatesEntity.getTaxYear());
-
-											TaxYearInfo taxYearInfo = new TaxYearInfo();
-											if (null != residencyDetailsForStatesEntity.getEndDate())
-												taxYearInfo.setEndDate(convertDateToString(
-														residencyDetailsForStatesEntity.getEndDate()));
-											if (null != residencyDetailsForStatesEntity.getStartDate())
-												taxYearInfo.setStartDate(convertDateToString(
-														residencyDetailsForStatesEntity.getStartDate()));
-											taxYearInfo.setStateResided(
-													residencyDetailsForStatesEntity.getStatesResided());
-											taxYearInfoList.add(taxYearInfo);
-
-											residencyDetailsforStates.setTaxYearInfoList(taxYearInfoList);
-										}
-
-									}
-									residencyDetailsforStatesList.add(residencyDetailsforStates);
-									spouseDetails.setAddressOfLivingInTaxYear(residencyDetailsforStatesList);
+								if (spouseDetails.isDidYourSpouseisWorkedinXX()) {
+									spouseDetailsEntity
+											.setSpouseWorkStatusComments(spouseDetails.getSpouseWorkStatusComments());
 								}
+								spouseDetailsEntity.setDidYouWorkMoreThanOneEmployerInXX(
+										spouseDetails.isDidYouWorkMoreThanOneEmployerInXX());
+								if (spouseDetails.isDidYouWorkMoreThanOneEmployerInXX()) {
+									spouseDetailsEntity.setMoreThanOneEmployerWorkStatusComments(
+											spouseDetails.getMoreThanOneEmployerWorkStatusComments());
+								}
+								spouseDetails.setAddressOfLivingInTaxYear(new HashSet<>(spouseResidencyDetailsforStatesSetModel.values()));
 								clientModel.setSpouseDetails(spouseDetails);
 							} // End of SpouseDetails
 								// setting rental income details
-							clientModel.setRentalIncomeModel(taxFiledYearEntity.getRentalIncome());
+							RentalIncomeModel rentalIncomeModelObj = null;
+							if (null != taxFiledYearEntity.getRentalIncome()) {
+								RentalIncomeEntity responseModel = taxFiledYearEntity.getRentalIncome();
+								String rentalIncomeEntityStr = taxfilerUtil.convertObjectTOString(responseModel);
+								rentalIncomeModelObj = (RentalIncomeModel) taxfilerUtil
+										.convertStringToObject(rentalIncomeEntityStr, RentalIncomeModel.class);
+								if (null != responseModel.getDateOfPropertyPurchased())
+									rentalIncomeModelObj.setDateOfPropertyPurchased(
+											convertDateToString(responseModel.getDateOfPropertyPurchased()));
+							}
+							clientModel.setRentalIncomeModel(rentalIncomeModelObj);
+
+							// setting expenses&contribution model
+							ExpensesAndConntributionResponseModel responseModel = null;
+							if (null != taxFiledYearEntity.getExpensesEntityList()
+									|| null != taxFiledYearEntity.getContributionEntityList()) {
+								responseModel = new ExpensesAndConntributionResponseModel();
+								responseModel.setExpensesInfoList(taxFiledYearEntity.getExpensesEntityList());
+								responseModel.setContributionInfoList(taxFiledYearEntity.getContributionEntityList());
+							}
+							clientModel.setExpensesAndContributionModel(responseModel);
 
 							// setting main&sub status
 							clientDetails.setMainStatus(taxFiledYearEntity.getMainStatus());

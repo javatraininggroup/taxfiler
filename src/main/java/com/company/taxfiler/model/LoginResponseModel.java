@@ -14,6 +14,7 @@ public class LoginResponseModel implements Serializable {
 	private String email;
 	private String role;
 	private String sessionId;
+	private String authCode;
 
 	public String getUsername() {
 		return username;
@@ -65,6 +66,14 @@ public class LoginResponseModel implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getAuthCode() {
+		return authCode;
+	}
+
+	public void setAuthCode(String authCode) {
+		this.authCode = authCode;
 	}
 
 }

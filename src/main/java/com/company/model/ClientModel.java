@@ -1,6 +1,6 @@
 package com.company.model;
 
-import com.company.taxfiler.dao.RentalIncomeEntity;
+import java.util.Set;
 
 public class ClientModel {
 
@@ -8,13 +8,15 @@ public class ClientModel {
 	private BasicInformation basicInformation;
 	private ContactDetails contactDetails;
 	private SpouseDetails spouseDetails;
-	private DependentInformation dependentInformation;
+	private Set<DependentInformation> dependentInformation;
 	private BankDetails bankDetails;
 	private OtherIncomeInfoModel otherIncomeInfoModel;
 	private AdditionalInfoModel additionalInfoModel;
 	private Fbar fbar;
 	private OtherInformation otherInformation;
-	private RentalIncomeEntity rentalIncomeModel;
+	// private RentalIncomeEntity rentalIncomeModel;
+	private RentalIncomeModel rentalIncomeModel;
+	private ExpensesAndConntributionResponseModel expensesAndContributionModel;
 
 	public ClientDetails getClientDetails() {
 		return clientDetails;
@@ -48,11 +50,11 @@ public class ClientModel {
 		this.spouseDetails = spouseDetails;
 	}
 
-	public DependentInformation getDependentInformation() {
+	public Set<DependentInformation> getDependentInformation() {
 		return dependentInformation;
 	}
 
-	public void setDependentInformation(DependentInformation dependentInformation) {
+	public void setDependentInformation(Set<DependentInformation> dependentInformation) {
 		this.dependentInformation = dependentInformation;
 	}
 
@@ -96,12 +98,20 @@ public class ClientModel {
 		this.otherInformation = otherInformation;
 	}
 
-	public RentalIncomeEntity getRentalIncomeModel() {
+	public RentalIncomeModel getRentalIncomeModel() {
 		return rentalIncomeModel;
 	}
 
-	public void setRentalIncomeModel(RentalIncomeEntity rentalIncomeModel) {
+	public void setRentalIncomeModel(RentalIncomeModel rentalIncomeModel) {
 		this.rentalIncomeModel = rentalIncomeModel;
+	}
+
+	public ExpensesAndConntributionResponseModel getExpensesAndContributionModel() {
+		return expensesAndContributionModel;
+	}
+
+	public void setExpensesAndContributionModel(ExpensesAndConntributionResponseModel expensesAndContributionModel) {
+		this.expensesAndContributionModel = expensesAndContributionModel;
 	}
 
 }

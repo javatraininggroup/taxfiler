@@ -15,6 +15,7 @@ public class BasicInformation {
 	private String citizenship;
 	private boolean didYouWorkMoreThanOneEmployerInXX;
 	private String moreThanOneEmployerWorkStatusComments;
+	private String timezone;
 
 	private ContactDetails contactDetails;
 	private List<ResidencyDetailsforStates> residencyDetailsforStates;
@@ -125,6 +126,14 @@ public class BasicInformation {
 
 	public void setMoreThanOneEmployerWorkStatusComments(String moreThanOneEmployerWorkStatusComments) {
 		this.moreThanOneEmployerWorkStatusComments = moreThanOneEmployerWorkStatusComments;
+	}
+
+	public String getTimezone() {
+		return timezone;
+	}
+
+	public void setTimezone(String timezone) {
+		this.timezone = timezone;
 	}
 
 }

@@ -46,10 +46,11 @@ public class BasicInfoEntity {
 	@Column(name = "type_of_visa")
 	private String typeOfVisa;
 	private String citizenship;
-	@Column(name="did_you_work_more_than_one_employer_in_XX")
+	@Column(name = "did_you_work_more_than_one_employer_in_XX")
 	private boolean didYouWorkMoreThanOneEmployerInXX;
-	@Column(name="more_than_one_employer_work_status_comments")
+	@Column(name = "more_than_one_employer_work_status_comments")
 	private String moreThanOneEmployerWorkStatusComments;
+	//private String timezone;
 
 	public TaxFiledYearEntity getTaxFileYear() {
 		return taxFileYear;
@@ -170,7 +171,13 @@ public class BasicInfoEntity {
 	public void setMoreThanOneEmployerWorkStatusComments(String moreThanOneEmployerWorkStatusComments) {
 		this.moreThanOneEmployerWorkStatusComments = moreThanOneEmployerWorkStatusComments;
 	}
-	
-	
+
+/*	public String getTimezone() {
+		return timezone;
+	}
+
+	public void setTimezone(String timezone) {
+		this.timezone = timezone;
+	}*/
 
 }

@@ -32,13 +32,13 @@ public class TaxFiledYearEntity {
 	private int year;
 
 	@Column(name = "main_status")
-	//@ColumnDefault("SCHEDULING")
+	// @ColumnDefault("SCHEDULING")
 	private String mainStatus;
 
 	@Column(name = "sub_status")
-	//@ColumnDefault("NEW_REGISTER")
+	// @ColumnDefault("NEW_REGISTER")
 	private String subStatus;
-	
+
 	@PrePersist
 	protected void onCreate() {
 		if (mainStatus == null) {
@@ -48,7 +48,7 @@ public class TaxFiledYearEntity {
 			subStatus = "NEW_REGISTER";
 		}
 	}
-	
+
 	@PreUpdate
 	protected void onUpdate() {
 		if (mainStatus == null) {
@@ -70,57 +70,65 @@ public class TaxFiledYearEntity {
 	@JsonManagedReference
 	private BasicInfoEntity basicInfo;
 
-	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @JsonBackReference
 	@JsonManagedReference
 	private ContactDetailsEntity contactDetails;
 
-	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @JsonBackReference
 	@JsonManagedReference
 	private Set<ResidencyDetailsForStatesEntity> residencyDetailsforStatesList;
 
-	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @JsonBackReference
 	@JsonManagedReference
 	private SpouseDetailsEntity spouseDetails;
 
-	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	/*
+	 * @OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch =
+	 * FetchType.LAZY, cascade = CascadeType.ALL) // @JsonBackReference
+	 * 
+	 * @JsonManagedReference private DependentInformationEntity
+	 * dependentInformation;
+	 */
+
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @JsonBackReference
 	@JsonManagedReference
-	private DependentInformationEntity dependentInformation;
+	private Set<DependentInformationEntity> dependentInformationList;
 
-	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @JsonBackReference
 	@JsonManagedReference
 	private BankDetailsEntity bankDetails;
 
-	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @JsonBackReference
 	@JsonManagedReference
 	private Set<OtherIncomeInformatonEntity> otherIncomeInformatonEntityList;
 
-	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @JsonBackReference
 	@JsonManagedReference
 	private Set<AdditionalInformationEntity> additionalInformationEntityList;
 
-	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @JsonBackReference
 	@JsonManagedReference
 	private FbarEntity fbarEntity;
 
-	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @JsonBackReference
 	@JsonManagedReference
 	private OtherInformationEntity otherInformationEntity;
 
-	@OneToMany(/* orphanRemoval = true, */ mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(/* orphanRemoval = true, */ mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @JsonBackReference
 	@JsonManagedReference
 	private Set<UploadFilesEntity> UploadFilesEntityList;
 
-	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @JsonBackReference
 	@JsonManagedReference
 	private Set<MessagesEntity> messagesEntityList;
@@ -130,12 +138,12 @@ public class TaxFiledYearEntity {
 	@JsonManagedReference
 	private RentalIncomeEntity rentalIncome;
 
-	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @JsonBackReference
 	@JsonManagedReference
 	private Set<ExpensesEntity> expensesEntityList;
 
-	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @JsonBackReference
 	@JsonManagedReference
 	private Set<ContributionEntity> contributionEntityList;
@@ -195,13 +203,13 @@ public class TaxFiledYearEntity {
 		this.spouseDetails = spouseDetails;
 	}
 
-	public DependentInformationEntity getDependentInformation() {
-		return dependentInformation;
-	}
-
-	public void setDependentInformation(DependentInformationEntity dependentInformation) {
-		this.dependentInformation = dependentInformation;
-	}
+	/*
+	 * public DependentInformationEntity getDependentInformation() { return
+	 * dependentInformation; }
+	 * 
+	 * public void setDependentInformation(DependentInformationEntity
+	 * dependentInformation) { this.dependentInformation = dependentInformation; }
+	 */
 
 	public BankDetailsEntity getBankDetails() {
 		return bankDetails;
@@ -301,6 +309,14 @@ public class TaxFiledYearEntity {
 
 	public void setContributionEntityList(Set<ContributionEntity> contributionEntityList) {
 		this.contributionEntityList = contributionEntityList;
+	}
+
+	public Set<DependentInformationEntity> getDependentInformationList() {
+		return dependentInformationList;
+	}
+
+	public void setDependentInformationList(Set<DependentInformationEntity> dependentInformationList) {
+		this.dependentInformationList = dependentInformationList;
 	}
 
 }

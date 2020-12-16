@@ -59,7 +59,7 @@ public class LoginController {
 				if (userEntity.getPassword().equals(loginModel.getPassword())) {
 					LoginResponseModel response = taxfilerUtil.setLoginResponse(userEntity);
 
-					TaxfilerUtil.getTtlhashmap().put(response.getSessionId(), userEntity.getEmail());
+					TaxfilerUtil.getTtlhashmap().put(response.getSessionId(), userEntity.getId());
 					if (userEntity.getRole().equalsIgnoreCase("EMPLOYEE")
 							|| userEntity.getRole().equalsIgnoreCase("SUPER_ADMIN"))
 						TaxfilerUtil.getTtlhashmap().getOtherSessionIds().add(response.getSessionId());

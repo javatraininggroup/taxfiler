@@ -38,8 +38,11 @@ public class UserEntity {
 	@Column(name = "confirm_details")
 	private boolean confirmDetails;
 	private String role;
+	@Column(name = "auth_code")
+	private String authCode;
 
-	@OneToMany(/* orphanRemoval = true, */ mappedBy = "userEntity", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = TaxFiledYearEntity.class)
+	//@OneToMany(/* orphanRemoval = true, */ mappedBy = "userEntity", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = TaxFiledYearEntity.class)
+	@OneToMany(/* orphanRemoval = true, */ mappedBy = "userEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = TaxFiledYearEntity.class)
 	// @JsonBackReference
 	@JsonManagedReference
 	private Set<TaxFiledYearEntity> taxFiledYearList;
@@ -140,6 +143,14 @@ public class UserEntity {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getAuthCode() {
+		return authCode;
+	}
+
+	public void setAuthCode(String authCode) {
+		this.authCode = authCode;
 	}
 
 }

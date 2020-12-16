@@ -67,7 +67,6 @@ public class EmployeeServicesController {
 				if (!allCustomersData.isEmpty()) {
 					LOGGER.info("no of customers {}", allCustomersData.size());
 					for (UserEntity entity : allCustomersData) {
-						LOGGER.info("emailid {}", entity.getEmail());
 						EmployeePortalInformationModel employeePortalModel = new EmployeePortalInformationModel();
 						Set<TaxFiledYearEntity> taxFiledYearEntityList = entity.getTaxFiledYearList();
 						if (null != taxFiledYearEntityList && taxFiledYearEntityList.size() > 0) {

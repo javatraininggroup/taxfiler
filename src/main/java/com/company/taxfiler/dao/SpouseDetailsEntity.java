@@ -68,8 +68,8 @@ public class SpouseDetailsEntity {
 	private boolean didYouWorkMoreThanOneEmployerInXX;
 	@Column(name = "more_than_one_employer_work_status_comments")
 	private String moreThanOneEmployerWorkStatusComments;
-	@Column(name = "type_of_visa")
-	private String typeOfVisa;
+	//@Column(name = "type_of_visa")
+	//private String typeOfVisa;
 
 	public String getLastName() {
 		return lastName;
@@ -217,12 +217,12 @@ public class SpouseDetailsEntity {
 		this.moreThanOneEmployerWorkStatusComments = moreThanOneEmployerWorkStatusComments;
 	}
 
-	public String getTypeOfVisa() {
+/*	public String getTypeOfVisa() {
 		return typeOfVisa;
 	}
 
 	public void setTypeOfVisa(String typeOfVisa) {
 		this.typeOfVisa = typeOfVisa;
-	}
+	}*/
 
 }

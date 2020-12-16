@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -20,7 +21,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Table(name = "dependent_info")
 public class DependentInformationEntity {
 
-	@OneToOne(cascade = CascadeType.ALL)
+	//@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "tax_file_year_id", referencedColumnName = "id")
 	// @JsonManagedReference
 	@JsonBackReference
@@ -63,6 +65,8 @@ public class DependentInformationEntity {
 	private boolean providedMoreThan50PESupport;
 	@Column(name = "is_you_and_spouse_working")
 	private boolean isYouAndSpouseWorking;
+	@Column(name = "no_of_days_stayed_in_us")
+	private int noOfDaysStayedInUS;
 
 	@OneToOne(orphanRemoval = true, mappedBy = "dependentInfo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JsonManagedReference
@@ -186,6 +190,14 @@ public class DependentInformationEntity {
 
 	public void setDayCareEntity(DayCareEntity dayCareEntity) {
 		this.dayCareEntity = dayCareEntity;
+	}
+
+	public int getNoOfDaysStayedInUS() {
+		return noOfDaysStayedInUS;
+	}
+
+	public void setNoOfDaysStayedInUS(int noOfDaysStayedInUS) {
+		this.noOfDaysStayedInUS = noOfDaysStayedInUS;
 	}
 
 }
