@@ -1,3 +1,5 @@
+ALTER TABLE users AUTO_INCREMENT = 100000;
+
 alter table bank_details modify tax_file_year_id int(11) default 0;
 
 alter table basic_info modify tax_file_year_id int(11) default 0;
