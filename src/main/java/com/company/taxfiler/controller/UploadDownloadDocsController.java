@@ -162,12 +162,12 @@ public class UploadDownloadDocsController {
 										//unknown mimetype so set the mimetype to application/octet-stream
 										mimeType = "application/octet-stream";
 									}*/
-									//System.out.println("file ext: "+MediaType.parseMediaType(uploadFilesEntity.getFileType()).get);
+									//System.out.println("file ext: "+MediaType.parseMediaType(uploadFilesEntity.getFileType()).getSubtype());
 									
 									return ResponseEntity.ok()
 											.contentType(MediaType.parseMediaType(uploadFilesEntity.getFileType()))
 											.header(HttpHeaders.CONTENT_DISPOSITION,
-													"attachment; filename=\"" + uploadFilesEntity.getFileName() + "\"")
+													"attachment; filename=\"" + uploadFilesEntity.getFileName()+"."+MediaType.parseMediaType(uploadFilesEntity.getFileType()).getSubtype()+ "\"")
 											.body(new ByteArrayResource(uploadFilesEntity.getFileContent()));
 								}
 							}
