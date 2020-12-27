@@ -1,6 +1,9 @@
 package com.company.model;
 
+import java.util.List;
 import java.util.Set;
+
+import com.company.taxfiler.dao.CommentsEntity;
 
 public class ClientModel {
 
@@ -17,6 +20,7 @@ public class ClientModel {
 	// private RentalIncomeEntity rentalIncomeModel;
 	private RentalIncomeModel rentalIncomeModel;
 	private ExpensesAndConntributionResponseModel expensesAndContributionModel;
+	private Set<CommentsEntity> commentsList;
 
 	public ClientDetails getClientDetails() {
 		return clientDetails;
@@ -112,6 +116,14 @@ public class ClientModel {
 
 	public void setExpensesAndContributionModel(ExpensesAndConntributionResponseModel expensesAndContributionModel) {
 		this.expensesAndContributionModel = expensesAndContributionModel;
+	}
+
+	public Set<CommentsEntity> getCommentsList() {
+		return commentsList;
+	}
+
+	public void setCommentsList(Set<CommentsEntity> commentsList) {
+		this.commentsList = commentsList;
 	}
 
 }

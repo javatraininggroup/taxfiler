@@ -1,7 +1,6 @@
 package com.company.taxfiler.controller;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -140,11 +139,13 @@ public class UploadDownloadDocsController {
 
 	@GetMapping(Constants.GET_DOWNLOAD_FILE_ENDPOINT)
 	public Object downloadFile(@PathVariable(Constants.FILE_ID) String fileId,
-			@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear, @RequestParam String sessionId)
-			throws Exception {
-		/*Object verifySessionIdResponse = taxfilerUtil.verifySessionId(sessionId);
-		if (verifySessionIdResponse instanceof ResponseModel)
-			return verifySessionIdResponse;*/
+			@PathVariable(Constants.USER_ID) int userId, @PathVariable(Constants.TAX_YEAR) int taxYear,
+			@RequestParam String sessionId) throws Exception {
+		/*
+		 * Object verifySessionIdResponse = taxfilerUtil.verifySessionId(sessionId); if
+		 * (verifySessionIdResponse instanceof ResponseModel) return
+		 * verifySessionIdResponse;
+		 */
 		try {
 			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 			if (optionalUserEntity.isPresent()) {
@@ -156,18 +157,13 @@ public class UploadDownloadDocsController {
 							Set<UploadFilesEntity> uploadFilesEntitySet = taxFiledYearEntity.getUploadFilesEntityList();
 							for (UploadFilesEntity uploadFilesEntity : uploadFilesEntitySet) {
 								if (uploadFilesEntity.getDownloadId().equals(fileId)) {
-									/*String mimeType = URLConnection.guessContentTypeFromName(uploadFilesEntity.getFileType());
-									System.out.println("file type: "+uploadFilesEntity.getFileType()+", mime type: "+mimeType);
-									if (mimeType == null) {
-										//unknown mimetype so set the mimetype to application/octet-stream
-										mimeType = "application/octet-stream";
-									}*/
-									//System.out.println("file ext: "+MediaType.parseMediaType(uploadFilesEntity.getFileType()).getSubtype());
-									
 									return ResponseEntity.ok()
 											.contentType(MediaType.parseMediaType(uploadFilesEntity.getFileType()))
 											.header(HttpHeaders.CONTENT_DISPOSITION,
-													"attachment; filename=\"" + uploadFilesEntity.getFileName()+"."+MediaType.parseMediaType(uploadFilesEntity.getFileType()).getSubtype()+ "\"")
+													"attachment; filename=\"" + uploadFilesEntity.getFileName() + "."
+															+ MediaType.parseMediaType(uploadFilesEntity.getFileType())
+																	.getSubtype()
+															+ "\"")
 											.body(new ByteArrayResource(uploadFilesEntity.getFileContent()));
 								}
 							}

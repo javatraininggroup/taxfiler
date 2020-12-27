@@ -2,6 +2,9 @@ package com.company.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
+
+import com.company.taxfiler.dao.CommentsEntity;
 
 public class EmployeePortalInformationModel implements Serializable {
 
@@ -14,7 +17,9 @@ public class EmployeePortalInformationModel implements Serializable {
 	private int id;
 	private String timezone;
 
-	private List<MessageResponseModel> messagesList;
+	// private List<MessageResponseModel> messagesList;
+
+	private Set<CommentsEntity> commentsList;
 
 	private List<DocsResponseModel> uploadedFilesList;
 	// private List<UploadFilesEntity> uploadedFilesList;
@@ -35,13 +40,13 @@ public class EmployeePortalInformationModel implements Serializable {
 		this.email = email;
 	}
 
-	public List<MessageResponseModel> getMessagesList() {
+	/*public List<MessageResponseModel> getMessagesList() {
 		return messagesList;
 	}
 
 	public void setMessagesList(List<MessageResponseModel> messagesList) {
 		this.messagesList = messagesList;
-	}
+	}*/
 
 	public List<DocsResponseModel> getUploadedFilesList() {
 		return uploadedFilesList;
@@ -72,6 +77,14 @@ public class EmployeePortalInformationModel implements Serializable {
 
 	public void setTimezone(String timezone) {
 		this.timezone = timezone;
+	}
+
+	public Set<CommentsEntity> getCommentsList() {
+		return commentsList;
+	}
+
+	public void setCommentsList(Set<CommentsEntity> commentsList) {
+		this.commentsList = commentsList;
 	}
 
 }

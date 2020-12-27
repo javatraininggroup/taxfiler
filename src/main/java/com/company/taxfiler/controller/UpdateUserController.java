@@ -2,6 +2,7 @@ package com.company.taxfiler.controller;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.company.model.AdditionalInfoModel;
 import com.company.model.BankDetails;
 import com.company.model.BasicInformation;
+import com.company.model.CommentsModel;
 import com.company.model.ContactDetails;
 import com.company.model.DayCareModel;
 import com.company.model.DependentInformation;
@@ -50,6 +52,7 @@ import com.company.model.TaxYearInfo;
 import com.company.taxfiler.dao.AdditionalInformationEntity;
 import com.company.taxfiler.dao.BankDetailsEntity;
 import com.company.taxfiler.dao.BasicInfoEntity;
+import com.company.taxfiler.dao.CommentsEntity;
 import com.company.taxfiler.dao.ContactDetailsEntity;
 import com.company.taxfiler.dao.ContributionEntity;
 import com.company.taxfiler.dao.DayCareEntity;
@@ -183,7 +186,7 @@ public class UpdateUserController {
 						basicInfo.setMoreThanOneEmployerWorkStatusComments(
 								basicInformationModel.getMoreThanOneEmployerWorkStatusComments());
 					}
-					//basicInfo.setTimezone(basicInformationModel.getTimezone());
+					// basicInfo.setTimezone(basicInformationModel.getTimezone());
 
 					basicInfo.setTaxFileYear(taxFiledYearEntity);
 
@@ -255,7 +258,7 @@ public class UpdateUserController {
 					spouseDetailsEntity.setCheckIfITINToBeApplied(spouseDetails.isCheckIfITINToBeApplied());
 					spouseDetailsEntity.setCheckIfITINToBeRenewed(spouseDetails.isCheckIfITINToBeRenewed());
 					spouseDetailsEntity.setITINRenewed(spouseDetails.isITINRenewed());
-					//spouseDetailsEntity.setTypeOfVisa(spouseDetails.getTypeOfVisa());
+					spouseDetailsEntity.setTypeOfVisa(spouseDetails.getTypeOfVisa());
 
 					if (StringUtils.isNotBlank(spouseDetails.getEntryDateIntoUS()))
 						spouseDetailsEntity
@@ -387,10 +390,10 @@ public class UpdateUserController {
 							ResidencyDetailsforStates spouseModel = null;
 							for (ResidencyDetailsForStatesEntity entity : residencyStatesEntitySet) {
 								if (entity.getTypeOfResidencyDetails().equalsIgnoreCase("basic")) {
-									if(null != residencyDetailsforStatesSetModel.get(entity.getTaxYear())){
+									if (null != residencyDetailsforStatesSetModel.get(entity.getTaxYear())) {
 										basicModel = residencyDetailsforStatesSetModel.get(entity.getTaxYear());
 										taxYearInfoList = basicModel.getTaxYearInfoList();
-									}else {
+									} else {
 										basicModel = new ResidencyDetailsforStates();
 										taxYearInfoList = new HashSet<>();
 										basicModel.setTaxYear((int) entity.getTaxYear());
@@ -403,13 +406,13 @@ public class UpdateUserController {
 									info.setStateResided(entity.getStatesResided());
 									taxYearInfoList.add(info);
 									basicModel.setTaxYearInfoList(taxYearInfoList);
-									residencyDetailsforStatesSetModel.put(entity.getTaxYear(),basicModel);
+									residencyDetailsforStatesSetModel.put(entity.getTaxYear(), basicModel);
 								} else if (entity.getTypeOfResidencyDetails().equalsIgnoreCase("spouse")) {
-									
-									if(null != spouseResidencyDetailsforStatesSetModel.get(entity.getTaxYear())){
+
+									if (null != spouseResidencyDetailsforStatesSetModel.get(entity.getTaxYear())) {
 										spouseModel = spouseResidencyDetailsforStatesSetModel.get(entity.getTaxYear());
 										spouseTaxYearInfoList = spouseModel.getTaxYearInfoList();
-									}else {
+									} else {
 										spouseModel = new ResidencyDetailsforStates();
 										spouseTaxYearInfoList = new HashSet<>();
 										spouseModel.setTaxYear((int) entity.getTaxYear());
@@ -422,13 +425,14 @@ public class UpdateUserController {
 									info.setStateResided(entity.getStatesResided());
 									spouseTaxYearInfoList.add(info);
 									spouseModel.setTaxYearInfoList(spouseTaxYearInfoList);
-									spouseResidencyDetailsforStatesSetModel.put(entity.getTaxYear(),spouseModel);
+									spouseResidencyDetailsforStatesSetModel.put(entity.getTaxYear(), spouseModel);
 								}
 							}
 							if (null == contactDetailsModel) {
 								contactDetailsModel = new ContactDetails();
 							}
-							contactDetailsModel.setAddressOfLivingInTaxYear(new HashSet<>(residencyDetailsforStatesSetModel.values()));
+							contactDetailsModel.setAddressOfLivingInTaxYear(
+									new HashSet<>(residencyDetailsforStatesSetModel.values()));
 							taxPayerModel.setContactDetails(contactDetailsModel);
 
 							/**
@@ -455,7 +459,8 @@ public class UpdateUserController {
 							if (null == spouseDetailsModel) {
 								spouseDetailsModel = new SpouseDetails();
 							}
-							spouseDetailsModel.setAddressOfLivingInTaxYear(new HashSet<>(spouseResidencyDetailsforStatesSetModel.values()));
+							spouseDetailsModel.setAddressOfLivingInTaxYear(
+									new HashSet<>(spouseResidencyDetailsforStatesSetModel.values()));
 							taxPayerModel.setSpouseDetails(spouseDetailsModel);
 							return taxPayerModel;
 						}
@@ -501,14 +506,29 @@ public class UpdateUserController {
 							if (taxFiledYearEntity.getYear() == taxYear) {
 								LOGGER.info("updating existing dependentInformation details");
 
-								//DependentInformationEntity dependentInformationEntity = taxFiledYearEntity.getDependentInformation();
-								Set<DependentInformationEntity> dependentInformationEntityList = taxFiledYearEntity.getDependentInformationList();
+								// DependentInformationEntity dependentInformationEntity =
+								// taxFiledYearEntity.getDependentInformation();
+								Set<DependentInformationEntity> dependentInformationEntityList = taxFiledYearEntity
+										.getDependentInformationList();
 								DependentInformationEntity dependentInformationEntity = new DependentInformationEntity();
+
 								if (null == dependentInformationEntityList) {
 									dependentInformationEntityList = new HashSet<>();
+									dependentInformationEntityList.add(dependentInformationEntity);
 									taxFiledYearEntity.setDependentInformationList(dependentInformationEntityList);
 								}
-								dependentInformationEntityList.add(dependentInformationEntity);
+
+								if (0 != dependentInformation.getId()) {
+									for (DependentInformationEntity entity : dependentInformationEntityList) {
+										if (dependentInformation.getId() == entity.getId()) {
+											dependentInformationEntity = entity;
+										}
+									}
+								} else {
+									dependentInformationEntityList.add(dependentInformationEntity);
+								}
+
+								// dependentInformationEntityList.add(dependentInformationEntity);
 
 								if (null != dependentInformation.getName()) {
 									dependentInformationEntity
@@ -539,7 +559,8 @@ public class UpdateUserController {
 										.setLivedForMoreThan06Months(dependentInformation.isLivingMoreThan6Months());
 								dependentInformationEntity.setProvidedMoreThan50PESupport(
 										dependentInformation.isIfProvidedMoreThan50PERSupportDuringTheYearXX());
-								dependentInformationEntity.setNoOfDaysStayedInUS(dependentInformation.getNoOfDaysStayedInUS());
+								dependentInformationEntity
+										.setNoOfDaysStayedInUS(dependentInformation.getNoOfDaysStayedInUS());
 
 								if (null != dependentInformation.getResidencyDetailsforStates()
 										&& dependentInformation.getResidencyDetailsforStates().size() > 0) {
@@ -608,7 +629,7 @@ public class UpdateUserController {
 						TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
 						taxFiledYearEntity.setYear(taxYear);
 						taxFiledYearEntityList.add(taxFiledYearEntity);
-						Set<DependentInformationEntity> dependentInformationEntityList  =  new HashSet<>();
+						Set<DependentInformationEntity> dependentInformationEntityList = new HashSet<>();
 						DependentInformationEntity dependentInformationEntity = new DependentInformationEntity();
 
 						if (null != dependentInformation.getName()) {
@@ -728,7 +749,7 @@ public class UpdateUserController {
 							if (null == dependentInformationEntityList || dependentInformationEntityList.isEmpty()) {
 								return taxfilerUtil.getErrorResponse(MessageCode.USER_DEPENDENT_INFO_NULL_OR_EMPTY);
 							}
-							
+
 							for (DependentInformationEntity dependentInformationEntity : dependentInformationEntityList) {
 								DependentInformation dependentInformation = new DependentInformation();
 								Name name = new Name();
@@ -1996,5 +2017,104 @@ public class UpdateUserController {
 			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
 		}
 		return taxfilerUtil.getSuccessResponse("details not available");
+	}
+
+	@GetMapping(Constants.GET_COMMENT_ENDPOINT)
+	public Object getComments(@PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof ResponseModel)
+			return verifySessionIdResponse;
+		try {
+			Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
+			if (optionalUserEntity.isPresent()) {
+				UserEntity userEntity = optionalUserEntity.get();
+				Set<TaxFiledYearEntity> taxFiledYearEntityList = userEntity.getTaxFiledYearList();
+				if (null != taxFiledYearEntityList && !taxFiledYearEntityList.isEmpty()) {
+					for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
+						if (taxFiledYearEntity.getYear() == taxYear) {
+							if (null != taxFiledYearEntity.getCommentsList()
+									&& !taxFiledYearEntity.getCommentsList().isEmpty())
+								return taxFiledYearEntity.getCommentsList();
+						}
+					}
+				}
+			} else {
+				return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
+		}
+		return taxfilerUtil.getSuccessResponse("details not available");
+	}
+
+	@PostMapping(Constants.ADD_COMMENT_ENDPOINT)
+	public Object addComment(@RequestBody TaxPayer taxPayerModel, @PathVariable(Constants.USER_ID) int userId,
+			@PathVariable(Constants.TAX_YEAR) int taxYear) throws IOException {
+		Object verifySessionIdResponse = taxfilerUtil.verifySessionId(httpServletRequest);
+		if (verifySessionIdResponse instanceof ResponseModel)
+			return verifySessionIdResponse;
+		try {
+			if (null != taxPayerModel.getComment()) {
+				CommentsModel commentsModel = taxPayerModel.getComment();
+				Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
+				if (optionalUserEntity.isPresent()) {
+					UserEntity userEntity = optionalUserEntity.get();
+					Set<TaxFiledYearEntity> taxFiledYearEntityList = userEntity.getTaxFiledYearList();
+					boolean isCommentAdded = false;
+					if (null != taxFiledYearEntityList && !taxFiledYearEntityList.isEmpty()) {
+						for (TaxFiledYearEntity taxFiledYearEntity : taxFiledYearEntityList) {
+							if (taxFiledYearEntity.getYear() == taxYear) {
+								LOGGER.info("updating existing record for comments");
+								Set<CommentsEntity> commensEntityList = taxFiledYearEntity.getCommentsList();
+								if (null == commensEntityList) {
+									commensEntityList = new HashSet<>();
+								}
+								CommentsEntity entity = new CommentsEntity();
+								entity.setComment(commentsModel.getComment());
+								entity.setLastUpdatedBy(commentsModel.getLastUpdatedBy());
+								java.util.Date d = new java.util.Date();
+								// DateFormat format = DateFormat.getDateInstance().getDateTimeInstance();
+								entity.setLastUpdatedDate(format.format(d));
+								entity.setTaxFileYear(taxFiledYearEntity);
+								commensEntityList.add(entity);
+								taxFiledYearEntity.setCommentsList(commensEntityList);
+								isCommentAdded = true;
+							}
+						}
+					}
+					if (!isCommentAdded) {
+						LOGGER.info("Inserting new record for comments");
+						if (null == taxFiledYearEntityList) {
+							taxFiledYearEntityList = new HashSet<>();
+						}
+						TaxFiledYearEntity taxFiledYearEntity = new TaxFiledYearEntity();
+						taxFiledYearEntityList.add(taxFiledYearEntity);
+						Set<CommentsEntity> commensEntityList = new HashSet<>();
+
+						CommentsEntity entity = new CommentsEntity();
+						entity.setComment(commentsModel.getComment());
+						entity.setLastUpdatedBy(commentsModel.getLastUpdatedBy());
+						entity.setLastUpdatedDate(new Date(System.currentTimeMillis()).toString());
+						entity.setTaxFileYear(taxFiledYearEntity);
+						commensEntityList.add(entity);
+						taxFiledYearEntity.setCommentsList(commensEntityList);
+						taxFiledYearEntity.setUserEntity(userEntity);
+						userEntity.setTaxFiledYearList(taxFiledYearEntityList);
+						userRepository.save(userEntity);
+						isCommentAdded = true;
+					}
+				} else {
+					return taxfilerUtil.getErrorResponse(MessageCode.USER_NOT_REGISTERED);
+				}
+			} else {
+				return taxfilerUtil.getSuccessResponse("");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return taxfilerUtil.getErrorResponse(MessageCode.AN_ERROR_HAS_OCCURED, e.getMessage());
+		}
+		return taxfilerUtil.getSuccessResponse(Constants.SUCCESS);
 	}
 }

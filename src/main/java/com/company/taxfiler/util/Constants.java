@@ -46,5 +46,7 @@ public class Constants {
 	
 	public static final String PUT_EXPENSES_CONTRIBUTION_INFORMATION_ENDPOINT = "/updateuser/{user_id}/{tax_year}/expensesAndContribution";
 	public static final String GET_EXPENSES_CONTRIBUTION_INFORMATION_ENDPOINT = "/updateuser/{user_id}/{tax_year}/expensesAndContribution";
+	public static final String ADD_COMMENT_ENDPOINT = "/updateuser/{user_id}/{tax_year}/comment";
+	public static final String GET_COMMENT_ENDPOINT = "/updateuser/{user_id}/{tax_year}/comment";
 
 }

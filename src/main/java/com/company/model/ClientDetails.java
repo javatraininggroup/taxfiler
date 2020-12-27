@@ -8,9 +8,9 @@ public class ClientDetails {
 	private String altPhone;
 	private String regPhone;
 	private String maililingZip;
-	private String status;
-	private String comments;
-	private List<String> allComments;
+	//private String status;
+	//private String comments;
+	//private List<String> allComments;
 	private List<DownloadModel> uploadDocsList;
 	private String name;
 	private String fileId;
@@ -58,7 +58,7 @@ public class ClientDetails {
 		this.maililingZip = maililingZip;
 	}
 
-	public String getStatus() {
+	/*public String getStatus() {
 		return status;
 	}
 
@@ -80,7 +80,7 @@ public class ClientDetails {
 
 	public void setAllComments(List<String> allComments) {
 		this.allComments = allComments;
-	}
+	}*/
 
 	public List<DownloadModel> getUploadDocsList() {
 		return uploadDocsList;

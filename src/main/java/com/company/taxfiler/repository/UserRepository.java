@@ -2,6 +2,8 @@ package com.company.taxfiler.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -24,8 +26,18 @@ public interface UserRepository extends CrudRepository<UserEntity, Integer>, Jpa
 
 	@Query("SELECT u from UserEntity u left join MessagesEntity m on m.taxFileYear=u.id LEFT join UploadFilesEntity f on f.taxFileYear=u.id where m.mainStatus=:mainStatus and f.mainStatus=:mainStatus")
 	public List<UserEntity> findAllWithMainStatus(@Param("mainStatus") final String mainStatus);
-	
-	@Query("SELECT distinct u from UserEntity u left join MessagesEntity m on m.taxFileYear=u.id LEFT join UploadFilesEntity f on f.taxFileYear=u.id ")
-	public List<UserEntity> findAll();
 
+	/*@Query("SELECT distinct u from UserEntity u left join MessagesEntity m on m.taxFileYear=u.id LEFT join UploadFilesEntity f on f.taxFileYear=u.id ")
+	public List<UserEntity> findAll();*/
+	
+	@Query("SELECT distinct u from UserEntity u left join CommentsEntity m on m.taxFileYear=u.id LEFT join UploadFilesEntity f on f.taxFileYear=u.id ")
+	public List<UserEntity> findAll();
+	
+	@Query("select distinct u from UserEntity u left join TaxFiledYearEntity t on u.id=t.userEntity where t.year = :year")
+	public Page<UserEntity> findAll(@Param("year") final int year, Pageable paging);
+	
+	@Query("select distinct count(u.id) from UserEntity u left join TaxFiledYearEntity t on u.id=t.userEntity where t.year = :year")
+	public long count(@Param("year") final int year);
+	
+	
 }

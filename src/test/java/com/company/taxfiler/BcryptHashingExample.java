@@ -1,6 +1,7 @@
 package com.company.taxfiler;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,5 +23,7 @@ public class BcryptHashingExample {
 		}else {
 			System.out.println("Not matched");
 		}
+		
+		System.out.println("year: "+Calendar.getInstance().get(Calendar.YEAR));
 	}
 }

@@ -3,6 +3,7 @@ package com.company.taxfiler.util;
 import java.io.IOException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import javax.crypto.KeyGenerator;
@@ -39,6 +40,11 @@ public class TaxfilerUtil {
 	private final String HMACSHA256 = "HmacSHA256";
 
 	private static final TtlHashMap ttlHashMap = new TtlHashMap(TimeUnit.MINUTES, 60, 60 * 12);
+	
+	public static StringBuilder mailBody = new StringBuilder();
+	public static String mailBodyStr = "<p>" + 
+			"Thank you for choosing SereneTax to file your  "+Calendar.getInstance().get(Calendar.YEAR)+" Tax Return.</p>" +  
+			"<h2><p>Your login credentials are as follows.</p></h2>";
 
 	@Autowired
 	private HttpServletResponse httpServletResponse;

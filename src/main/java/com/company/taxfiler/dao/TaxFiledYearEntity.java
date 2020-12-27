@@ -32,11 +32,9 @@ public class TaxFiledYearEntity {
 	private int year;
 
 	@Column(name = "main_status")
-	// @ColumnDefault("SCHEDULING")
 	private String mainStatus;
 
 	@Column(name = "sub_status")
-	// @ColumnDefault("NEW_REGISTER")
 	private String subStatus;
 
 	@PrePersist
@@ -147,6 +145,11 @@ public class TaxFiledYearEntity {
 	// @JsonBackReference
 	@JsonManagedReference
 	private Set<ContributionEntity> contributionEntityList;
+
+	@OneToMany(orphanRemoval = true, mappedBy = "taxFileYear", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	// @JsonBackReference
+	@JsonManagedReference
+	private Set<CommentsEntity> commentsList;
 
 	public int getId() {
 		return id;
@@ -317,6 +320,14 @@ public class TaxFiledYearEntity {
 
 	public void setDependentInformationList(Set<DependentInformationEntity> dependentInformationList) {
 		this.dependentInformationList = dependentInformationList;
+	}
+
+	public Set<CommentsEntity> getCommentsList() {
+		return commentsList;
+	}
+
+	public void setCommentsList(Set<CommentsEntity> commentsList) {
+		this.commentsList = commentsList;
 	}
 
 }

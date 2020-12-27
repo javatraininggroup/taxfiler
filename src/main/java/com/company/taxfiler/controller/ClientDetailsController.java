@@ -46,6 +46,7 @@ import com.company.model.TaxYearInfo;
 import com.company.taxfiler.dao.AdditionalInformationEntity;
 import com.company.taxfiler.dao.BankDetailsEntity;
 import com.company.taxfiler.dao.BasicInfoEntity;
+import com.company.taxfiler.dao.CommentsEntity;
 import com.company.taxfiler.dao.ContactDetailsEntity;
 import com.company.taxfiler.dao.DayCareEntity;
 import com.company.taxfiler.dao.DependentInformationEntity;
@@ -101,6 +102,7 @@ public class ClientDetailsController {
 		SpouseDetails spouseDetails = new SpouseDetails();
 		RentalIncomeEntity rentalIncomeModel = new RentalIncomeEntity();
 		Set<OtherIncomeInfoData> additionalInfoDataList = new HashSet<>();
+		List<CommentsEntity> commentsList = new ArrayList<>();
 
 		/**
 		 * 1. validate sessionId 2. Get the all person details through the BUSINESS
@@ -140,7 +142,7 @@ public class ClientDetailsController {
 									.getResidencyDetailsforStatesList();
 
 							/*************** START MessagesEntity *************/
-							List<String> allComments = null;
+							/*List<String> allComments = null;
 							Set<MessagesEntity> messagesEntitySet = taxFiledYearEntity.getMessagesEntityList();
 							if (null != messagesEntitySet) {
 								allComments = new ArrayList<String>();
@@ -150,7 +152,7 @@ public class ClientDetailsController {
 									allComments.add(entity.getMessage());
 								}
 							}
-							clientDetails.setAllComments(allComments);
+							clientDetails.setAllComments(allComments);*/
 
 							/***************
 							 * START UploadFilesEntity
@@ -530,6 +532,10 @@ public class ClientDetailsController {
 							// setting main&sub status
 							clientDetails.setMainStatus(taxFiledYearEntity.getMainStatus());
 							clientDetails.setSubStatus(taxFiledYearEntity.getSubStatus());
+							
+							//setting comments data
+							clientModel.setCommentsList(taxFiledYearEntity.getCommentsList());
+							
 						} // End of TaxFilerEntity
 
 					} // End of for loop of taxFiledYearEntityList

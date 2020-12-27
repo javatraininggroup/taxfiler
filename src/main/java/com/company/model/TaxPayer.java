@@ -15,6 +15,7 @@ public class TaxPayer {
 	private Fbar fbar;
 	private OtherInformation otherInformation;
 	private ExpensesAndContributionModel expensesAndContributionModel;
+	private CommentsModel comment;
 
 	public BasicInformation getBasicInformation() {
 		return basicInformation;
@@ -94,6 +95,14 @@ public class TaxPayer {
 
 	public void setExpensesAndContributionModel(ExpensesAndContributionModel expensesAndContributionModel) {
 		this.expensesAndContributionModel = expensesAndContributionModel;
+	}
+
+	public CommentsModel getComment() {
+		return comment;
+	}
+
+	public void setComment(CommentsModel comment) {
+		this.comment = comment;
 	}
 
 }
